@@ -81,7 +81,6 @@ acs-*.bib
 
 # feynmf/feynmp
 *.mf
-*.mp
 *.t[1-9]
 *.t[1-9][0-9]
 *.tfm
@@ -155,6 +154,7 @@ acs-*.bib
 *.mlf
 *.mlt
 *.mlc
+*.mtc
 *.mtc[0-9]*
 *.slf[0-9]*
 *.slt[0-9]*

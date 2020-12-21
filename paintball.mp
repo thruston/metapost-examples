@@ -1,0 +1,11 @@
+vardef paint_ball(expr C, c, a, b, n) = 
+    save p; picture p; p = image(
+    for i=0 upto n:
+        fill interpath(i/n, C, c) withcolor (i/n)[a, b];
+    endfor
+    draw C;
+    ); p
+enddef;
+picture bball, rball;
+bball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3) , 1/4 blue, white, 32);
+rball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3) , 3/4 red, white, 32);
