@@ -6,6 +6,7 @@ vardef paint_ball(expr C, c, a, b, n) =
     draw C;
     ); p
 enddef;
-picture bball, rball;
-bball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3) , 1/4 blue, white, 32);
-rball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3) , 3/4 red, white, 32);
+picture bball, rball, gball;
+bball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3), 1/4 blue, white, 32);
+rball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3), 3/4 red, white, 32);
+gball = paint_ball(fullcircle scaled 16, fullcircle scaled 2 shifted (3,3), 1/2 green, white, 32);

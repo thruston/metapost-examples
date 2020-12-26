@@ -5794,4 +5794,105 @@ n^3 + \left(n+1\right)^3\cr
 $$
 \vfill
 \rightline{— RBN}
+
+\newpage
+\section{The square of any odd number is the difference between two triangular
+numbers}
+\vfill
+$$
+\begin{mplibcode}
+input paintball
+
+numeric n, s; n = 4; s = 21;
+picture P[], txt[], arr[];
+txt0 = thelabel("$1$", origin);
+txt1 = thelabel("$n$", origin);
+txt2 = thelabel("$2n+1$", origin);
+txt3 = thelabel("$3n+1$", origin);
+arr1 = image(drawdblarrow (left--right) scaled (3/8 n * s + 1/8 s); unfill bbox txt1; draw txt1);
+arr2 = image(drawdblarrow (left--right) scaled (    n * s + 1/8 s); unfill bbox txt3; draw txt2);
+arr3 = image(drawdblarrow (left--right) scaled (3/2 n * s + 1/8 s); unfill bbox txt3; draw txt3);
+
+P1 = image(
+    for i=-n upto n:
+        for j = -n upto n:
+            draw if j < i + 5: bball else: rball fi shifted ((i, j) scaled s);
+        endfor
+    endfor
+    draw txt0 shifted (       (0, n+1) scaled s);
+    draw arr1 shifted ((+(n+1)/2, n+1) scaled s);
+    draw arr1 shifted ((-(n+1)/2, n+1) scaled s);
+    draw arr2 shifted (      (0, -n-1) scaled s);
+    draw arr2 rotated 90 shifted ((-n-1, 0) scaled s);
+);
+P2 = image(
+    for j=-2n upto n:
+        for i=j upto n:
+            draw if i < -n: gball elseif j > 0: rball else: bball fi shifted ((i, j) scaled s);
+        endfor
+    endfor
+    draw arr1 shifted ((-13/8n, -2n-1) scaled s);
+    draw arr3 rotated -90 shifted ((n+1, -1/2n) scaled s);
+);
+
+draw P1;
+draw P2 shifted (2n*s, -n*s);
+
+label.top("$1+2+\cdots+n=T_n\quad\Rightarrow\quad\left(2n+1\right)^2 = T_{3n+1} - T_n$", 
+point 5/2 of bbox currentpicture shifted 16 up);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— RBN}
+\newpage
+\section{Triangular numbers mod 3}
+\vfill
+$$
+\begin{mplibcode}
+numeric u, v; u = 18; v = ypart ((u,0) rotated 60);
+picture b[], P[]; path o; o = fullcircle scaled 1/2 u; 
+forsuffixes $=1,2,3: b$ = image(fill o withcolor RdYlGn 3 $; draw o withpen pencircle scaled 1/4); endfor
+P1 = image(
+    for i=1,2,3:
+        for j=6,5,4:
+            for k=1 upto j:
+                draw b[i] shifted (k*u - 1/2j*u - 2u, (10/3-j)*v) rotated 120i;
+            endfor
+        endfor
+    endfor
+    label.bot("$T_{3k} = 3\left(T_{2k}-T_k\right)$", (0, -10/3v));
+);
+P2 = image(
+    for i=1,2,3:
+        for j=7,6,5:
+            for k=1 upto j:
+                draw b[i] shifted (k*u - 1/2j*u - 2u, (12/3-j)*v) rotated 120i;
+            endfor
+        endfor
+    endfor
+    draw o withpen pencircle scaled 1/4;
+    for t=-45, 45: draw (left -- right) scaled 1/2 u rotated t withcolor 2/3 red; endfor
+    label.bot("$T_{3k+1} = 1 + 3\left(T_{2k+1}-T_{k+1}\right)$", (0, -11/3v));
+);
+P3 = image(
+    for i=1,2,3:
+        for j=7,6,5,4:
+            for k=1 upto j:
+                draw b[i] shifted (k*u - 1/2j*u - 5/2u, (11/3-j)*v) rotated 120i;
+            endfor
+        endfor
+    endfor
+    label.bot("$T_{3k+2} = 3\left(T_{2k+1}-T_k\right)$", (0, -4v));
+);
+draw P1;
+draw P2 shifted (6u, 11v);
+draw P3 shifted (12u, -3v);
+label.top(btex $1+2+\cdots+n=T_n \enspace\Rightarrow\enspace
+\left\{\vcenter{\vbox{\openup8pt\halign{#\hfil\cr
+$T_n \equiv 1 \bmod 3$, \quad $n\equiv 1 \bmod 3$\cr
+$T_n \equiv 0 \bmod 3$, \quad $n\not\equiv 1 \bmod 3$\cr
+}}}\right.$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
 \end{document}
