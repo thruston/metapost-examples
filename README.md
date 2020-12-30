@@ -17,3 +17,8 @@ original book and therefore all the pictures are copyrighted by the
 Mathematical Association of America. My Metapost source files are covered by
 the GNU Public License V3.  This means you can use them for any non-commercial
 purpose.
+
+## Contact / questions
+
+If you have questions about Metapost or any of my examples, please consider asking
+them on a Q&A site like http://tex.stackexchange.com/ using the `metapost` tag.
