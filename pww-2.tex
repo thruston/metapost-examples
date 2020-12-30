@@ -5961,4 +5961,59 @@ $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 $$
 \vfill
 \rightline{— Deanna B.\@ Haunsperger and Stephen F.\@ Kennedy}
+\newpage
+\section{Alternating sums of triangular numbers}
+\vfill
+$$
+\begin{mplibcode}
+input paintball
+picture P[];
+P1 = image(
+    z1 = 9 up;
+    for k=1 upto 5:
+        for i=1 upto k:
+            for j=1 upto i: 
+                draw if odd i: bball else: rball fi shifted (18 * (i-j, j)) shifted z1;
+            endfor
+        endfor
+        x1 := x1 + 18k + 24;
+        y1 := y1 - 9;
+        if k < 5:
+            label.lft("$" & if odd k: "-" else: "+" fi & "$", (-14,  9k+18) + z1);
+        fi
+    endfor
+);
+P2 = image(
+    for i=1 step 2 until 5:
+        for j=1 upto i: 
+            draw bball shifted (18 * (i-j, j));
+        endfor
+    endfor
+    draw origin -- (56, 56) dashed evenly withpen pencircle scaled 1/4;
+);
+P3 = image(
+    for i=-1 upto 1:
+        for j=-1 upto 1:  
+            draw bball shifted (36/sqrt(2) * (i,j));
+        endfor
+    endfor
+    draw (2 left--right) scaled 30 rotated 45 shifted 13 up 
+        dashed evenly withpen pencircle scaled 1/4;
+);
+
+label(P1, origin);
+label("$=$",       (-120, -120));
+label(P2,           (-60, -124));
+label("$=$",          (0, -120));
+label(P3 rotated 45, (80, -122));
+
+
+label.top(btex $\displaystyle
+1+2+\cdots+k=T_k \enspace\Rightarrow\enspace
+    \sum_{k=1}^{2n-1} \left(-1\right)^{k+1} T_k = n^2
+$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— RBN}
 \end{document}
