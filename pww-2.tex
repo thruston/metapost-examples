@@ -6030,4 +6030,112 @@ $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 $$
 \vfill
 \rightline{— RBN}
+
+\section{Recursion for triangular numbers}
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(20, -32); ipscale := 16;
+path upper, front, side;  
+upper = p(0,1,0) -- p(1,1,0) -- p(1,1,1) -- p(0,1,1) -- cycle;
+front = p(0,0,0) -- p(1,0,0) -- p(1,1,0) -- p(0,1,0) -- cycle;
+side  = p(1,0,0) -- p(1,0,1) -- p(1,1,1) -- p(1,1,0) -- cycle;
+picture cube[];
+cube1 = image(
+    fill upper withcolor Oranges 8 3;
+    fill front withcolor background;
+    fill side withcolor Oranges 8 1;
+    draw upper; draw front; draw side;
+);
+cube2 = image(
+    fill upper withcolor Blues 8 3;
+    fill front withcolor background;
+    fill side withcolor Blues 8 1;
+    draw upper; draw front; draw side;
+);
+cube3 = image(
+    fill upper withcolor Greens 8 3;
+    fill front withcolor background;
+    fill side withcolor Greens 8 1;
+    draw upper; draw front; draw side;
+);
+vardef dimity(expr p, t) = 
+    save pp, tt; 
+    path pp; pp = p shifted (unitvector(direction 1/2 of p) rotated 90 scaled 4 labeloffset); 
+    picture tt; tt = thelabel(t, point 1/2 of pp);
+    drawdblarrow pp; unfill bbox tt; draw tt;
+enddef;
+
+picture P[];
+P1 = image(
+    for x=0 upto 4:
+        for y=0 upto 4-x:
+            draw cube1 shifted p(x,y,0);
+        endfor
+    endfor
+    dimity(p(0,0,0) -- p(0,5,0), "$\scriptstyle n$");
+    dimity(p(5,0,0) -- p(0,0,0), "$\scriptstyle n$");
+    label("$T_n$", p(2,-3,0));
+);
+P2 = image(
+    for x=0 upto 5:
+        for y=0 upto 5-x:
+            for z=4 downto 0:
+                draw if x=0: cube2 else: cube1 fi shifted p(x,y,z);
+            endfor
+        endfor
+    endfor
+    dimity(p(0,0,0) -- p(0,6,0), "$\scriptstyle n+1$");
+    dimity(p(6,0,0) -- p(0,0,0), "$\scriptstyle n+1$");
+    dimity(p(6,0,6) -- p(6,0,1), "$\scriptstyle n$");
+    label("$n\cdot T_{n+1}$", p(3,-3,0));
+);
+P3 = image(
+    for x=0 upto 5:
+        for y=0 upto 5-x:
+            for z=4 downto 0:
+                draw if x=0: cube2 shifted p(-3,y,z-1) else: cube1 shifted p(x,y,z) fi;
+            endfor
+        endfor
+    endfor
+    draw p(-3,5,-1) -- p(-2,5,-1) -- p(-2,5,0) -- p(-2,4,0) 
+      -- p(-2,4,1) -- p(-2,3,1) -- p(-2,3,2) -- p(-2,2,2) 
+      -- p(-2,2,3) -- p(-2,1,3) -- p(-2,1,4) withpen pencircle scaled 1.21;
+    label("$2\cdot T_n + n\cdot T_n$", p(1, -3, 0));
+);
+P4 = image(
+    for x=0 upto 4:
+        for y=0 upto 4-x:
+            for z=6 downto 0:
+                draw
+                if z mod 6 = 0:
+                    cube2 shifted p(x,y,z if z>0: + else: - fi 1/8)
+                else:
+                    cube1 shifted p(x,y,z)
+                fi;
+            endfor
+        endfor
+    endfor
+    dimity(p(0,0,0) -- p(0,5,0), "$\scriptstyle n$");
+    dimity(p(5,0,0) -- p(0,0,0), "$\scriptstyle n$");
+    dimity(p(5,0,8) -- p(5,0,1), "$\scriptstyle n+2$");
+    label("$(n+2)\cdot T_n$", p(5,-2,0));
+);
+
+draw P1 shifted 60 left;
+draw P2 shifted 60 right;
+draw P3 shifted (-72, -180);
+draw P4 shifted (+96, -180);
+
+label.top(btex $\displaystyle
+1+2+\cdots+n=T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
+$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+label.bot(btex $\displaystyle
+    n\cdot T_{n+1} = (n+2) \cdot T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
+$ etex, point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+
 \end{document}
