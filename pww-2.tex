@@ -6138,4 +6138,116 @@ $ etex, point 1/2 of bbox currentpicture shifted 21 down);
 $$
 \vfill
 
+\section{Indenties for triangular numbers}
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 8;
+vardef T(expr n) = 
+    numeric m; m = abs(n);
+    numeric r; r = n/m; % don't use n=0
+    picture s; s = image(
+        fill unitsquare scaled u withcolor if r < 0: Oranges 8 1 else: Greens 8 2 fi;
+        draw unitsquare scaled u withpen pencircle scaled 1/4;
+    );
+    picture trig; 
+    trig = image(
+        for i=0 upto m - 1:
+            for j=0 upto m - 1 - i:
+                draw s shifted (u*(i, j));
+            endfor
+        endfor
+        draw (origin -- for i=0 upto m-1: (m-i, i) -- (m-i, i+1) -- endfor (0, m) -- cycle) scaled u;
+    ) rotated (90+90r);
+    trig
+enddef;
+picture P[];
+picture t[]; t5 = T(-5); t6 = T(6);
+
+P1 = image(
+    for x=0 upto 3:
+        for y=0 upto 3-x:
+            draw t5 shifted (6u*(x,y));
+            if x+y < 3:
+                draw t6 shifted (6u*(x+1, y+1));
+            fi
+        endfor
+    endfor
+    label.urt("$T_{n-1}T_k + T_n T_{k-1} = T_{nk-1}$", (20u, 4u));
+);
+P2 = image(
+    for x=0 upto 3:
+        for y=0 upto 3-x:
+            draw t6 shifted (-6u*(x,y));
+            if x+y < 3:
+                draw t5 shifted (-6u*(x+1, y+1));
+            fi
+        endfor
+    endfor
+    label.llft("$T_{n}T_k + T_{n-1} T_{k-1} = T_{nk}$", -(20u, 4u));
+);
+draw P1;
+draw P2 shifted 36(u, u);
+label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— RBN}
+
+\section{More identities for triangular numbers}
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 8;
+vardef T(expr n) = 
+    numeric m; m = abs(n);
+    numeric r; r = n/m; % don't use n=0
+    picture s; s = image(
+        fill unitsquare scaled u withcolor if r < 0: Oranges 8 1 else: Greens 8 2 fi;
+        draw unitsquare scaled u withpen pencircle scaled 1/4;
+    );
+    picture trig; 
+    trig = image(
+        for i=0 upto m - 1:
+            for j=0 upto m - 1 - i:
+                draw s shifted (u*(i, j));
+            endfor
+        endfor
+        draw (origin -- for i=0 upto m-1: (m-i, i) -- (m-i, i+1) -- endfor (0, m) -- cycle) scaled u;
+    ) rotated (90+90r);
+    trig
+enddef;
+picture P[];
+picture t[]; t6 = T(6); t5 = T(5) rotated 180;
+picture sq; sq = image(
+    fill unitsquare scaled 6u withcolor Oranges 8 1;
+    for i=1 upto 5:
+        draw ((i, 0) -- (i, 6)) scaled u dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
+        draw ((0, i) -- (6, i)) scaled u dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
+    endfor
+    draw unitsquare scaled 6u;
+);
+P1 = image(
+    for x=0 upto 3:
+        for y=0 upto 3-x:
+            draw if x+y < 3: sq else: t5 fi shifted (6u*(x,y));
+        endfor
+    endfor
+    label.urt("$n^2T_{k-1} + kT_{n-1} = T_{nk-1}$", (20u, 4u));
+);
+P2 = image(
+    for x=0 upto 3:
+        for y=0 upto 3-x:
+            draw if x+y < 3: sq rotated 180 else: t6 fi shifted (-6u*(x,y));
+        endfor
+    endfor
+    label.llft("$n^2T_{k-1} + kT_{n} = T_{nk}$", -(20u, 4u));
+);
+draw P1;
+draw P2 shifted 36(u, u);
+label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— James O.\@ Chilaka}
 \end{document}
