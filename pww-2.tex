@@ -6250,4 +6250,205 @@ label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", point 5/2 of bbox currentpict
 $$
 \vfill
 \rightline{— James O.\@ Chilaka}
-\end{document}
+
+\section{Identities for pentagonal numbers}
+\vfill
+$$
+\begin{mplibcode}
+   numeric s, r, d; s = 18; 1.8d = s; r = s / 2 / cosd 54;
+   path p[];
+   picture P[], xo, o[];
+   color cb[]; cb0 = Blues 7 6; cb1 = Oranges 7 3;  cb2 = Greens 7 1;
+   xo = image(draw fullcircle scaled .9d; 
+    draw (left--right) scaled 0.6 d rotated 45;
+    draw (left--right) scaled 0.6 d rotated -45;
+   );
+   for i=0 upto 2:
+       o[i] = image(
+           fill fullcircle scaled d withcolor cb[i];
+           draw fullcircle scaled d;
+        );
+    endfor
+
+   p1 = (for t=0 upto 4: up scaled r rotated  72t -- endfor cycle) shifted (0, -r);
+   p2 = origin -- for t=0 upto 3: left scaled s rotated 60t -- endfor cycle;
+   pair u, v; 
+   u = point 2 of p2; v = point 3 of p2;
+
+   for k=1 upto 2:
+       P[k] = image(
+           for i = 1 upto 3:
+               draw p[k] scaled i;
+           endfor
+           for i = 1 upto 3:
+               for t = i upto i * length(p[k]) - i: 
+                   draw o0 shifted (point t/i of p[k] scaled i);
+               endfor
+           endfor
+           draw o0;
+           if k=2:
+               draw xo shifted 3u shifted v;
+               draw xo shifted 3u shifted 2v;
+               draw xo shifted 3u shifted 3v;
+               draw xo shifted 2u shifted 2v;
+               draw xo shifted 2u shifted 3v;
+               draw xo shifted  u shifted 3v;
+           fi
+       );
+    endfor
+
+    drawarrow (left--right) scaled 20;
+
+    label.lft(P1, 42 left);
+    label.rt(P2, 42 right);
+    label.bot("$P_n = T_{2n-1} - T_{n-1}$", 64 down);
+
+    P3 = image(
+        for i=0 upto 2:
+            for j=1 upto 3:
+                for k=1 upto j * length p2:
+                    draw o[i] shifted (point k/j of p2 scaled j) 
+                        shifted -11/3 v shifted 1/3 u 
+                        rotated 120i;
+                endfor
+            endfor
+        endfor
+        label.bot("$3P_n = T_{3n-1}$", 4(u+v));
+    );
+    draw P3 shifted 180 down;
+
+    label.top(btex $\left.
+    \vcenter{\openup 4pt\halign{$#$\hfill\cr
+    P_n = 1 + 4 + 7 + \cdots + (3n-2)\cr
+    T_n = 1 + 2 + 3 + \cdots + n\cr}} \right\} \Rightarrow {}$ etex,
+    point 5/2 of bbox currentpicture shifted 42 up);
+
+
+\end{mplibcode}
+$$
+\vfill
+
+\section{Sums of octagonal numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+   numeric s, r, d; s = 18; 2d = s; 2r * cosd 67.5 = s;
+   picture P[], o[];
+   color cb[], cf[]; 
+   cf0 = Blues 7 1; cf1 = Oranges 7 1;  cf2 = Greens 7 1;
+   cb0 = Blues 7 3; cb1 = Oranges 7 3;  cb2 = Greens 7 3;
+   for i=0 upto 2:
+       o[i] = image(
+           fill fullcircle scaled d withcolor cb[i];
+           draw fullcircle scaled d;
+       );
+   endfor
+
+   P1 = image(
+       path octagon, O[];
+       octagon = (for t=0 upto 7: down scaled r rotated (45t-45/2) -- endfor cycle) shifted (0, -r);
+       O1 = octagon shifted - point 0 of octagon;
+       O2 = O1 scaled 2; 
+       fill point 0 of O2 -- subpath (3,5) of O2 -- cycle withcolor cf0;
+       for p = -1, 1:
+           fill subpath (1/2p, 3/2p) of O2 -- cycle withcolor cf1;
+           fill subpath (2p, 5/2p) of O2 -- point 2p of O1 -- cycle withcolor cf2;
+       endfor
+       draw O1; draw O2;
+       for t = 10, 13, 14, 15, 23, 23.5, 24, 24.5, 25:
+           draw o0 shifted point t mod 10 of O[floor (t/10)];
+       endfor
+       for t = 20.5, 21, 21.5, 26.5, 27, 27.5:
+           draw o1 shifted point t mod 10 of O[floor (t/10)];
+       endfor
+       for t = 12, 22, 22.5, 25.5, 26, 16:
+           draw o2 shifted point t mod 10 of O[floor (t/10)];
+       endfor
+   );
+   P2 = image(
+       picture t[], q;
+       for i=1,2:
+           t[i] = image(
+               fill for j=0 upto 2: (0, d) rotated 120j -- endfor cycle withcolor cf[i];
+               for j=0 upto 2: draw o[i] shifted (0,d) rotated 120j; endfor);
+       endfor
+       q = image(
+           fill unitsquare shifted -(1/2, 1/2) scaled 2s withcolor cf0;
+           for j=-1 upto 1: for k=-1 upto 1: draw o0 shifted (j*s, k*s); endfor endfor);
+       draw t1 shifted (-s, 0); draw t1 shifted (s, 0); 
+       draw t2 shifted (-s, 3/2s); draw t2 shifted (s, 3/2s);
+       draw q shifted (0, 4s);
+   );
+   vardef octaframe(expr n, tag) = 
+       save t, m; numeric t, m;
+       m + 1 = n; 2t = m * m + m;
+       save A; picture A; 
+       save a, b, c; path a, b, c;
+       a = unitsquare xscaled t yscaled 2 scaled s;
+       b = unitsquare xscaled n yscaled m scaled s shifted point 1 of a;
+       c = unitsquare scaled n scaled s shifted point 3 of b; 
+       A = image(
+           if n > 1:
+               fill a withcolor cf1; draw a; draw point -1/2 of a -- point 3/2 of a;
+               fill b withcolor cf2; draw b; 
+               draw (left--right) scaled 400 rotated -45 shifted center b 
+                   cutbefore subpath (3,2) of b cutafter subpath (1, 0) of b;
+           fi
+           fill c withcolor cf0; draw c;
+           for j=1 upto 2:
+               for i=1 upto t:
+                   draw o1 shifted (i*s - 1/2 s, j*s - 1/2 s);
+               endfor
+           endfor
+           for i=1 upto n:
+               for j=1 upto m:
+                   draw o2 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of b;
+               endfor
+           endfor
+           for i=1 upto n:
+               for j=1 upto n:
+                   draw o0 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of c;
+               endfor
+           endfor
+           label.top(tag, point 5/2 of c);
+           draw point 0 of a -- point 1 of b -- point 2 of c withpen pencircle scaled 1;
+       ); A enddef;
+   P3 = image(
+       draw octaframe(3, nullpicture);
+   );
+
+   draw P1 shifted 144 left; draw P2; draw P3 shifted 89 right;
+
+   label.bot("$T_k = 1 + 2 + \cdots + k \Rightarrow O_k = k^2 + 4T_{k-1}$", 21 down);
+
+   P4 = image(
+       draw octaframe(5, "$n$"); 
+       draw octaframe(4, "$\cdots$") shifted (0, 2s);
+       draw octaframe(3, "$3$")      shifted (0, 4s);
+       draw octaframe(2, "$2$")      shifted (0, 6s);
+       draw octaframe(1, "$1$")      shifted (0, 8s);
+       label.lft("$1$", (0, 17/2s));
+       label.rt("$n$", (15s, 13/2s));
+       label.rt("$n-1$", (15s, 2s));
+       picture a, b; path p, q;
+       p = (0, -s) -- (15s, -s);
+       q = (17s, 0) -- (17s, 9s);
+       a = thelabel("$\displaystyle {n(n+1)\over2}$", origin) shifted point 1/2 of p;
+       b = thelabel("$\displaystyle 2n - 1$", origin) shifted point 1/2 of q;
+       drawdblarrow p; unfill bbox a; draw a;
+       drawdblarrow q; unfill bbox b; draw b;
+   );
+    
+   draw P4 shifted (-15/2s, -15s);
+
+
+   label.bot(btex $\displaystyle
+   \sum_{k=1}^n O_k = 1 + 8 + 21 + 40 + \cdots + \left(n^2 + 4T_{n-1}\right) = {n(n+1)(2n-1)\over 2}
+   $ etex, point 1/2 of bbox currentpicture shifted 24 down);
+   \end{mplibcode}
+   $$
+   \vfill
+   \rightline{— James O.\@ Chilaka}
+
+   \end{document}
