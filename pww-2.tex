@@ -6446,9 +6446,55 @@ $$
    label.bot(btex $\displaystyle
    \sum_{k=1}^n O_k = 1 + 8 + 21 + 40 + \cdots + \left(n^2 + 4T_{n-1}\right) = {n(n+1)(2n-1)\over 2}
    $ etex, point 1/2 of bbox currentpicture shifted 24 down);
-   \end{mplibcode}
-   $$
-   \vfill
-   \rightline{— James O.\@ Chilaka}
+\end{mplibcode}
+$$
+\vfill
+\rightline{— James O.\@ Chilaka}
 
-   \end{document}
+\section{Sums of products of consecutive integers}
+\vfill
+$$
+\begin{mplibcode}
+    numeric s; s = 23;
+    vardef box(expr n) = 
+        path a, b;
+        a = unitsquare xscaled n yscaled (n + 1) scaled s;
+        b = unitsquare xscaled 1 yscaled (n*(n+1)/2) scaled s rotated 90 shifted point 2 of a;
+        picture p; p = image(
+            fill a withcolor Blues 7 2; 
+            fill b withcolor Oranges 7 2; 
+            label(if n > 4: "$n(n+1)$" elseif n = 4: "$\cdots$" else: "$" & decimal n & "\cdot" & decimal (n+1) & "$" fi, 
+            (xpart center a, ypart center b - s));
+            label(if n > 4: "$1+2+\cdots+n$" elseif n = 4: "$\cdots$" else: "$1" for i=2 upto n: & "+" & decimal i endfor & "$" fi, center b);
+            path t; t = origin -- right scaled s;
+            draw t shifted (0,s) for i=2 upto n: -- t shifted (s*(i-1,i)) endfor dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+            draw a;
+            draw b;
+        ); p
+    enddef;
+
+    for n=1 upto 5:
+        draw box(n) shifted (s*n*(n-1)/2, 0);
+    endfor
+
+    path xx, yy; picture lx, ly; 
+    xx = (origin -- 15 right * s) shifted 22 down;
+    yy = (origin --  7 up * s) shifted 24 left;
+    drawdblarrow xx; drawdblarrow yy; interim bboxmargin := 8;
+    lx = thelabel("$\displaystyle {n(n+1)\over2}$", point 1/2 of xx); unfill bbox lx; draw lx;
+    ly = thelabel("$n+2$", point 1/2 of yy); unfill bbox ly; draw ly;
+
+    label.top("$\displaystyle \sum_{k=1}^n k (k+1) = {n(n+1)(n+2)\over3}$", point
+    5/2 of bbox currentpicture shifted 42 up);
+    label.bot(btex
+    \vbox{\openup 16pt\halign{#\hfill\cr
+    $T_k = 1 + 2 + \cdots + k \enspace\Rightarrow$\cr
+    \hfill $\displaystyle 1\cdot2 + 2\cdot3 + \cdots + n(n+1) + \left(T_1+T_2+\cdots+T_n\right)={n(n+1)(n+2)\over2}$,\cr
+    \hfill $\displaystyle \left(T_1+T_2+\cdots+T_n\right) = {1\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right)$,\cr
+    \hfill \therefore\quad$\displaystyle {3\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right) = {n(n+1)(n+2)\over2}$.\cr
+    }} etex, point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— James O.\@ Chilaka}
+\end{document}
