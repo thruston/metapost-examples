@@ -6451,7 +6451,7 @@ $$
 \vfill
 \rightline{— James O.\@ Chilaka}
 
-\section{Sums of products of consecutive integers}
+\section{Sums of products of consecutive integers I}
 \vfill
 $$
 \begin{mplibcode}
@@ -6493,6 +6493,50 @@ $$
     \hfill $\displaystyle \left(T_1+T_2+\cdots+T_n\right) = {1\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right)$,\cr
     \hfill \therefore\quad$\displaystyle {3\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right) = {n(n+1)(n+2)\over2}$.\cr
     }} etex, point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— James O.\@ Chilaka}
+
+\section{Sums of products of consecutive integers II}
+\vfill
+$$
+\begin{mplibcode}
+numeric u, k, n; u = 14; k = 4; n = 5;
+vardef t(expr n) = n*(n+1)/2 enddef;
+path b[]; for i=1 upto n: b[i] = unitsquare xscaled t(i + 2) yscaled -t(i) scaled u; endfor
+picture P[]; P1 = image(
+    fill b4 withcolor Oranges 8 4;
+    fill b3 withcolor background;
+    z0 = (xpart point 2 of b3, ypart point 2 of b4);
+    fill subpath (2,3) of b3 -- point 3 of b4 -- z0 -- cycle
+        withcolor Oranges 8 3;
+    draw z0 -- point 2 of b3 dashed evenly withpen pencircle scaled 1/4;
+    draw b3; draw b4;
+    for i=0 upto k+2: draw (up--down) scaled 2 shifted (t(i)*u, 0); endfor
+    for i=0 upto k: draw (left--right) scaled 2 shifted (0, -t(i)*u); endfor
+    for i=1,2:
+        label.top("$" & decimal i & "$", 1/2u*(t(i-1)+t(i), 0));
+        label.lft("$" & decimal i & "$", -1/2u*(0, t(i-1)+t(i)));
+    endfor
+    label.lft("$\vdots$", -1/2u*(0, t(2)+t(3)));
+    label.lft("$k$",      -1/2u*(0, t(3)+t(4)));
+    label.top("$\cdots$", 1/2u*(t(2)+t(3), 0));
+    label.top("$k+1$", 1/2u*(t(4)+t(5), 0));
+    label.top("$k+2$", 1/2u*(t(5)+t(6), 0));
+    label.top("$1+2+\cdots+(k+1)$", point 5/2 of b3);
+    label("$\displaystyle k{(k+1)(k+2)\over2}$", 1/2[point 2 of b3, point 3 of b4]);
+    label("$\displaystyle (k+2){k(k+1)\over2}$", 1/2[point 1 of b4, z0]);
+    label.rt(TEX("$1+2+\cdots+k$") rotated 90, point 3/2 of b4);
+        
+
+);
+draw P1 shifted (-10u, 13u);
+label(btex $\displaystyle 
+k{(k+1)(k+2)\over2}+(k+2){k(k+1)\over2}=k(k+1)(k+2)
+$ etex, origin);
+label.top("$\displaystyle \sum_{k=1}^n k(k+1)(k+2) = {n(n+1)(n+2)(n+3)\over4}$",
+point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
