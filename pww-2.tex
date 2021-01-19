@@ -6574,4 +6574,36 @@ point 1/2 of bbox currentpicture);
 $$
 \vfill
 \rightline{— James O.\@ Chilaka}
+
+\section{Sums of powers of three}
+
+\vfill
+$$
+\begin{mplibcode}
+    picture t[];
+    t0 = image(fill fullcircle scaled 4 withcolor 1/2[blue, white]; draw fullcircle scaled 4);
+    for i=1 upto 5:
+        numeric delta; delta = 2**(i-1);
+        t[i] = image(
+            draw t[i-1];
+            draw t[i-1] shifted ((6 delta, 0) rotated -60);
+            draw t[i-1] shifted ((-6 delta, 0) rotated 60);
+        );
+    endfor
+    numeric x; x = 0;
+    for i=0 upto 4:
+        draw t[i] shifted (x, 0); label.bot("$3^" & decimal i & "$", point 1/2 of bbox t[i] + (x, 0));
+        x := x + 18 * (i+1);
+    endfor
+    t5 := t5 shifted (90, -80); 
+    draw t5;
+    draw point 1/2 of bbox t5 -- point 5/2 of bbox t5;
+    drawdot (90, -80) withpen pencircle scaled 3.6 withcolor 3/4[red, white];
+    label.top("$\displaystyle \sum_{k=0}^{n-1} 3^k = {3^n-1 \over 2} $", point 5/2 of bbox currentpicture shifted 12 up);
+    label("$\displaystyle 3^n-1 = 2\sum_{k=0}^{n-1} 3^k$", point 1.5 of bbox t5);
+\end{mplibcode}
+$$
+\vfill
+\rightline{— David B.\@ Sher}
+
 \end{document}
