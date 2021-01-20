@@ -6733,4 +6733,74 @@ $$
 \vfill
 \rightline{— Rick Mabry}
 
+\section{An alternating series}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 88;
+path a, b; numeric x, y; x = y = 1;
+a = (origin for i=1 upto 8: 
+    hide(y := y * 1/2;) -- (1-x, 1-y) 
+    hide(x := x * 1/2;) -- (1-x, 1-y) 
+endfor) scaled u;
+b = a reflectedabout(left, right);
+picture P[];
+P0 = image(
+    draw unitsquare shifted (-1/2, -1/2) scaled 2u;
+    draw u * left -- origin;
+    draw a;
+    draw b;
+);
+P1 = image(
+    draw P0;
+    for i=1 upto 3: 
+        label("$A_" & decimal i & "$", 5/8u * dir 120i); 
+    endfor
+);
+P2 = image(
+    draw P0;
+    drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
+    draw origin -- u * right;
+    for t=1 upto length(a):
+        if t < 7:
+            picture ff; 
+            ff = thelabel("${1\over" & decimal (2**t) & "}-{1\over" & decimal (2**(t+1)) & "}$", origin) scaled (7/8 ** t);
+        fi
+        forsuffixes $=a, b:
+            numeric signum; signum = ypart point t of $ / abs(ypart point t of $);
+            draw point t of $ -- if odd t: (xpart point t of $, u * signum) else: (u, ypart point t of $) fi;
+            if t < 7:
+                draw ff shifted if odd t:
+                    (xpart point t of $ - (1/2 ** ((t+1)/2)) * u, ypart point t of $)
+                else: 
+                    (xpart point t of $, 1/2(ypart point t of $ + ypart point t-2 of $))
+                fi;
+            fi
+        endfor
+    endfor
+    drawoptions();
+    label.lft("$1\over2$", (-u, 1/2u));
+    label.lft("$1\over2$", (-u, -1/2u));
+    label.bot("$1\over2$", (-1/2u, -u));
+    label.bot("$1\over4$", (+1/4u, -u));
+    label.bot("$1\over8$", (+5/8u, -u));
+);
+draw P1 shifted (-5/4u, 0);
+draw P2 shifted (+5/4u, 0);
+
+label.top("$\displaystyle \frac12 - \frac14 + \frac18 - \frac1{16} + \frac1{32} - \frac1{64} + \cdots = \frac13$",
+point 5/2 of bbox currentpicture shifted 34 up);
+
+label.bot(btex \vbox{\openup 16pt\halign{\hss # \hss\cr
+$\displaystyle A_1 = \frac12 - \frac14 + \frac18 - \frac1{16} + \frac1{32} - \frac1{64} + \cdots$,\cr
+$A_1 = A_2 = A_3$, \quad $A_1 + A_2 + A_3 = 1$,\cr
+\therefore \quad $\displaystyle A_1 = \frac13$.\cr}} etex, point 1/2 of bbox currentpicture shifted 34 down);
+
+\end{mplibcode}
+$$
+\vfill
+
+\rightline{— James O.\@ Chilaka}
+
 \end{document}
