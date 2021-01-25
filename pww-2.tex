@@ -6800,7 +6800,94 @@ $A_1 = A_2 = A_3$, \quad $A_1 + A_2 + A_3 = 1$,\cr
 \end{mplibcode}
 $$
 \vfill
-
 \rightline{— James O.\@ Chilaka}
+
+\section{A generalized geometric series}
+
+Let $\left\{k_1, k_2, k_3 \right\}$ be a sequence of integers, each of which is at least 2.  Then
+$$
+\begin{mplibcode}
+vardef brace_label@#(expr port, a, b) = 
+    pair m, u, v; u = unitvector(b-a); v = u rotated -90;
+    m = 1/2[a, b] shifted 8v;
+    draw a shifted (1/2u+v) {v rotated 10}.. {u} a shifted (4u + 4v) 
+        -- 
+        m shifted (-4u - 4v) {u} .. {v} m {-v} .. {u} m shifted (4u - 4v) 
+        -- 
+        b shifted (4v-4u) {u} .. {-v rotated -10} b shifted (v-1/2u);
+    label@#(port, m);
+enddef;
+numeric u; u = 144;
+picture P[]; path s; s = unitsquare shifted -(1/2, 1/2) scaled u;
+P1 = image(
+    for i=0 upto 3:
+        path t; t = unitsquare xscaled 1/5u yscaled u 
+                    shifted point 1/5i of s; 
+        fill t withcolor Blues[6][5-i]; 
+        draw subpath (1,2) of t withpen pencircle scaled 1/4;
+    endfor
+);
+P2 = image(
+    draw P1; 
+    for i=0 upto 2:
+        path t; t = unitsquare xscaled -1/5u yscaled -1/4u shifted point 2-1/4i of s; 
+        fill t withcolor Oranges[6][5-i]; 
+        draw subpath (2,3) of t withpen pencircle scaled 1/4;
+    endfor
+);
+P3 = image(
+    draw P2;
+    for i=0 upto 1:
+        path t; t = unitsquare xscaled (1/3 * 1/5u) yscaled 1/4u shifted point 4/5 + 1/15i of s;
+        fill t withcolor Greens[4][3-i];
+        draw subpath (1,2) of t withpen pencircle scaled 1/4;
+    endfor
+);
+P4 = image(
+    draw P3; 
+    for i=0 upto 2:
+        path t; t = unitsquare xscaled -1/15u yscaled -1/16u shifted point 5/4-1/16i of s; 
+        fill t withcolor Reds[6][4-i]; 
+        draw subpath (2,3) of t withpen pencircle scaled 1/4;
+    endfor
+);
+P11 = image(
+    draw P1; draw s;
+    brace_label.bot("$k_1-1\over k_1$", point 0 of s, point 4/5 of s);
+    brace_label.bot("$1\over k_1$", point 4/5 of s, point 1 of s);
+);
+P12 = image(
+    draw P2; draw s;
+    brace_label.rt("${k_2-1\over k_2}\cdot{1\over k_1}$", point 5/4 of s, point 2 of s);
+    brace_label.rt("${1\over k_2 k_1}$", point 1 of s, point 5/4 of s);
+);
+P13 = image(
+    draw P3; draw s;
+    brace_label.bot("${k_3-1\over k_3}\cdot{1\over k_2 k_1}$", point 4/5 of s, point 14/15 of s);
+);
+P14 = image(
+    draw P4; draw s; label.bot("$\cdots$", point 1 of s shifted 5 down);
+);
+
+draw P11 shifted 100 left shifted 100 up;
+draw P12 shifted 100 right shifted 100 up;
+draw P13 shifted 100 left shifted 100 down;
+draw P14 shifted 100 right shifted 100 down;
+
+drawarrow (left--right) scaled 20 shifted 100 up;
+drawarrow (left--right) scaled 20 rotated 225;
+drawarrow (left--right) scaled 20 shifted 100 down;
+
+label.top(btex $\displaystyle
+{k_1-1\over k_1} +
+{k_2-1\over k_2 k_1} +
+{k_3-1\over k_3 k_2 k_1} + \cdots = 1$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+
+\end{mplibcode}
+$$
+\vfill
+\rightline{— John Mason}
+
+
 
 \end{document}
