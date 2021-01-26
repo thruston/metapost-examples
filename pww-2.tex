@@ -7068,5 +7068,178 @@ point 5/2 of bbox currentpicture shifted 21 up);
 $$
 \vfill
 
+\section{$\left(\mathbf{A}\mathbf{B}\right)^T = \mathbf{B}^T\mathbf{A}^T$, where
+$\mathbf{A}$ and $\mathbf{B}$ are matrices}
+\vfill
+$$
+\begin{mplibcode}
+path A, B, AB, A', B', AB';
+numeric ax, ay, bx, by;
+ax = 89; ay = 55; bx = 61; by = 98.7; 
+
+A = unitsquare xscaled ax yscaled ay;
+B = unitsquare xscaled bx yscaled by shifted point 2 of A;
+AB = unitsquare xscaled bx yscaled ay shifted point 1 of A;
+A' = A reflectedabout((-1,1), (1,-1));
+AB' = AB reflectedabout((-1,1), (1,-1));
+B' = B reflectedabout((-1,1), (1,-1));
+
+forsuffixes $=A,B,AB:
+    draw $; label("$\mathbf{" & str $ & "}$", center $);
+    draw $'; label("$\mathbf{" & str $ & "}^T$", center $');
+endfor
+draw (left--right) scaled 144 rotated -45 dashed evenly withcolor Reds 7 7;
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{James G.\@ Simmonds}
+
+\section{The distributive property of the triple scalar product}
+
+\vfill
+\def\vA{\vec{A}}
+\def\vB{\vec{B}}
+\def\vC{\vec{C}}
+\def\vD{\vec{D}}
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(10, -21); ipscale := 16;
+pair A, B, C, D;
+A = p(-1, 3, 0);
+B = p(2, 4, 0);
+C = p(5, 0, 0);
+D = p(0, 0, 5);
+
+picture P[];
+
+P1 = image(
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  draw D -- D+A;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw A -- A+D -- A+D+C -- A+C -- cycle;
+    draw A+C -- C;
+    draw A+C+D -- C+D;
+    drawoptions();
+    drawarrow origin -- A; label.lft("$\vA$", 1/2A);
+    drawarrow origin -- C; label.bot("$\vC$", 1/2C);
+    drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+);
+P2 = image(
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  draw D -- D+B;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw B -- B+D -- B+D+C -- B+C -- cycle;
+    draw B+C -- C;
+    draw B+C+D -- C+D;
+    drawoptions();
+    drawarrow origin -- B; label.lft("$\vB$", 1/2B);
+    drawarrow origin -- C; label.bot("$\vC$", 1/2C);
+    drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+);
+P3 = image(
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  
+    draw D -- A+D -- A+B+D;
+    draw A -- A+D -- A+C+D;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw A -- A+C -- A+C+D;
+    draw C -- A+C -- A+B+C -- A+B;
+    draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
+    draw A+B -- A+B+D;
+    draw A+B+C -- A+B+C+D;
+    drawoptions();
+    drawarrow origin -- A; label.lft("$\vA$", 1/2A);
+    drawarrow A -- A+B; label.lft("$\vB$", 1/2[A, A+B]);
+    drawarrow origin -- C; label.bot("$\vC$", 1/2C);
+    drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+);
+P4 = image(
+    pair dx; dx = -1/2C;
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  
+    draw D -- A+B+D;
+    draw A + dx -- A+D + dx;
+    draw D + dx -- A+D + dx -- A+B+D + dx;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw C -- A+C -- A+B+C -- A+B;
+    draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
+    draw A+B -- A+B+D;
+    draw A+C -- A+C+D;
+    draw A+B+C -- A+B+C+D;
+    draw origin + dx -- D+ dx -- A+B+D+ dx -- A+B+ dx;
+    drawoptions();
+    drawarrow origin -- A+B;
+    drawarrow origin -- C;
+    drawarrow C -- C + D; 
+    drawarrow origin + dx -- A + dx; 
+    drawarrow origin + dx -- A+B + dx; 
+    drawarrow A + dx -- A+B + dx;
+    label("$\vA+\vB$", 1/2(A+B+ dx));
+    label.bot("$\vC$", 1/2C);
+    label.lft("$\vA$", 1/2A+ dx);
+    label.lft("$\vB$", 1/2[A+ dx, A+B+ dx]);
+    label.lrt("$\vD$", 1/2[C, C+D]);
+);
+P5 = image(
+    pair dx; dx = 3/2C;
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  
+    draw D -- A+B+D;
+    draw A + dx -- A+D + dx;
+    draw D + dx -- A+D + dx -- A+B+D + dx;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw C -- A+C -- A+B+C -- A+B;
+    draw C -- C+D -- A+C+D -- A+B+C+D -- A+B+D;
+    draw A+B -- A+B+D;
+    draw A+C -- A+C+D;
+    draw A+B+C -- A+B+C+D;
+    draw D + dx -- A+B+D+ dx -- A+B+ dx;
+    drawoptions();
+    drawarrow origin + dx -- D + dx;
+    drawarrow origin -- A+B;
+    drawarrow origin -- C;
+    drawarrow + dx -- A+ dx; 
+    drawarrow + dx -- A+B+ dx; 
+    drawarrow A+ dx -- A+B+ dx;
+    label.lft("$\vA+\vB$", 1/2(A+B));
+    label.bot("$\vC$", 1/2C);
+    label.lrt("$\vD$", 1/2[dx, dx+D]);
+);
+P6 = image(
+    drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+    draw origin -- D -- D+C;  draw D -- A+B+D;
+    drawoptions(withpen pencircle scaled 1/4);
+    draw C -- A+B+C -- A+B;
+    draw C+D -- A+B+C+D -- A+B+D;
+    draw A+B -- A+B+D;
+    draw A+B+C -- A+B+C+D;
+    drawoptions();
+    drawarrow origin -- A+B;
+    drawarrow origin -- C;
+    drawarrow C -- C + D; 
+    label.lft("$\vA+\vB$", 1/2(A+B));
+    label.bot("$\vC$", 1/2C);
+    label.lrt("$\vD$", 1/2[C, C+D]);
+);
+draw P1; label("$+$", 1/4(A+B+6C+2D));
+draw P2 shifted 2C;     
+draw P3 shifted -3/2(A+B);
+draw P4 shifted (3C-3/2(A+B));
+draw P5 shifted -3(A+B);
+draw P6 shifted (3C-3(A+B));
+
+label("$=$", 1/4(A+B+6C+2D)+2C);
+label("$=$", 1/2(A+B+3C+D)-3/2(A+B));
+label("$=$", 1/2(A+B+3C+D)-3/2(A+B)+3C);
+label("$=$", 1/2(A+B+3C+D)-3(A+B)+1/2C);
+
+label.top("$\vA\cdot\left(\vC \times \vD\right) + \vB\cdot\left(\vC \times \vD\right) =\left(\vA+\vB\right)\cdot\left(\vC \times \vD\right)$",
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Constance C.\@ Edwards and Prashant S.\@ Sansgiry}
 
 \end{document}
