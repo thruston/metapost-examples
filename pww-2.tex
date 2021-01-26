@@ -3836,16 +3836,13 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+    numeric u; u = 260; 
+
+    vardef f(expr x) = x**(7/3) enddef;
+
     path xx, yy, ff;
-    numeric u, p, q; 
-    u = 3.6in;
-    
     xx = 12 left -- (u + 32) * right;
     yy = xx rotated 90;
-    
-    p = 3; q = 7;
-    vardef f(expr x) = x**(q/p) enddef;
-
     ff = (origin{right} for x=1/8 step 1/8 until 9/8:
         .. (x, f(x)) endfor) scaled u
         cutafter (xx shifted point 1 of yy);
