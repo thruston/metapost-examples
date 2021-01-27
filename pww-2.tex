@@ -7242,4 +7242,79 @@ $$
 \vfill
 \contrib{Constance C.\@ Edwards and Prashant S.\@ Sansgiry}
 
+\section{Cramer's rule}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(13, -36); ipscale := 23;
+
+numeric x, y, z; 
+x = 7/2;
+y = 9/8;
+z = 9/8;
+
+pair a, b, c, d, o; 
+o = origin;
+a = p(3/4, 2, 0);
+b = p(4, 0, 0);
+c = p(0, 0, 5);
+d = x*a + y*b + z*c;
+
+path base[]; 
+base0 = o -- b -- b + c -- c -- cycle;
+base1 = base0 shifted a;
+base2 = base0 shifted (x*a);
+base3 = base0 shifted d;
+
+draw point 3 of base2 -- point 3 of base3 - y*b -- point 3 of base3 dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+draw point 1 of base2 -- point 1 of base3 - z*c -- point 1 of base3 dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+
+fill base0 withcolor Blues 8 3;
+draw base0 withpen pencircle scaled 1/4;
+forsuffixes $=2, 3:
+    draw point 1 of base 0 -- point 1 of base$ withpen pencircle scaled 1/4 withcolor 0;
+    draw point 2 of base 0 -- point 2 of base$ withpen pencircle scaled 1/4 withcolor 1/4;
+    draw point 3 of base 0 -- point 3 of base$ dashed withdots scaled 1/4 withcolor 3/4;
+endfor
+draw base1 withpen pencircle scaled 1/4;
+forsuffixes $=2, 3:
+    fill base$ withcolor Blues[8][2];
+    draw base$ withpen pencircle scaled 1/4;
+endfor
+forsuffixes $=a,b,c,d:
+    drawarrow origin -- $ withpen pencircle scaled 1;
+endfor
+drawarrow a -- x*a withpen pencircle scaled 1;
+
+drawoptions(withpen pencircle scaled 1/4 withcolor Blues 8 8);
+drawarrow p(0, 0,  -4) -- o -- p(0, 9, 0);
+draw      p(0, 2, -3) -- p(0, 2, 0) -- a;
+draw      p(0, 2x, -4) -- p(0, 2x, 0) -- x*a;
+numeric s; s = 1/4;
+draw p(0,2,-s)--p(0,2-s,-s)--p(0,2-s,0)--p(s,2-s,0)--p(s,2,0);
+draw p(0,2x,-s)--p(0,2x-s,-s)--p(0,2x-s,0)--p(s,2x-s,0)--p(s,2x,0);
+path hx, h; picture lhx, lh;
+h = p(0, 0, -5/2)--p(0, 2, -5/2);
+hx = p(0, 0, -7/2)--p(0, 2x, -7/2);
+interim ahangle := 20; ahlength := 2;
+drawdblarrow h; lh = thelabel("$h$", point 1/2 of h); unfill bbox lh; draw lh;
+drawdblarrow hx; lhx = thelabel("$xh$", point 3/4 of hx); unfill bbox lhx; draw lhx;
+drawoptions();
+
+label.rt("$\textbf{a}$", 3/4a);
+label.rt("$x\textbf{a}$", 3/4a*x);
+label.bot("$\textbf{b}$", 3/4b);
+label.ulft("$\textbf{c}$", 3/4c);
+label.ulft("$\textbf{d}$", 5/8d);
+
+label.bot(btex \vbox{\openup 12pt \def\va{\textbf{a}}\def\vb{\textbf{b}}\def\vc{\textbf{c}}\def\vd{\textbf{d}}
+\halign{\hss $\displaystyle # $\hss\cr
+x\va+ y\vb+ z\vc = \vd \enspace\Rightarrow\enspace \det(\vd,\vb,\vc) = \det(x\va,\vb,\vc) = x\det(\va,\vb,\vc)\cr
+\therefore\quad x={\det(\vd,\vb,\vc)\over\det(\va,\vb,\vc)}\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{\textit{The Mathematics Initiative}, Education Development Center}
 \end{document}
