@@ -12,7 +12,7 @@
 \mtcsetrules{*}{off}
 %--------------------
 \title{Proofs without words II\\[6pt]{\Large More exercises in \MP}}
-\date{March 2020\\[4in]
+\date{March 2020 — January 2021\\[4in]
 \centerline{\begin{mplibcode}
     path t[], h;
     numeric r; r = -30;
@@ -61,20 +61,20 @@ u = 5mm;
 path s[];
 for i=0 upto 4:
     for j=0 upto 4:
-     s[5i+j] = unitsquare shifted -(1/2,1/2)
-     scaled ((4-((i+j) mod 2))*u) 
-     shifted (1/2i*u*(7,-1))
-     shifted (1/2j*u*(1,7));
-     fill s[5i+j] withcolor 7/8[if odd (i+j): blue else: red fi, white];
+         s[5i+j] = unitsquare shifted -(1/2,1/2)
+             scaled ((4-((i+j) mod 2))*u) 
+             shifted (1/2i*u*(7,-1))
+             shifted (1/2j*u*(1,7));
+         fill s[5i+j] withcolor if odd (i+j): Blues 8 3 else: Oranges 8 3 fi;
     endfor
 endfor
-fill subpath(0,7/4) of s[8] -- cycle withcolor 7/8[green+red,white];
+fill subpath(0,7/4) of s[8] -- cycle withcolor Reds 8 4;
 for i=0 upto 4:
     for j=0 upto 4:
-     draw s[5i+j];
+        draw s[5i+j];
     endfor
 endfor
-drawoptions(withpen pencircle scaled 1.44);
+drawoptions(withpen pencircle scaled 1);
 draw point 0 of s[0] -- point 7/4 of s[24];
 draw point 0 of s[2] -- point 7/4 of s[14] -- point 7/4 of s[22] -- point 0 of s[10] -- cycle;
 draw point 0 of s[4] -- point 7/4 of s[ 4] -- point 7/4 of s[20] -- point 0 of s[20] -- cycle;
@@ -103,17 +103,14 @@ b4 = b2 reflectedabout((0,0),(1,1));
 
 picture A[], B[];
 
-A1 = image(fill a1 withcolor 7/8[red,white]; draw a1);
-A2 = image(fill a2 withcolor 7/8[red,white]; draw a2);
-
-B0 = image(fill b[0] withcolor 7/8[blue,white]; draw b[0]);
-B1 = image(fill b[1] withcolor 7/8[blue,white]; draw b[1]);
-B2 = image(fill b[2] withcolor 7/8[blue,white]; draw b[2]);
-B3 = image(fill b[3] withcolor 7/8[blue,white]; draw b[3]);
-B4 = image(fill b[4] withcolor 7/8[blue,white]; draw b[4]);
-
-for i=1 upto 2: draw A[i] shifted (-3u,0); endfor
-for i=0 upto 4: draw B[i] shifted (0,-4u); endfor
+forsuffixes $=1,2:
+    A$ = image(fill a$ withcolor Blues 8 3; draw a$);
+    draw A$ shifted (3u * left);
+endfor
+forsuffixes $=0,1,2,3,4:
+    B$ = image(fill b$ withcolor Oranges 8 3; draw b$);
+    draw B$ shifted (4u * down);
+endfor
 
 draw A1 shifted (0u,3u);
 draw A2 shifted (4u,1u);
@@ -136,7 +133,7 @@ $$
     path c, t, s[];
     c = fullcircle scaled 2/5 \mpdim\textwidth;
     t = point 4 of c -- point 0 of c -- point 2.5 of c -- cycle;
-    fill t withcolor 7/8[blue,white];
+    fill t withcolor Oranges 7 3;
     vardef square_on(expr a,b) = 
      unitsquare scaled abs(a-b) rotated angle (a-b) shifted b
     enddef;
@@ -7317,4 +7314,277 @@ x\va+ y\vb+ z\vc = \vd \enspace\Rightarrow\enspace \det(\vd,\vb,\vc) = \det(x\va
 $$
 \vfill
 \contrib{\textit{The Mathematics Initiative}, Education Development Center}
+
+\section{Parametric representation of primitive Pythagorean triples}
+
+\vfill
+$$
+\begin{mplibcode}
+path t; t = (origin -- 144 up -- 233 right -- cycle) scaled 1.414;
+draw unitsquare scaled 8 withcolor 1/2; draw t withcolor Blues 8 8;
+label.lft("$a$", point 1/2 of t);
+label.bot("$b$", point -1/2 of t);
+label.urt("$c$", point 3/2 of t);
+
+label.top("${a\over2}, b, c \in \mathbb{Z}^+$,\quad $(a,b)=1$", point 5/2 of bbox currentpicture shifted 21 up);
+label.bot(btex \vbox{\openup 12 pt\halign{#\hfil&$\displaystyle {}\Rightarrow #$\hfil\cr
+$\displaystyle {c+b\over a}={n\over m}$, \enspace $(n, m) = 1$ 
+    & {c-b\over a} = {m\over n},\cr
+    & {c \over a} = {n^2 + m^2 \over 2mn},\enspace
+      {b \over a} = {n^2 - m^2 \over 2mn},\cr
+    & n \not\equiv m \pmod2.\cr
+    \therefore\enspace $(a,b,c) = \bigl(2mn, n^2-m^2, n^2+m^2\bigr)$.\hidewidth&\omit\cr
+}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Raymond A.\@ Beauregard and E.\@ R.\@ Suryanarayan}
+
+\section{On perfect numbers}
+\vfill
+$$
+\begin{mplibcode}
+numeric u, n; u = 13; n = 4;
+for i=0 upto n:
+    path s; s = unitsquare xscaled -1 yscaled -(2**i) scaled u shifted ((0, 2**i-1)*-u);
+    fill s withcolor Oranges[7][i+1]; draw s;
+    label.lft("$" & if i=n: "2^n" elseif i=n-1: "\vdots" else: decimal (2**i) fi & "$", point 3/2 of s);
+    if i=0: label.top("$1$", point 1/2 of s); fi
+endfor
+for i=0 upto n-1:
+    path s; s = unitsquare xscaled (2**i) yscaled -(2**(n+1)-1) scaled u shifted ((2**i-1, 0)*u);
+    fill s withcolor Blues [8][i+1];
+    draw s;
+    label.top("$" & if i=n-1: "2^{n-1}" elseif i=n-2: "\cdots" else: decimal (2**i) fi & "$", point 1/2 of s);
+    label.top("$" & if i=n-1: "2^{n-1}p" elseif i=n-2: "\cdots" elseif i=0: "p" else: decimal (2**i) & "p" fi & "$", center s);
+endfor
+path ax, ay; picture lax, lay;
+ax = ((1, 2**(n+1)-1) -- (-(2**n-1), 2**(n+1)-1)) scaled -u shifted 8 down;
+ay = ((2**n, 0) -- (2**n, -(2**(n+1)-1))) scaled u shifted 21 right;
+lax = thelabel("$2^n$", point 1/2 of ax);
+lay = thelabel("$p=2^{n+1}-1$", point 1/2 of ay);
+drawdblarrow ax; unfill bbox lax; draw lax;
+drawdblarrow ay; unfill bbox lay; draw lay;
+
+label.top("$p=2^{n+1}-1$ prime ${}\Rightarrow{}$ $N=2^np$ perfect", 
+point 5/2 of bbox currentpicture shifted 13 up);
+label.bot("$1+2+\cdots+2^n+p+2p+\cdots+2^{n-1}p = 2^np = N$", 
+point 1/2 of bbox currentpicture shifted 13 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Don Goldberg}
+
+\section{Self-complementary graphs}
+
+A graph is \textit{simple} if it contains no loops or multiple edges.  
+A simple graph $G=(V,E)$ is \textit{self-complementary} of $G$ is isomorphic
+to its \textit{complement} $\bar{G}=(V,\bar{E})$, where 
+$$\bar{E} = \left\{ \hbox{$\{v, w\}: v, w \in V$, $v\ne w$, and $\{v, w\} \not\in E$} \right\}.$$
+It is a standard exercise to show that if $G$ is a self-complementary simple graph with $n$ vertices, 
+    then $n \equiv 0 \pmod 4$ or $n\equiv 1 \pmod 4$.  A converse also holds, as we now show.
+
+\bigskip\noindent
+\textsc{Theorem}:  \textit{If $n$ is a positive integer and either $n\equiv 0 \pmod 4$ or
+$n\equiv1\pmod4$, then there exists a self-complementary simple graph $G_n$ with $n$ vertices}.
+
+\bigskip\noindent
+\textsc{Proof}:
+
+$$\begin{mplibcode}
+numeric u, v; u = 13; v = -24;
+picture G[], dot, rdot, bdot; 
+dot = image(fill fullcircle scaled 4 withcolor 3/4; draw fullcircle scaled 4);
+rdot = image(fill fullcircle scaled 4 withcolor Reds 8 4; draw fullcircle scaled 4);
+bdot = image(fill fullcircle scaled 4 withcolor Blues 8 4; draw fullcircle scaled 4);
+G1  = image(draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); label.lft("$G_1 : {}$", point -1/2 of bbox currentpicture));
+G11 = image(draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); label.lft("$\overline{G_1} : {}$", point -1/2 of bbox currentpicture));
+
+G4 = image(
+    draw origin -- right scaled 3u; 
+    numeric x; x = -1;
+    forsuffixes s=a,b,c,d:
+        draw if odd ASCII str s: rdot else: bdot fi shifted ((incr x) * u, 0); 
+        label.top("$" & str s & "$", (x*u, -16)); 
+    endfor
+    label.lft("$G_4 : {}$", point -1/2 of bbox currentpicture)
+);
+G41 = image(
+    draw origin -- right scaled 3u; 
+    numeric x; x = -1;
+    forsuffixes s=b,d,a,c:
+        draw if odd ASCII str s: rdot else: bdot fi shifted ((incr x) * u, 0); 
+        label.top("$" & str s & "$", (x*u, -16)); 
+    endfor
+    label.lft("$\overline{G_4} : {}$", point -1/2 of bbox currentpicture)
+);
+G5 = image(
+    path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
+    numeric t; t = -1;
+    forsuffixes s=x, y, z, w, p: 
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
+    endfor
+    label.lft("$G_5 : {}$", point -1/2 of bbox currentpicture)
+);
+G51 = image(
+    path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
+    numeric t; t = -1;
+    forsuffixes s=y, w, x, z, p: 
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
+    endfor
+    label.lft("$\overline{G_5} : {}$", point -1/2 of bbox currentpicture)
+);
+G8 = image(
+    path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
+    for t = 4 upto 7: draw point 0 of pp -- point t of pp -- point 3 of pp; endfor  
+    numeric t; t = -1;
+    forsuffixes s=x, y, z, w, d, c, b, a: 
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
+    endfor
+    label.lft("$G_8 : {}$", point -1/2 of bbox currentpicture);
+);
+G81 = image(
+    path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
+    for t = 4 upto 7: draw point 0 of pp -- point t of pp -- point 3 of pp; endfor  
+    numeric t; t = -1;
+    forsuffixes s = y, w, x, z, c, a, d, b: 
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
+    endfor
+    label.lft("$\overline{G_8} : {}$", point -1/2 of bbox currentpicture);
+);
+G0 = image(
+    path pp, ee; 
+    ee = fullcircle xscaled 6u yscaled 2u;
+    draw ee;
+    pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
+    for i=1 upto 5: 
+        z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
+    endfor
+    for i=1, 2, 5:
+        draw point 0 of pp -- z[i] -- point 3 of pp;
+        draw dot shifted z[i]; 
+    endfor
+    for i=3, 4:
+        draw point 0 of pp -- z[i] cutafter ee scaled 2;
+        draw point 3 of pp -- z[i] cutafter ee scaled 2;
+    endfor
+    numeric t; t = -1;
+    forsuffixes s=x, y, z, w:
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted 10 up);
+    endfor
+    label("$G_k$", 7/12[point 4 of ee, point 0 of ee]);
+    label("$G_{k+4} : {}$", point -1/2 of bbox currentpicture);
+);
+G10 = image(
+    path pp, ee; 
+    ee = fullcircle xscaled 6u yscaled 2u;
+    draw ee;
+    pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
+    for i=1 upto 5: 
+        z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
+    endfor
+    for i=1, 2, 5:
+        draw point 0 of pp -- z[i] -- point 3 of pp;
+        draw dot shifted z[i]; 
+    endfor
+    for i=3, 4:
+        draw point 0 of pp -- z[i] cutafter ee scaled 2;
+        draw point 3 of pp -- z[i] cutafter ee scaled 2;
+    endfor
+    numeric t; t = -1;
+    forsuffixes s=y, w, x ,z:
+        draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+        label("$\strut " & str s & "$", point t of pp shifted 10 up);
+    endfor
+    label("$\overline{G_k}$", 7/12[point 4 of ee, point 0 of ee]);
+    label("$\overline{G_{k+4}} : {}$", point -1/2 of bbox currentpicture);
+);
+
+
+numeric dx, dy; dx = 108; dy = -3/4 dx;;
+label(G1, (0dx, 0dy)); label(G11, (1dx, 0dy)); label(G4, (2dx, 0dy)); label(G41, (3dx, 0));
+label(G5, (0dx, 1dy)); label(G51, (1dx, 1dy)); label(G8, (2dx, 1dy)); label(G81, (3dx, 1dy));
+label(G0, (3/4dx, 5/2dy));
+label(G10, (9/4dx, 5/2dy));
+\end{mplibcode}$$
+\vfill
+\contrib{Stephan C.\@ Carlson}
+
+\section{Tiling with trominoes}
+
+A \textit{tronimo} is a plane figure composed of three squares: 
+\begin{mplibcode}path t; t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
+draw point 5/2 of t -- origin -- point 7/2 of t withpen pencircle scaled 1/4 withcolor 1/2; 
+draw t withpen pencircle scaled 1; \end{mplibcode}
+
+\bigskip\noindent
+\textsc{Theorem}: \textit{If $n$ is a power of two, then an $n\times n$ chess board with any one square removed
+can be tiled with trominoes}.
+
+\bigskip\noindent
+\textsc{Proof} (by induction):
+
+\bigskip\noindent
+I. $$
+\begin{mplibcode}path t; t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
+fill t withcolor Blues 8 6; fill origin -- subpath (5/2, 7/2) of t -- cycle withcolor Blues 8 2;
+draw t withpen pencircle scaled 1; \end{mplibcode}
+$$
+
+\bigskip\noindent
+II.
+$$
+\begin{mplibcode}
+numeric n, u; n = 16; u = 10;
+picture P[];
+P0 = image(
+    for i=0 upto n-1: for j = 0 upto n-1:
+        fill unitsquare scaled u shifted (u*(i, j)) withcolor Blues[8][if odd (i+j): 2 else: 6 fi];
+    endfor endfor
+    unfill unitsquare scaled u shifted (2u,11u); 
+    draw   unitsquare scaled u shifted (2u,11u) withpen pencircle scaled 1;
+    draw unitsquare scaled (u*n) withpen pencircle scaled 1;
+);
+P2 = image(draw P0; 
+    begingroup; interim bboxmargin := 0;
+    for t=-1/2, 1/2:
+        draw point t of bbox P0 -- point 2+t of bbox P0 withpen pencircle scaled 1;
+    endfor
+    path hole; hole = (origin -- (0, u) -- (u, u) -- (u, -u) -- (-u, -u) -- (-u, 0) -- cycle) shifted center P0;
+    unfill hole; draw hole withpen pencircle scaled 1;
+    path a, b; picture p, q; 
+    a = subpath (0, 1/2) of bbox P0 shifted 12 down; 
+    b = subpath (1/2, 1) of bbox P0 shifted 12 down; 
+    endgroup; 
+    drawdblarrow a;
+    drawdblarrow b;
+    p = thelabel("$n$", point 1/2 of a); unfill bbox p; draw p;
+    q = thelabel("$n$", point 1/2 of b); unfill bbox q; draw q;
+);
+P1 = image(draw P0; path a; picture p; 
+    begingroup; interim bboxmargin := 0;
+    a = subpath (0, 1) of bbox P0 shifted 12 down; 
+    endgroup; drawdblarrow a;
+    p = thelabel("$2n$", point 1/2 of a); unfill bbox p; draw p;
+);
+
+label(P1, 112 left);
+label(P2, 112 right);
+label("$=$", origin);
+\end{mplibcode}
+$$
+
+\vfill
+\contrib{Solomon W.\@ Golomb}
+
+\bigskip\noindent
+\textsc{Note}: Except when $n=5$, an $n\times n$ chessboard with any one square removed can be tiled with
+tronimoes if and only if $n\not\equiv 0 \pmod 3$. See I-Ping Chu and Richard Johnsonbaugh, “Tiling deficient boards with
+tronimoes”, \textit{Mathematics Magazine}, 59 (1986) 34–40.
+
 \end{document}
