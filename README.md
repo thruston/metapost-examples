@@ -18,6 +18,11 @@ Mathematical Association of America. My Metapost source files are covered by
 the GNU Public License V3.  This means you can use them for any non-commercial
 purpose.
 
+## Tutorial Examples
+
+For this one, I have chosen examples from various sources, that may be familiar from 
+elsewhere in the world of \TeX.
+
 ## Contact / questions
 
 If you have questions about Metapost or any of my examples, please consider asking
