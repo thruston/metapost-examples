@@ -1,0 +1,192 @@
+\documentclass[oneside]{scrbook}
+\usepackage{unicode-math}
+\setmainfont{TeX Gyre Pagella}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{graphicx}
+\usepackage{mflogo}
+\addtokomafont{section}{\clearpage}
+\usepackage{luamplib}
+\mplibtextextlabel{enable}
+\everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}\everyendmplib{endfig;}
+\usepackage{minitoc}
+\mtcsetrules{*}{off}
+%--------------------
+\title{Proofs without words I\\[6pt]{\Large Exercises in \MP}}
+\date{March 2021 —\\[4in]
+\centerline{\begin{mplibcode}
+    path t[], h;
+    numeric r; r = -30;
+    t0 = (for i=0 upto 2: up scaled 21 rotated 120i -- endfor cycle) rotated r;
+    h  = (for i=0 upto 5: up scaled 34 rotated 60i -- endfor cycle) rotated r;
+    t1 = subpath (0, 1) of t0 -- point 1 of h -- cycle;
+    t2 = subpath (1, 2) of t0 -- point 3 of h -- cycle;
+    t3 = subpath (2, 3) of t0 -- point 5 of h -- cycle;
+    t4 = subpath (0, 1) of h -- point 0 of t0 -- cycle;
+    t5 = subpath (1, 2) of h -- point 1 of t0 -- cycle;
+    t6 = subpath (2, 3) of h -- point 1 of t0 -- cycle;
+    t7 = subpath (3, 4) of h -- point 2 of t0 -- cycle;
+    t8 = subpath (4, 5) of h -- point 2 of t0 -- cycle;
+    t9 = subpath (5, 6) of h -- point 0 of t0 -- cycle;
+    fill t0 withcolor Blues 7 2;
+    fill t1 withcolor Blues 7 1;
+    fill t2 withcolor Blues 7 3;
+    fill t3 withcolor Blues 7 3;
+    fill t4 withcolor Blues 7 1;
+    fill t5 withcolor Blues 7 1;
+    fill t6 withcolor Blues 7 2;
+    fill t7 withcolor Blues 7 5;
+    fill t8 withcolor Blues 7 5;
+    fill t9 withcolor Blues 7 2;
+    forsuffixes @=0, 4, 5, 6, 7, 8, 9: draw t@; endfor
+\end{mplibcode}}}
+\author{Toby Thurston}
+\setcounter{secnumdepth}{-1}
+\setcounter{tocdepth}{0}
+\def\contrib#1{\rightline{— #1}}
+\begin{document}
+\dominitoc[n]
+\maketitle
+\tableofcontents
+\chapter{Geometry and Algebra}
+
+\minitoc
+
+\section{The Pythagorean theorem I}
+
+\vfill
+$$
+\begin{mplibcode}
+path s, t; 
+s = unitsquare shifted -(1/2, 1/2) scaled 144;
+t = point 0 of s -- point 2/3 of s -- point -1/3 of s -- cycle;
+picture P[];
+P2 = image(
+    for i=0 upto 3:
+        fill t rotated 90i withcolor if odd i: Blues 7 2 else: Oranges 7 2 fi; 
+        draw t rotated 90i;
+    endfor
+    draw s;
+);
+P1 = image(
+    fill t withcolor Oranges 7 2; draw t;
+    t := t rotatedabout(point 3/2 of t, 180);
+    fill t withcolor Oranges 7 2; draw t;
+    t := t shifted (point 0 of t - point 2 of t);
+    t := t rotatedabout(point 2 of t, -90);
+    fill t withcolor Blues 7 2; draw t;
+    t := t rotatedabout(point 3/2 of t, 180);
+    fill t withcolor Blues 7 2; draw t;
+    draw s;
+);
+draw P1;
+draw P2 shifted 200 right;
+\end{mplibcode}
+$$
+\vfill
+\contrib{adapted from the \textit{Chou pei san ching}}
+
+\section{The Pythagorean Theorem II}
+
+\vfill
+$$
+\begin{mplibcode}
+path s, t; 
+s = fullcircle scaled 144;
+t = (point 4 of s -- point 0 of s -- point sqrt(2) of s -- cycle) shifted point 6 of s;
+picture P[];
+P1 = image(
+    for i=0 upto 3:
+        fill t rotated 90i withcolor if odd i: Oranges 7 2 else: Blues 7 2 fi;
+        draw t rotated 90i;
+    endfor
+);
+P2 = image(
+    t := t rotatedabout(point 0 of t, 180 - angle (point 2 of t - point 0 of t)) shifted (point 1 of t - point 0 of t); 
+    fill t withcolor Blues 7 2; draw t;
+    t := t rotatedabout(point 1/2 of t, 180); 
+    fill t withcolor Blues 7 2; draw t;
+    t := t rotatedabout(point 1 of t, -90); 
+    fill t withcolor Oranges 7 2; draw t;
+    t := t rotatedabout(point 1/2 of t, 180); 
+    fill t withcolor Oranges 7 2; draw t;
+    draw subpath (0, 2) of unitsquare scaled (abs(point 2 of t - point 1 of t) - abs(point 2 of t - point 0 of t)) shifted point 2 of t;
+);
+
+draw P1;
+draw P2 shifted 180 right;
+label.bot("\textit{Behold!}", point 1/2 of bbox currentpicture shifted 36 down);
+
+    
+\end{mplibcode}
+$$
+
+\vfill
+\contrib{Bh\=askara (12th century)}
+
+\section{The Pythagorean Theorem III}
+
+\vfill
+$$
+\begin{mplibcode}
+path s, t, a, b, c; 
+s = fullcircle scaled 72;
+t = (point 4 of s -- point 0 of s -- point sqrt(6) of s -- cycle) shifted point 6 of s;
+a = unitsquare scaled abs(point 2 of t - point 0 of t) rotated angle (point 2 of t - point 0 of t) shifted point 0 of t;
+b = unitsquare scaled abs(point 1 of t - point 2 of t) rotated angle (point 1 of t - point 2 of t) shifted point 2 of t;
+c = unitsquare scaled abs(point 0 of t - point 1 of t) rotated angle (point 0 of t - point 1 of t) shifted point 1 of t;
+color v, w; v = Oranges 7 1; w = Greens 7 1;
+picture P[];
+P0 = image(
+    draw a;
+    draw b;
+    draw c;
+);
+P1 = image(
+    fill a withcolor v;
+    fill b withcolor v;
+    draw P0
+);
+z0 = whatever[point 2 of a, point 3 of a] = whatever[point 2 of b, point 3 of b];
+z1 = whatever[z0, point 3 of a]; x1 = xpart point 0 of a;
+z2 = whatever[z0, point 2 of b]; x2 = xpart point 1 of b;
+path wedge; wedge = subpath (0,1) of a -- subpath (0, 1) of b -- z2 -- z0 -- z1 -- cycle;
+
+P2 = image(
+    draw point 2 of a -- z0 -- point 3 of b dashed evenly scaled 1/2;
+    path a', b'; numeric t, u;
+    t = angle (point 1 of a - point 0 of a);
+    u = angle (point 1 of b - point 0 of b);
+    a' = a shifted - point 0 of a rotated -t slanted 1/2 rotated t shifted point 0 of a;
+    b' = b shifted - point 0 of b rotated -u slanted -1/3 rotated u shifted point 0 of b;
+    fill a' withcolor 1/4[v,w]; draw a';
+    fill b' withcolor 1/4[v,w]; draw b';
+    draw P0
+);
+P3 = image(
+    draw point 2 of a -- z0 -- point 3 of b dashed evenly scaled 1/2;
+    fill wedge withcolor 1/2[v,w]; draw wedge; draw point 1 of a -- z0;
+    draw P0
+);
+P4 = image(
+    fill wedge shifted (point 0 of a - z1) withcolor 3/4[v,w]; 
+    draw wedge shifted (point 0 of a - z1); 
+    draw P0
+);
+P5 = image(
+    fill c withcolor w;
+    draw P0
+);
+
+draw P1;
+draw P2 shifted (144,0);
+draw P3 shifted (288,0);
+draw P4 shifted (72, -200);
+draw P5 shifted (216, -200);
+
+    
+\end{mplibcode}
+$$
+\vfill
+\contrib{based on Euclid's proof}
+
+\end{document}
