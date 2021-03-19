@@ -85,7 +85,7 @@ $$
 \vfill
 \contrib{adapted from the \textit{Chou pei san ching}}
 
-\section{The Pythagorean Theorem II}
+\section{The Pythagorean theorem II}
 
 \vfill
 $$
@@ -123,7 +123,7 @@ $$
 \vfill
 \contrib{Bh\=askara (12th century)}
 
-\section{The Pythagorean Theorem III}
+\section{The Pythagorean theorem III}
 
 \vfill
 $$
@@ -188,5 +188,104 @@ draw P5 shifted (216, -200);
 $$
 \vfill
 \contrib{based on Euclid's proof}
+
+\section{The Pythagorean theorem IV}
+
+
+\vfill
+$$
+\begin{mplibcode}
+path c, a, a', bq, bq'; numeric r; r = 59;
+c = unitsquare shifted -(1/2, 1/2) scaled 160;
+a = c scaled cosd(r) rotated r;
+pair p, q;
+p = whatever[point 0 of a, point 1 of a] = whatever[point 0 of c, point 1 of c];
+q = whatever[point 0 of a, point 3 of a] = whatever[point 0 of c, point 3 of c];
+bq = point 0 of c -- p -- point 0 of a -- q -- cycle;  
+
+fill a withcolor Blues 7 2;
+for i=0 upto 3:
+    fill bq rotated 90i withcolor if odd i: Oranges 7 2 else: Purples 7 2 fi;
+    draw bq rotated 90i;
+endfor
+
+a' = a shifted (point 3 of c - point 0 of a);
+fill a' withcolor Blues 7 2; 
+draw a';
+
+bq' = bq rotated 180 shifted (point 1 of a' - point 2 of (bq rotated 180));
+pair o; o = point 0 of bq';
+for i=0 upto 3:
+    fill bq' rotatedabout(o, 90i) withcolor if odd i: Oranges 7 2 else: Purples 7 2 fi;
+    draw bq' rotatedabout(o, 90i);
+endfor
+
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{H.\@ E.\@ Dudeney (1917)}
+
+\section{The Pythagorean theorem V}
+
+\vfill
+$$
+\begin{mplibcode}
+path t, t';
+t = (origin -- 377 right -- 144 up -- cycle) scaled 3/4;
+t' = t rotated -90 shifted (point 2 of t + point 1 of t rotated 90);
+
+draw unitsquare scaled 8 withcolor 1/2;
+draw unitsquare scaled 8 rotated -90 shifted point 0 of t' withcolor 1/2;
+draw unitsquare scaled 8 rotated angle (point 1 of t - point 2 of t)
+      shifted point 2 of t withcolor 1/2;
+
+draw t;
+draw t';
+draw point 1 of t -- point 2 of t';
+
+label.lft("$a$", point -1/2 of t);
+label.bot("$b$", point 1/2 of t);
+label.urt("$c$", point 3/2 of t);
+label.top("$a$", point -1/2 of t');
+label.lft("$b$", point 1/2 of t');
+label.lrt("$c$", point 3/2 of t');
+
+label.bot(btex \vbox{\openup 24pt\halign{\hfil $#$ \hfil\cr
+A = 2 \cdot \frac12 ab + \frac12 c^2 = \frac12\left(a+b\right)^2\cr
+c^2 = a^2 + b^2\cr}} etex, (xpart point 1 of t, ypart point 2 of t' - 12));
+
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{James A.\@ Garfield (1876)}
+
+\section{The Pythagorean theorem VI}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric r;
+r = 144;  z1 = r * dir 66;
+
+draw unitsquare scaled 8 rotated 90 shifted (x1, 0) withcolor 1/2;
+draw (left--right) scaled r withcolor Blues 7 7;
+draw origin -- z1 -- (x1, 0) withcolor Blues 7 7;
+draw fullcircle scaled 2r withcolor Reds 7 7;
+
+label.top("$a$", (1/2 x1, 0));
+label.rt("$b$", (x1, 1/2 y1));
+label.ulft("$c$", 1/2 z1);
+label.top("$c$", (-1/2 r, 0));
+label.top("$c-a$", (1/2(r+x1), 0));
+
+label.lft(btex \vbox{\openup 24pt\halign{\hfil $\displaystyle#$ \hfil\cr
+{c+a\over b} = {b \over c-a} \cr
+a^2 + b^2 = c^2\cr}} etex, point -1/2 of bbox currentpicture + 16 left);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Michael Hardy}
 
 \end{document}
