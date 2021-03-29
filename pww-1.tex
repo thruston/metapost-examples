@@ -859,4 +859,61 @@ of the common chord $\overline{PQ}$ is equal to the tangent segment $\overline{P
 $$
 \vfill
 \contrib{Roland H.\@ Eddy}
+
+
+\section{Completing the square}
+\vfill
+$$
+\begin{mplibcode}
+path xx, ax, hax, haha;
+numeric x, a;
+x = 89; a = 34;
+xx   = unitsquare shifted 1/2 left scaled x shifted 12 up;
+ax   = unitsquare shifted 1/2 left xscaled x yscaled -a shifted 12 down;
+hax  = unitsquare shifted 1/2 left xscaled x yscaled -1/2 a shifted 12 down;
+haha = unitsquare scaled 1/2 a rotated -90 shifted point 1 of xx shifted (8, -8);
+
+picture P[];
+P1 = image(
+    fill xx withcolor Oranges 7 1; draw xx; 
+    label.top("$x$", point 5/2 of xx); 
+    label.lft("$x$", point 7/2 of xx); 
+    label("${}+{}$", origin);
+    fill ax withcolor Blues 7 2; draw ax;
+    label.lft("$a$", point 7/2 of ax);
+);
+
+P2 = image(
+    fill xx withcolor Oranges 7 1; draw xx; 
+    label("${}+{}$", origin);
+    for i=0, 1:
+        fill hax shifted (0, -24i) withcolor Blues 7 2; 
+        draw hax shifted (0, -24i);
+    endfor
+);
+
+P3 = image(
+    fill xx withcolor Oranges 7 1; draw xx; 
+    hax := hax shifted (point 0 of xx - point 0 of hax);
+    fill hax withcolor Blues 7 2; draw hax;
+    hax := hax shifted - point 0 of hax rotated 90 shifted point 1 of xx;
+    fill hax withcolor Blues 7 2; draw hax;
+
+    fill haha withcolor Blues 7 1;
+    draw haha dashed withdots scaled 1/4;
+);
+
+
+draw P1 shifted 144 left;
+label("$=$", (-72, 16));
+draw P2;
+label("$=$", (72, 16));
+draw P3 shifted 144 right;
+
+label.top("$x^2 + ax = \left(x + a/2\right)^2 - \left(a/2\right)^2$", 
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Charles D.\@ Gallant}
 \end{document}
