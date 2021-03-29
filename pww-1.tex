@@ -9,7 +9,7 @@
 \mplibtextextlabel{enable}
 \everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}
 \everyendmplib{
-numeric wd, tw; 
+numeric wd, tw;
 wd = xpart (urcorner bbox currentpicture - llcorner bbox currentpicture);
 tw = \mpdim{\textwidth};
 if wd > tw: currentpicture := currentpicture scaled (tw/wd); fi
@@ -63,13 +63,13 @@ endfig;}
 \vfill
 $$
 \begin{mplibcode}
-path s, t; 
+path s, t;
 s = unitsquare shifted -(1/2, 1/2) scaled 144;
 t = point 0 of s -- point 2/3 of s -- point -1/3 of s -- cycle;
 picture P[];
 P2 = image(
     for i=0 upto 3:
-        fill t rotated 90i withcolor if odd i: Blues 7 2 else: Oranges 7 2 fi; 
+        fill t rotated 90i withcolor if odd i: Blues 7 2 else: Oranges 7 2 fi;
         draw t rotated 90i;
     endfor
     draw s;
@@ -97,7 +97,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path s, t; 
+path s, t;
 s = fullcircle scaled 144;
 t = (point 4 of s -- point 0 of s -- point sqrt(2) of s -- cycle) shifted point 6 of s;
 picture P[];
@@ -108,13 +108,13 @@ P1 = image(
     endfor
 );
 P2 = image(
-    t := t rotatedabout(point 0 of t, 180 - angle (point 2 of t - point 0 of t)) shifted (point 1 of t - point 0 of t); 
+    t := t rotatedabout(point 0 of t, 180 - angle (point 2 of t - point 0 of t)) shifted (point 1 of t - point 0 of t);
     fill t withcolor Blues 7 2; draw t;
-    t := t rotatedabout(point 1/2 of t, 180); 
+    t := t rotatedabout(point 1/2 of t, 180);
     fill t withcolor Blues 7 2; draw t;
-    t := t rotatedabout(point 1 of t, -90); 
+    t := t rotatedabout(point 1 of t, -90);
     fill t withcolor Oranges 7 2; draw t;
-    t := t rotatedabout(point 1/2 of t, 180); 
+    t := t rotatedabout(point 1/2 of t, 180);
     fill t withcolor Oranges 7 2; draw t;
     draw subpath (0, 2) of unitsquare scaled (abs(point 2 of t - point 1 of t) - abs(point 2 of t - point 0 of t)) shifted point 2 of t;
 );
@@ -122,8 +122,6 @@ P2 = image(
 draw P1;
 draw P2 shifted 180 right;
 label.bot("\textit{Behold!}", point 1/2 of bbox currentpicture shifted 36 down);
-
-    
 \end{mplibcode}
 $$
 
@@ -135,7 +133,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path s, t, a, b, c; 
+path s, t, a, b, c;
 s = fullcircle scaled 72;
 t = (point 4 of s -- point 0 of s -- point sqrt(6) of s -- cycle) shifted point 6 of s;
 a = unitsquare scaled abs(point 2 of t - point 0 of t) rotated angle (point 2 of t - point 0 of t) shifted point 0 of t;
@@ -175,8 +173,8 @@ P3 = image(
     draw P0
 );
 P4 = image(
-    fill wedge shifted (point 0 of a - z1) withcolor 3/4[v,w]; 
-    draw wedge shifted (point 0 of a - z1); 
+    fill wedge shifted (point 0 of a - z1) withcolor 3/4[v,w];
+    draw wedge shifted (point 0 of a - z1);
     draw P0
 );
 P5 = image(
@@ -189,15 +187,12 @@ draw P2 shifted (144,0);
 draw P3 shifted (288,0);
 draw P4 shifted (72, -200);
 draw P5 shifted (216, -200);
-
-    
 \end{mplibcode}
 $$
 \vfill
 \contrib{based on Euclid's proof}
 
 \section{The Pythagorean theorem IV}
-
 
 \vfill
 $$
@@ -208,7 +203,7 @@ a = c scaled cosd(r) rotated r;
 pair p, q;
 p = whatever[point 0 of a, point 1 of a] = whatever[point 0 of c, point 1 of c];
 q = whatever[point 0 of a, point 3 of a] = whatever[point 0 of c, point 3 of c];
-bq = point 0 of c -- p -- point 0 of a -- q -- cycle;  
+bq = point 0 of c -- p -- point 0 of a -- q -- cycle;
 
 fill a withcolor Blues 7 2;
 for i=0 upto 3:
@@ -217,7 +212,7 @@ for i=0 upto 3:
 endfor
 
 a' = a shifted (point 3 of c - point 0 of a);
-fill a' withcolor Blues 7 2; 
+fill a' withcolor Blues 7 2;
 draw a';
 
 bq' = bq rotated 180 shifted (point 1 of a' - point 2 of (bq rotated 180));
@@ -226,8 +221,6 @@ for i=0 upto 3:
     fill bq' rotatedabout(o, 90i) withcolor if odd i: Oranges 7 2 else: Purples 7 2 fi;
     draw bq' rotatedabout(o, 90i);
 endfor
-
-
 \end{mplibcode}
 $$
 \vfill
@@ -261,8 +254,6 @@ label.lrt("$c$", point 3/2 of t');
 label.bot(btex \vbox{\openup 24pt\halign{\hfil $#$ \hfil\cr
 A = 2 \cdot \frac12 ab + \frac12 c^2 = \frac12\left(a+b\right)^2\cr
 c^2 = a^2 + b^2\cr}} etex, (xpart point 1 of t, ypart point 2 of t' - 12));
-
-
 \end{mplibcode}
 $$
 \vfill
@@ -303,11 +294,11 @@ $$
 path c; c = fullcircle scaled 377;
 z0 = point 4 of c; z1 = point 0 of c; z2 = point 2.828 of c;
 z3 = 5/16[z0, z1];
-z4 = whatever [z1, z2]; 
+z4 = whatever [z1, z2];
 z4 - z3 = whatever * (z2 - z0);
 picture P;
 P = image(
-    draw unitsquare scaled 6 rotated angle (z0 - z2) shifted z2 withcolor 1/2; 
+    draw unitsquare scaled 6 rotated angle (z0 - z2) shifted z2 withcolor 1/2;
     draw unitsquare scaled 6 rotated angle (z3 - z4) shifted z4 withcolor 1/2;
     draw z3 -- z1 -- z2 -- z0 -- z3 -- z4;
 
@@ -341,30 +332,30 @@ $$
 $$
 \begin{mplibcode}
 numeric r; r = 64;
-numeric pi; pi = 3.141592653589793;  
+numeric pi; pi = 3.141592653589793;
 path base, h, c, c', s;
 
 base = (left--right) scaled 7/2r;
 h = halfcircle rotated 180 scaled (pi * r + r);
 c = fullcircle scaled 2r rotated 90 shifted point 0 of h shifted (0, r);
 c' = fullcircle scaled 2r rotated 270 shifted point 4 of h shifted (-r, r);
-s = unitsquare scaled (sqrt(pi) * r) rotated -90 shifted point 0 of c'; 
+s = unitsquare scaled (sqrt(pi) * r) rotated -90 shifted point 0 of c';
 
-fill c withcolor Blues 7 1; 
+fill c withcolor Blues 7 1;
 fill s withcolor Blues 7 1;
 
 draw base withcolor 1/2;
-draw subpath (0, 4 + 1/45 angle point 1 of s) of h withcolor 1/2; 
+draw subpath (0, 4 + 1/45 angle point 1 of s) of h withcolor 1/2;
 draw subpath (4 + 1/45 angle point 1 of s, 4) of h withcolor Blues 7 3;
 draw s;
 draw point infinity of h -- point 2 of c' dashed evenly;
 
-forsuffixes $=c, c': 
+forsuffixes $=c, c':
     draw point 0 of $ -- center $ -- point 2 of $ dashed evenly;
     draw $; drawdot point 0 of $ withpen pencircle scaled dotlabeldiam;
 endfor
 
-drawarrow subpath (5/4, 1/4) of fullcircle scaled (2r + 16) 
+drawarrow subpath (5/4, 1/4) of fullcircle scaled (2r + 16)
     shifted center c withcolor Reds 7 7;
 \end{mplibcode}
 $$
@@ -376,7 +367,7 @@ $$
 $$
 \begin{mplibcode}
   picture link, pointer, pointer_groove;
-  color metal, light_metal; 
+  color metal, light_metal;
   metal = (181, 166, 66)/256;
   light_metal = 3/4[metal,white];
 
@@ -386,7 +377,7 @@ $$
       a' = a shifted (98,0);
       b = fullcircle scaled 5;
       b' = b shifted center a';
-      c = subpath(2,6) of b -- 
+      c = subpath(2,6) of b --
           subpath(-2,2) of b' -- cycle;
           fill c withcolor light_metal; draw c;
           fill a withcolor metal; draw a;
@@ -401,10 +392,10 @@ $$
           point 8-r of b shifted (10cm,0) --
           point 0   of b shifted (116mm,0) --
           point 8+r of b shifted (10cm,0) -- cycle;
-      fill c withcolor light_metal; 
+      fill c withcolor light_metal;
       fill subpath (9,11) of c -- cycle withcolor 7/8 white;
-      draw point 9 of c -- point 11 of c; 
-      draw c; 
+      draw point 9 of c -- point 11 of c;
+      draw c;
       fill a withcolor white; draw a;
   );
   pointer_groove = image(
@@ -418,7 +409,7 @@ $$
   draw pointer_groove rotated 28;
   draw pointer_groove rotated 14;
   draw pointer        rotated 0;
-  z0 = 210 right rotated 14;  
+  z0 = 210 right rotated 14;
   z1 = 120 right;
   numeric t; t = angle (z0-z1);
   draw link rotated t shifted z1 rotatedabout(z0,-34.5);
@@ -440,25 +431,25 @@ alpha = 144;
 beta = 0;
 for i=1 upto 9:
     beta := beta if odd i: + else: - fi alpha * (2 ** -i);
-    path ray; 
+    path ray;
     ray = origin -- (130 + 10i) * dir beta;
     draw ray withcolor 3/4;
     if i < 7:
-        picture t; 
-        t = thelabel("$\frac1{" & decimal (2**i) & "}$", origin) scaled (1 - i/8) shifted point 1 of ray; 
+        picture t;
+        t = thelabel("$\frac1{" & decimal (2**i) & "}$", origin) scaled (1 - i/8) shifted point 1 of ray;
         unfill bbox t; draw t;
     fi
 endfor
-   
+
 for i = 0 upto 3:
-    draw origin -- 240 dir (i * alpha/3) 
+    draw origin -- 240 dir (i * alpha/3)
         if i mod 3 > 0: dashed evenly fi
         withcolor Reds 6 6;
 endfor
 filldraw fullcircle scaled dotlabeldiam;
 label.bot("$\displaystyle \frac13 = \frac12 - \frac14 +\frac18 - \frac1{16} + \cdots $",
     point 1/2 of bbox currentpicture shifted 24 down);
-    
+
 \end{mplibcode}
 $$
 \vfill
@@ -496,7 +487,7 @@ P1 = image(draw P0; draw P9);
 P2 = image(
     draw P0;
     drawoptions(withpen pencircle scaled 1/4 withcolor Blues 7 4);
-    draw subpath 1/45(230, 250) of ca; 
+    draw subpath 1/45(230, 250) of ca;
     drawoptions();
     draw C -- D withcolor 1/2;
     dotlabel.top("$C$", C);
@@ -504,7 +495,7 @@ P2 = image(
     draw P9;
 );
 P3 = image(
-    draw B--D withcolor 1/2; 
+    draw B--D withcolor 1/2;
     draw A -- C reflectedabout(A,B) dashed evenly withcolor 1/2;
     drawdot E withpen pencircle scaled dotlabeldiam;
     label("$E$", E-(2,12));
@@ -522,10 +513,350 @@ draw P2 shifted (250, 0);
 draw P3 shifted (0, -220);
 draw P4 shifted (250, -220);
 
-label.bot("$\overline{AF} = \frac13\cdot\overline{AB}$",  
+label.bot("$\overline{AF} = \frac13\cdot\overline{AB}$",
     point 1/2 of bbox currentpicture shifted 36 down);
 \end{mplibcode}
 $$
 \vfill
 \contrib{Scott Cobel}
+
+\section{The vertex angles of a star sum to 180°}
+\vfill
+$$
+\begin{mplibcode}
+z3 = -z5 = 120 left;
+z1 = 180 dir 81;
+z2 = 250 dir 130;
+z4 =  90 dir -100;
+
+z6 = z5 + 72 right;
+z7 = whatever [z2, z5] = whatever [z1, z4];
+z8 = whatever [z3, z5] = whatever [z1, z4];
+y9 = y1; z9 - z5 = whatever * (z1 - z4);
+
+path star;
+star = z3 -- z5 -- z2 -- z4 -- z1 -- cycle;
+draw star withcolor Blues 7 7;
+draw z6 -- z5 -- z9 dashed evenly withcolor Blues 7 5;
+
+def angle_point(expr a, b, c, r) = b + r * (unitvector(a-b) + unitvector(c-b)) enddef;
+
+label("$α$", angle_point(z3, z1, z4, 12));
+label("$β$", angle_point(z5, z2, z4, 16));
+label("$γ$", angle_point(z5, z3, z1, 10));
+label("$δ$", angle_point(z1, z4, z2, 12));
+label("$ε$", angle_point(z2, z5, z3, 12));
+
+label("$α+γ$", angle_point(z1, z8, z5, 16) + 8 down);
+label("$α+γ$", angle_point(z9, z5, z6, 16) + 8 down);
+label("$β+δ$", angle_point(z5, z7, z4, 18) + 1 up);
+label("$β+δ$", angle_point(z2, z5, z9, 18) + 2 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Fouad Nakhli}
+
+\section{Viviani's theorem I}
+\vfill
+$$
+\begin{mplibcode}
+pair A', B', C', A, B, C, D, E, F, G, P, Q, R;
+A' = origin;
+B' = 300 right;
+C' = B' rotated 60;
+P = 3/8[B', C'];
+xpart Q = xpart C';
+ypart Q = ypart E = ypart P;
+D = whatever[A', B']; xpart D = xpart P;
+E = whatever[A', C'];
+R = whatever[A', C']; R - P = whatever * (A' - C') rotated 90;
+G = whatever[C', Q] = whatever [R, P];
+A = whatever[A', B']; G-A = whatever * (C' - A');
+B - B' = A - A' = C - C';
+F = whatever[B, C]; F-P = whatever * (B-C) rotated 90;
+
+def right_angle_mark(expr a, b, s) =
+    subpath (1,3) of unitsquare scaled s rotated angle(b-a) shifted a
+enddef;
+
+drawoptions(withcolor 1/2);
+draw right_angle_mark(D, B, 6);
+draw right_angle_mark(F, P, 6);
+draw right_angle_mark(G, P, 6);
+draw right_angle_mark(Q, P, 6);
+draw right_angle_mark(R, A', 6);
+draw E--P;
+draw A'--B'--C'--cycle;
+drawoptions();
+
+draw P--F withcolor Reds 7 7;
+draw R--G--Q withcolor 1/2[Reds 7 7, white];
+draw G--P dashed evenly scaled 3/4 withcolor Greens 7 7;
+draw G--C' dashed evenly scaled 3/4 withcolor 1/2[Greens 7 7, white];
+
+draw P--D dashed withdots scaled 1/4 withcolor Blues 7 7;
+draw A--B--C--cycle;
+
+drawdot P withpen pencircle scaled dotlabeldiam;
+
+forsuffixes $=A, A', B, B', D, Q: label.bot("\strut$" & str $ & "$", $); endfor
+forsuffixes $=C, C': label.top("$" & str $ & "$", $); endfor
+label.urt("$F$", F);
+label("$G$", G + 10 dir 192);
+
+label.top(btex \vbox{\halign{\hss #\hss\cr
+The perpendiculars to the sides from a point on\cr
+the boundary or within an equilateral triangle\cr
+add up to the height of the triangle.\cr
+}} etex, point 5/2 of bbox currentpicture shifted 42 up);
+
+label("\textit{This shows a particular example, with $C'GQ$ collinear, rather than the general case}",
+point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Samuel Wolf}
+
+\section{Viviani's theorem II}
+\vfill
+$$
+\begin{mplibcode}
+
+def distance(expr a, b, c) = abs ypart ((a-b) rotated -angle (c-b)) enddef;
+
+pair a, b, c, p;
+a = 89 up;
+b = a rotated 120;
+c = b rotated 120;
+p = 21 dir 42;
+
+numeric h[];
+h0 = distance(a, b, c);
+h1 = distance(p, a, b);
+h2 = distance(p, b, c);
+h3 = distance(p, c, a);
+
+path t[];
+t0 = a--b--c--cycle;
+t1 = t0 rotated -120 shifted -point 2 of t0 scaled (h1/h0) shifted p;
+t2 = t0 shifted -point 0 of t0 scaled (h2/h0) shifted p;
+t3 = t0 rotated +120 shifted -point 1 of t0 scaled (h3/h0) shifted p;
+
+z0 = 1/3[1/2[point 2 of t1, point 1 of t3], point 0 of t0];
+z1 = 2/3[point 0 of t1, point 3/2 of t1];
+
+color s[];
+s1 = Reds 7 2; s2 = Oranges 7 2; s3 = Blues 7 2;
+picture p[];
+forsuffixes $=1,2,3: p$ = image(fill t$ withcolor s$; draw t$ --point 3/2 of t$); endfor
+
+picture P[];
+P1 = image(draw p1; draw p2; draw p3; draw t0;);
+P2 = image(
+    path cor;
+    cor = reverse fullcircle rotated 90 scaled 4/3 h1 scaled 15/16 shifted z1;
+    drawarrow subpath 1/45(20, 100) of cor withcolor Reds 7 7;
+    drawarrow subpath 1/45(140, 220) of cor withcolor Reds 7 7;
+    drawarrow subpath 1/45(260, 340) of cor withcolor Reds 7 7;
+    draw p1 rotatedabout(z1, -120); draw p2; draw p3; draw t0;);
+P3 = image(
+    path cor;
+    cor = reverse fullcircle rotated 90 scaled 4/3 (h1+h3) scaled 7/8 shifted z0;
+    drawarrow subpath 1/45(20, 100) of cor withcolor Reds 7 7;
+    drawarrow subpath 1/45(140, 220) of cor withcolor Reds 7 7;
+    drawarrow subpath 1/45(260, 340) of cor withcolor Reds 7 7;
+    draw point 2 of t1 -- point 1 of t3 dashed withdots scaled 1/2;
+    draw p2;
+    draw p1 rotatedabout(z1, -120) rotatedabout(z0, -120);
+    draw p3 rotatedabout(z0, -120);
+    draw t0;);
+
+draw P1 shifted 160 up;
+draw P2 shifted 90 left;
+draw P3 shifted 90 right;
+label.top(btex \vbox{\halign{\hss #\hss\cr
+The perpendiculars to the sides from a point on\cr
+the boundary or within an equilateral triangle\cr
+add up to the height of the triangle.\cr
+}} etex, point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Ken-Ichiroh Kawasaki}
+
+\section{A theorem about right angles}
+\vfill
+$$
+\begin{mplibcode}
+
+path s, t;
+s = unitsquare shifted -(1/2,1/2) scaled 210;
+t = subpath (3, 2) of s -- point 1.732 of fullcircle scaled 210
+  shifted point 5/2 of s -- cycle;
+
+fill t withcolor Blues 7 1;
+fill s withcolor Oranges 7 1;
+for i=0 upto 3: draw t rotated 90i; endfor;
+draw point 2 of t -- point 2 of t rotated 180;
+
+label.top(btex \vbox{\halign{\hss #\hss\cr
+The internal bisector of the right angle of a right\cr
+triangle bisects the square on the hypotenuse\cr
+}} etex, point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roland H.\@ Eddy}
+
+\section{Area and the projection theorem of a right triangle}
+\vfill
+$$
+\begin{mplibcode}
+def angle_arc(expr a, o, b, r) = fullcircle scaled 2r rotated angle (a-o) shifted o cutafter (o--b) enddef;
+
+path c; c = fullcircle scaled 180;
+pair A, B, C, D, E, F;
+A = point 4 of c;
+B = point 0 of c;
+C = point 1.7 of c;
+D = (xpart C, ypart A);
+E = C rotatedabout(D, -90);
+F = B rotatedabout(D, -90);
+
+color r, b, g; r = Reds 7 1; g = Greens 7 1; b = Blues 7 1;
+picture P[];
+P1 = image(
+    fill A--B--C--cycle withcolor r;
+    draw unitsquare scaled 6 rotated angle (A-C) shifted C withcolor 3/4 r;
+    draw unitsquare scaled 6 rotated angle (C-D) shifted D withcolor 3/4 r;
+    draw angle_arc(D, A, C, 12) withpen pencircle scaled 1 withcolor Reds 7 5;
+    draw angle_arc(D, C, B, 12) withpen pencircle scaled 1 withcolor Reds 7 5;
+    draw D--C--B--A--C;
+    label.bot("$A$", A);
+    label.top("$C$", C);
+    label.bot("$D$", D);
+    label.bot("$B$", B);
+);
+
+P2 = image(
+    fill A--D--C--cycle withcolor r;
+    fill A--D--F--cycle withcolor g;
+    fill F--D--E--cycle withcolor r;
+    fill C--D--E--cycle withcolor b;
+    draw unitsquare scaled 6 rotated angle (C-D) shifted D withcolor 3/4 r;
+    draw angle_arc(D, A, C, 12) withpen pencircle scaled 1 withcolor Reds 7 5;
+    draw angle_arc(D, E, F, 12) withpen pencircle scaled 1 withcolor Reds 7 5;
+    drawarrow subpath (7/4, 1/4) of quartercircle scaled 42 shifted D withcolor Blues 6 6;
+    draw A--F--E--C--A--E;
+    draw C--F;
+    label.lft ("$A$", A);
+    label.top ("$C$", C);
+    label.llft("$D$", D);
+    label.rt  ("$E$", E);
+    label.bot ("$F$", F);
+);
+
+P3 = image(
+    fill A--D--C--cycle withcolor r;
+    fill C--D--E--cycle withcolor b;
+    z3 = whatever[A,C]; z3 - E = whatever * (A-C) rotated 90;
+    begingroup; interim ahangle := 180;
+    drawarrow E--z3 dashed evenly scaled 3/4 withpen pencircle scaled 1/4;
+    label.urt("$h$", 1/4[z3, E]);
+    endgroup;
+    draw A--E--C--A;
+    draw C--D;
+    label.bot("$A$", A);
+    label.top("$C$", C);
+    label.bot("$D$", D);
+    label.bot("$E$", E);
+);
+
+P4 = image(
+    fill A--D--C--cycle withcolor r;
+    fill A--D--F--cycle withcolor g;
+    z4 = whatever[A,C]; z4 - F = whatever * (A-C) rotated 90;
+    draw z4--F dashed evenly scaled 3/4 withpen pencircle scaled 1/4;
+    label.urt("$h$", 1/4[z4, F]);
+    draw A--C--F--A--D;
+    label.lft ("$A$", A);
+    label.urt ("$C$", C);
+    label.rt  ("$D$", D);
+    label.lrt ("$F$", F);
+);
+
+P5 = image(
+    fill C--D--E--cycle withcolor b;
+    draw D--E--C--D;
+    label.top("$C$", C);
+    label.bot("$D$", D);
+    label.bot("$E$", E);
+);
+
+P6 = image(
+    fill A--D--F--cycle withcolor g;
+    draw A--F--D--A;
+    label.lft ("$A$", A);
+    label.rt  ("$D$", D);
+    label.lrt ("$F$", F);
+);
+
+draw P1 shifted 120 left;
+draw P2 shifted 120 right;
+numeric y; y = -190;
+draw P3 shifted (-120, y); label("${}={}$", (12, y+16)); draw P4 shifted (+120, y);
+y := y - 112;
+draw P5 shifted (-120, y-abs(D-B)); label("${}={}$", (12, y-28)); draw P6 shifted (+120, y);
+label("$CD^2 = AD\cdot DB$", point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
+
+\section{Chords and tangents of equal length}
+\vfill
+$$
+\begin{mplibcode}
+def angle_arc(expr a, o, b, r) = fullcircle scaled 2r rotated angle (a-o) shifted o cutafter (o--b) enddef;
+
+path C[]; pair O, P, Q, R;
+C1 = fullcircle scaled 280; O = point 0 of C1;
+C2 = fullcircle scaled 200 shifted O;
+
+numeric t, u;
+(t, u) = C1 intersectiontimes C2;
+P = point t of C1;
+Q = point 8-t of C1;
+z0 = whatever[P, P + direction t of C1]; y0 = ypart point 6 of C1;
+R = C2 intersectionpoint (z0--P);
+
+draw center C1 -- P -- point 4 of C1 -- O withcolor 7/8;
+
+forsuffixes $=P, Q, R: 
+    draw O -- $ withcolor Blues 7 6; 
+endfor
+draw 5/4[Q, P] -- 5/4[P, Q] withcolor Reds 7 6;
+draw 5/4[P, R] -- 5/4[R, P] withcolor Reds 7 6;
+
+draw angle_arc(O, Q, P, 30);
+draw angle_arc(O, Q, P, 28);
+draw angle_arc(O, P, R, 30);
+draw angle_arc(O, P, R, 28);
+
+draw C1 withcolor 1/2;
+draw C2 withcolor 1/2;;
+
+dotlabel.urt("$O$", O);
+dotlabel.urt("\strut $P$", P);
+dotlabel.lrt("\strut $Q$", Q);
+dotlabel.rt("$\;R$", R);
+
+label.top(btex \vbox{\openup6pt\halign{\hss #\hss\cr
+If circle $C_1$ passes through the center $O$ of circle $C_2$, the length\cr
+of the common chord $\overline{PQ}$ is equal to the tangent segment $\overline{PR}$.\cr
+}} etex, point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roland H.\@ Eddy}
 \end{document}
