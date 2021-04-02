@@ -368,23 +368,20 @@ $$
 \begin{mplibcode}
   picture link, pointer, pointer_groove;
   color metal, light_metal;
-  metal = (181, 166, 66)/256;
-  light_metal = 3/4[metal,white];
+  metal = 1/256 (181, 166, 66);
+  light_metal = 3/4[metal, white];
 
   link = image(
-      path a,b,a',b',c;
-      a = fullcircle scaled 3;
-      a' = a shifted (98,0);
-      b = fullcircle scaled 5;
-      b' = b shifted center a';
-      c = subpath(2,6) of b --
-          subpath(-2,2) of b' -- cycle;
-          fill c withcolor light_metal; draw c;
-          fill a withcolor metal; draw a;
-          fill a' withcolor metal; draw a';
+      path a, b, a', b', c;
+      a = fullcircle scaled 3; a' = a shifted (98,0);
+      b = fullcircle scaled 5; b' = b shifted center a';
+      c = subpath(2,6) of b -- subpath(-2,2) of b' -- cycle;
+      fill c withcolor light_metal; draw c;
+      fill a withcolor metal; draw a;
+      fill a' withcolor metal; draw a';
   );
   pointer = image(
-      path a,b,c; numeric r;
+      path a, b, c; numeric r;
       a = fullcircle scaled 18;
       b = fullcircle scaled 24;
       r = 1/3;
@@ -402,7 +399,8 @@ $$
       draw pointer;
       path g;
       g = (halfcircle scaled 4 rotated 90 --
-      halfcircle scaled 4 rotated 270 shifted (4cm,0) -- cycle) shifted (5cm,0);
+           halfcircle scaled 4 rotated 270 shifted (4cm,0) -- 
+           cycle) shifted (5cm,0);
       fill g withcolor 7/8[metal,white]; draw g;
   );
   draw pointer        rotated 42;
@@ -416,7 +414,6 @@ $$
   draw link rotated t shifted z1 rotatedabout(z0,-34.5) rotated 14;
   draw link rotated t shifted z1;
   draw link rotated t shifted z1 rotated 14;
-
 \end{mplibcode}
 $$
 \vfill
@@ -860,7 +857,6 @@ $$
 \vfill
 \contrib{Roland H.\@ Eddy}
 
-
 \section{Completing the square}
 \vfill
 $$
@@ -916,4 +912,77 @@ point 5/2 of bbox currentpicture shifted 42 up);
 $$
 \vfill
 \contrib{Charles D.\@ Gallant}
+
+\section{Algebraic areas I}
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b;
+a = 89; b = 21;
+picture P[];
+P1 = image(
+    fill unitsquare xscaled a yscaled b shifted (0, a) withcolor Greens 7 1;
+    fill unitsquare xscaled b yscaled a shifted (a, 0) withcolor Greens 7 1;
+    draw (a, 0) -- (a, a+b) dashed withdots scaled 1/4;
+    draw (0, a) -- (a+b, a) dashed withdots scaled 1/4;
+    draw (a-b, a) -- (a-b, a+b) dashed withdots scaled 1/4;
+    draw (a, a-b) -- (a+b, a-b) dashed withdots scaled 1/4;
+    draw unitsquare scaled (a+b);
+    label.bot("\strut $a$", (1/2a, 0));
+    label.bot("\strut $b$", (a+1/2b, 0));
+    label.lft("$a$", (0, 1/2a));
+    label.lft("$b$", (0, a+1/2b));
+);
+P2 = image(
+    draw unitsquare scaled (a-b);
+    label.bot("\strut $a-b$", 1/2(a-b, 0));
+);
+P3 = image(
+    draw unitsquare scaled a;
+    draw unitsquare scaled b shifted (a,a);
+    label.bot("\strut $a$", (1/2a, 0));
+    label("$b$", (a + 1/2b, a + 1/2b));
+);
+P4 = image(
+    fill unitsquare scaled a withcolor Greens 7 1;
+    fill unitsquare scaled b shifted (a,a) withcolor Greens 7 1;
+    fill unitsquare scaled (a-b) withcolor background;
+    draw (a-b, a) -- (a-b, a-b) -- (a, a-b) dashed withdots scaled 1/4;
+    draw (0, a-b) -- (a-b, a-b) -- (a-b, 0);
+    draw unitsquare scaled a;
+    draw unitsquare scaled b shifted (a,a);
+    label.bot("\strut $a-b$", 1/2(a-b, 0));
+    label.bot("\strut $b$", (a-1/2b, 0));
+    label("$b$", (a + 1/2b, a + 1/2b));
+);
+
+
+numeric x, y;
+draw P1;
+
+y = 3/4 (a-b);
+x = a + b + 14;
+label("$+$", (x, y));
+
+x := x + 14;
+draw P2 shifted (x, 0);
+
+x := x + a - b + 16;
+label("$=$", (x, y));
+
+x := x + 16;
+draw P3 shifted (x, 0);
+
+x := x + a + 14;
+label("$+$", (x, y));
+
+x := x + 14;
+draw P4 shifted (x, 0);
+
+label.top("$\left(a+b\right)^2 + \left(a-b\right)^2 = 2\left(a^2 + b^2\right)$", 
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Shirley Wakin}
 \end{document}
