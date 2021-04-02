@@ -985,4 +985,84 @@ point 5/2 of bbox currentpicture shifted 42 up);
 $$
 \vfill
 \contrib{Shirley Wakin}
+
+\section{Algebraic areas II}
+\vfill
+$$
+\begin{mplibcode}
+input arrow_label
+
+numeric a, b, c;
+a = 80; 2b = a; 2c = b;
+
+def make_box(expr p, shade) = image(fill p withcolor shade; draw p) enddef;
+
+
+path s[];
+s1 = unitsquare scaled (a-b-c); 
+s2 = unitsquare scaled (2c); 
+s3 = unitsquare scaled (a-b+c);
+s4 = unitsquare scaled (2b);
+s5 = unitsquare scaled (a+b-c); 
+s6 = unitsquare xscaled (a+b-c) yscaled (a-b+c);
+s7 = unitsquare xscaled (a-b+c) yscaled (a+b-c);
+
+picture t[];
+t1 = make_box(s1, Reds 7 2);
+t2 = make_box(s2, Oranges 7 2);
+t3 = make_box(s3, YlGn 7 2);
+t4 = make_box(s4, Greens 7 2);
+t5 = make_box(s5, Blues 7 2);
+t6 = make_box(s6, Purples 7 2);
+t7 = make_box(s7, Purples 7 2);
+
+picture P[];
+P1 = image(
+    draw t5;
+    draw t7 shifted point 1 of s5;
+    draw t1 shifted (point 2 of s5 - point 3 of s1);
+    draw t3 shifted point 2 of s5;
+    draw t6 shifted point 3 of s5;
+
+    draw t4 shifted (2a + 30, 0);
+    draw t2 shifted (2a + 30 + 2b + 30, 0);
+
+    arrow_label(origin, 2a * right, "$2a$", 9);
+    label.bot("\strut$2b$", (2a + 30 + b, 0));
+    label.bot("\strut$2c$", (2a + 30 + 2b + 30 + c, 0));
+);
+P2 = image(
+    draw t4;
+    draw t7 shifted point 1 of s4;
+    draw t6 shifted point 3 of s4;
+    draw t2 shifted ((1,1) scaled (a+b-c));
+
+    draw t5 shifted (a + b + c + 20, 0);
+    draw t3 shifted (2a + 2b + 40, 0);
+    draw t1 shifted (3a + b + c + 60, 0);
+
+    arrow_label(origin, 2b * up, "$2b$", -12);
+    arrow_label((0, a+b+c), (a+b+c, a+b+c), "\strut$a+b+c$", -12);
+    label.rt("$2c$", (a+b+c, a+b));
+    label.top("$a+b-c$", (3/2a + 3/2b + 1/2c + 20, a + b - c + 4));
+    label.top("$a-b+c$", (5/2a + 3/2b + 1/2c + 40, a - b + c + 4));
+    label.top("$a-b-c$", (7/2a + 1/2b + 1/2c + 60, a - b - c + 4));
+);
+
+label.top(P1, origin);
+label.top(P2, (0, 2a+2b));
+
+
+label.top(btex $\left(a+b+c\right)^2 
+          + \left(a+b-c\right)^2 
+          + \left(a-b+c\right)^2 
+          + \left(a-b-c\right)^2 
+          = \left(2a\right)^2 
+          + \left(2b\right)^2
+          + \left(2c\right)^2$ etex, 
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sam Pooley and K.\@ Add Drude}
 \end{document}
