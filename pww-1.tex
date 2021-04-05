@@ -1064,5 +1064,176 @@ point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
-\contrib{Sam Pooley and K.\@ Add Drude}
+\contrib{Sam Pooley and K.\@ Ann Drude}
+
+\section{Sum of squares identity}
+\vfill
+$$
+\begin{mplibcode}
+input arrow_label
+picture P[];
+numeric a,b,c,d;
+a = sqrt(90); 1.732a = 1.414b; c + d = 3/2a; 1.414c = d;
+
+P1 = image(
+    path s[];
+    s1 = unitsquare xscaled -(a*a) yscaled -(d*d);
+    s2 = unitsquare xscaled  (b*b) yscaled -(d*d);
+    s3 = unitsquare xscaled  (b*b) yscaled (c*c);
+    s4 = unitsquare xscaled -(a*a) yscaled (c*c);
+                             
+    fill s1 withcolor Reds 7 1;     draw s1;
+    fill s2 withcolor Greens 7 1;   draw s2;
+    fill s3 withcolor Oranges 7 1;  draw s3;
+    fill s4 withcolor Blues 7 1;    draw s4;
+
+    label("$a^2d^2$", center s1);  
+    label("$b^2d^2$", center s2);  
+    label("$b^2c^2$", center s3);  
+    label("$a^2c^2$", center s4);  
+
+    arrow_label(point 3 of s4, point 2 of s4, "$a^2$", 8);    
+    arrow_label(point 2 of s4, point 1 of s4, "$c^2$", 8);    
+    arrow_label(point 2 of s3, point 3 of s3, "$b^2$", 8);    
+    arrow_label(point 1 of s1, point 2 of s1, "$d^2$", 8);    
+    
+);
+P2 = image(
+    path s[];
+    s1 = unitsquare xscaled -(a*d) yscaled -(a*d);
+    s2 = unitsquare xscaled  (b*d) yscaled -(b*d);
+    s3 = unitsquare xscaled  (b*c) yscaled (b*c);
+    s4 = unitsquare xscaled -(a*c) yscaled (a*c);
+                             
+    fill s1 withcolor Reds 7 1;     draw s1;
+    fill s2 withcolor Greens 7 1;   draw s2;
+    fill s3 withcolor Oranges 7 1;  draw s3;
+    fill s4 withcolor Blues 7 1;    draw s4;
+
+    label("$\left(ad\right)^2$", center s1);  
+    label("$\left(bd\right)^2$", center s2);  
+    label("$\left(bc\right)^2$", center s3);  
+    label("$\left(ac\right)^2$", center s4);  
+) shifted (260, 0);
+P3 = image(
+    path s[];
+    s1 = unitsquare xscaled -(a*d) yscaled -(a*d);
+    s2 = unitsquare xscaled  (b*d) yscaled -(b*d) shifted (44, -12);
+    s3 = unitsquare xscaled  (b*c) yscaled (b*c);
+    s4 = unitsquare xscaled -(a*c) yscaled (a*c) shifted point 1 of s2;
+                             
+    fill s1 withcolor Reds 7 1;     draw s1;
+    fill s2 withcolor Greens 7 1;   draw s2;
+    fill s3 withcolor Oranges 7 1;  draw s3;
+    fill s4 withcolor Blues 7 1;    draw s4;
+
+    label("$\left(ad\right)^2$", center s1);  
+    label("$\left(bd\right)^2$", center s2);  
+    label("$\left(bc\right)^2$", center s3);  
+    label("$\left(ac\right)^2$", center s4);  
+    
+    pair t, u, v; 
+    t = point arctime 2b*d-a*c of s2 of s2;
+    u = whatever[point 3 of s2, point 4 of s2]; ypart u = ypart t;
+    v = whatever[point 1 of s4, point 2 of s4]; ypart v = ypart t;
+    draw t--u dashed withdots scaled 1/2;
+    draw v--point 1 of s4 dashed withdots scaled 1/2;
+
+    arrow_label(point 2 of s2, t, "$ac$", 8);
+    arrow_label(t, point 3 of s4, "$bd$", 8);
+) shifted (-40, -170);
+P4 = image(
+    path s[];
+    s1 = unitsquare xscaled -(a*d) yscaled -(a*d);
+    s3 = unitsquare xscaled  (b*c) yscaled (b*c);
+
+    s21 = unitsquare xscaled -(a*c) yscaled (b*d) shifted t;
+    s22 = unitsquare xscaled -(b*d) yscaled (-a*c) shifted (t + 7 down);
+    s4 = unitsquare scaled (b*d-a*c) shifted (u + 7 left);
+                             
+    fill s1 withcolor Reds 7 1;     draw s1;
+    fill s21 withcolor 1/2[Blues 7 1, Greens 7 1];   
+    fill s22 withcolor 1/2[Blues 7 1, Greens 7 1];   
+    draw s21; draw s22;
+    fill s3 withcolor Oranges 7 1;  draw s3;
+    fill s4 withcolor Purples 7 2;    draw s4;
+
+    label("$\left(ad\right)^2$", center s1);  
+    label("$abcd$", center s21);  
+    label("$abcd$", center s22);  
+    label("$\left(bc\right)^2$", center s3);  
+    label("$\scriptstyle \left(bd-ac\right)^2$", center s4);  
+
+    label.top("$ac$", point 5/2 of s21);
+    label.rt("$bd$", point 7/2 of s21);
+    label.rt("$ac$", point 7/2 of s22);
+    label.bot("$bd$", point 5/2 of s22);
+    
+) shifted (260, -180);
+P5 = image(
+    path s[];
+    s1 = unitsquare xscaled -(a*d) yscaled -(a*d);
+    s3 = unitsquare xscaled  (b*c) yscaled (b*c);
+
+    s21 = unitsquare xscaled -(a*d) yscaled (b*c) shifted (-12, 12);
+    s22 = unitsquare xscaled (b*c) yscaled -(a*d) shifted (12, -12);
+    s4 = unitsquare scaled (b*d-a*c) shifted point 1 of s22 shifted 12 right;
+                             
+    fill s1 withcolor Reds 7 1;     draw s1;
+    fill s21 withcolor 1/2[Blues 7 1, Greens 7 1];   
+    fill s22 withcolor 1/2[Blues 7 1, Greens 7 1];   
+    draw s21; draw s22;
+    fill s3 withcolor Oranges 7 1;  draw s3;
+    fill s4 withcolor Purples 7 2;  draw s4;
+
+    label("$\left(ad\right)^2$", center s1);  
+    label("$abcd$", center s21);  
+    label("$abcd$", center s22);  
+    label("$\left(bc\right)^2$", center s3);  
+    label("$\scriptstyle \left(bd-ac\right)^2$", center s4);  
+
+    label.top("$ad$", point 5/2 of s21);
+    label.lft("$bc$", point 3/2 of s21);
+    label.rt("$ad$", point 3/2 of s22);
+    label.bot("$bc$", point 5/2 of s22);
+    
+) shifted (-40, -380);
+P6 = image(
+    path s[];
+    s1 = unitsquare scaled (a*d + b*c);
+    s4 = unitsquare scaled (b*d-a*c) shifted point 1 of s1 shifted 12 right;
+                             
+    fill s1 withcolor 1/2[1/2[Reds 7 1, Oranges 7 1], 1/2[Blues 7 1, Greens 7 1]];   
+    draw s1;
+    fill s4 withcolor Purples 7 2;  draw s4;
+
+    label("$\left(ad + bc\right)^2$", center s1);  
+    label("$\scriptstyle \left(bd-ac\right)^2$", center s4);  
+) shifted (180, -480);
+
+
+draw P1;
+draw P2;
+draw P3;
+draw P4;
+draw P5;
+draw P6;
+
+def connect_with_arrow(expr a, b) = 
+    drawarrow (left-- 4 right) scaled 4 rotated angle (b-a) shifted 1/2[a,b] withcolor Blues 5 5;
+enddef;
+connect_with_arrow(center P1 + 10 right, center P2);
+connect_with_arrow(center P2, center P3);
+connect_with_arrow(center P3, center P4);
+connect_with_arrow(center P4, center P5);
+connect_with_arrow(center P5, center P6);
+
+label.top(btex $\left(a^2+b^2\right)\left(c^2+d^2\right)
+          = \left(ab + bc\right)^2 
+          + \left(bd-ac\right)^2 $ etex, 
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Diophantus of Alexandria}
 \end{document}
