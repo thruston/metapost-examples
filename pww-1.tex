@@ -1236,4 +1236,204 @@ point 5/2 of bbox currentpicture shifted 42 up);
 $$
 \vfill
 \contrib{Diophantus of Alexandria}
+
+\section{Polygonal numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+vardef around(expr p, r) = 
+    if pair p:
+        fullcircle scaled 2r shifted p
+    elseif path p and (length(p) = 0):
+        fullcircle scaled 2r shifted point 0 of p
+    elseif path p:
+        for i=1 upto length(p):
+            subpath (i-1, i) of p 
+            shifted (r * unitvector(direction i-1/2 of p rotated -90))
+            ..
+        endfor 
+        if not cycle p:
+            for i=length(p) downto 1:
+                subpath (i, i-1) of p
+                shifted (r * unitvector(direction i-1/2 of p rotated 90))
+                ..
+            endfor
+        fi cycle
+    fi
+enddef;
+% k-th n-gonal number...
+numeric k, n;  
+k = 6;
+n = 6;
+path gon[];
+
+for i=2 upto k:
+    gon[i] = (origin for j=1 upto n-1: -- dir (180/n*j) endfor -- cycle) scaled 50(i-1);
+endfor
+
+numeric r; r = 8;
+
+fill around(origin, r) withcolor Blues 7 3; 
+draw around(origin, r); 
+
+for i=1 upto n-1:
+    path a; a = around(point i of gon2 -- point i of gon[k], r);
+    fill a withcolor Oranges 7 1; draw a;
+endfor
+
+for i=2 upto n-2:
+    draw origin -- point i of gon[k] dashed evenly;
+endfor
+
+for i=1 upto n-2:
+    path a; a = around(
+        point i+1/2 of gon[3] -- 
+        point i+1/(k-1) of gon[k] -- 
+        point i+1-1/(k-1) of gon[k] -- cycle, r);
+    fill a withcolor Greens 7 1; draw a;
+endfor
+
+for i=2 upto k:
+    draw gon[i];
+    for j = i-1 upto (n-1)*i:
+        drawdot point j/(i-1) of gon[i] withpen pencircle scaled r;
+    endfor
+endfor
+drawdot origin withpen pencircle scaled r;
+
+label.top(btex The $k$\textsuperscript{th} $n$-gonal number is 
+$1 + \bigl(k-1\bigr)\bigl(n-1\bigr) + \frac12\bigl(k-2\bigr)\bigl(k-1\bigr)\bigl(n-2\bigr)$ etex, 
+point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Dave Logothetti}
+
+\section{The volume of a frustrum of a square pyramid}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(22, -34);
+
+path base, hlid, mlid;
+numeric h, a, b; h = 6; b = 7; a = 3;
+base = p(0, 0, 0) -- p(0, 0, b) -- p(-b, 0, b) -- p(-b, 0, 0) -- cycle;
+hlid  = p(0, h, 0) -- p(0, h, a) -- p(-a, h, a) -- p(-a, h, 0) -- cycle;
+mlid  = p(0, b-a, 0) -- p(0, b-a, a) -- p(-a, b-a, a) -- p(-a, b-a, 0) -- cycle;
+
+picture P[];
+P1 = image(
+    path lid; lid = hlid;
+    fill subpath (0, 1) of base -- subpath (1, 0) of lid -- cycle withcolor Blues 8 1;
+    fill lid withcolor Blues 8 2;
+    drawoptions(dashed withdots scaled 1/2 withcolor 1/2);
+    draw subpath (1, 3) of base;
+    draw point 2 of base -- point 2 of lid;
+
+    drawoptions(withcolor 1/2);
+    numeric t; t = 1/2;
+    draw p(-t, 0, 0) -- p(-t, t, 0) -- p(0, t, 0) -- p(0, t, t) -- p(0, 0, t);
+    draw p(-t, h, 0) -- p(-t, h-t, 0) -- p(0, h-t, 0) -- p(0, h-t, t) -- p(0, h, t);
+
+    drawoptions();
+    draw lid -- point 0 of base;
+    draw point 3 of lid -- subpath (-1, 1) of base -- point 1 of lid;
+
+    label.lft("$h$", p(0, 1/2 h, 0));
+    label.urt("$a$", point 7/2 of lid);
+    label.ulft("$a$", point 1/2 of lid);
+    label.lrt("$b$", point 1/2 of base);
+    label.llft("$b$", point 7/2 of base);
+
+    label("$P_1$", p(0, -1, 0));
+);
+P2 = image(
+    path lid; lid = mlid;
+    fill subpath (0, 1) of base -- subpath (1, 0) of lid -- cycle withcolor Blues 8 1;
+    fill lid withcolor Blues 8 2;
+    drawoptions(dashed withdots scaled 1/2 withcolor 1/2);
+    draw subpath (1, 3) of base;
+    draw point 2 of base -- point 2 of lid;
+
+    drawoptions(withcolor 1/2);
+    numeric t; t = 1/2;
+    draw p(-t, 0, 0) -- p(-t, t, 0) -- p(0, t, 0) -- p(0, t, t) -- p(0, 0, t);
+    draw p(-t, b-a, 0) -- p(-t, b-a-t, 0) -- p(0, b-a-t, 0) -- p(0, b-a-t, t) -- p(0, b-a, t);
+
+    drawoptions();
+    draw lid -- point 0 of base;
+    draw point 3 of lid -- subpath (-1, 1) of base -- point 1 of lid;
+
+    label.lft("$b-a$", p(0, 1/2 (b-a), 0));
+    label.urt("$a$", point 7/2 of lid);
+    label.ulft("$a$", point 1/2 of lid);
+    label.lrt("$b$", point 1/2 of base);
+    label.llft("$b$", point 7/2 of base);
+
+    label("$P_2$", p(0, -1, 0));
+);
+P3 = image(
+    path aaa, bbb;
+    aaa = (p(0, 0, 0) -- 
+           p(0, 0, a) --
+           p(0, a, a) --
+           p(-a, a, a) --
+           p(-a, a, 0) -- 
+           p(-a, 0, 0) -- cycle) shifted p(0, b-a, 0);
+    bbb = p(0, 0, 0) -- 
+          p(0, 0, b) --
+          p(0, b, b) --
+          p(-b, b, b) --
+          p(-b, b, 0) -- 
+          p(-b, 0, 0) -- cycle;
+    pair c; c = p(-a, b-a, a);
+    
+    drawoptions(withcolor Blues 8 1);
+    fill subpath(0, 2) of bbb -- subpath (2, 0) of aaa -- cycle;
+    fill subpath (3, 5) of aaa -- c -- cycle;
+
+    drawoptions(withcolor Blues 8 2);
+    fill subpath(2, 4) of bbb -- subpath (4, 2) of aaa -- cycle;
+    fill subpath (-1, 1) of aaa -- c -- cycle;
+
+    drawoptions(dashed withdots scaled 1/2 withcolor 1/2);
+    draw subpath (1, 3) of base;
+    draw p(-b, b, b) -- point 2 of base -- point 2 of lid;
+
+    drawoptions(withcolor 1/4);
+    for $=1,3,5: draw point $ of aaa -- c; endfor
+
+     drawoptions();
+    for $=1 upto length aaa: draw point $ of aaa -- point $ of bbb; endfor
+    draw aaa;
+    draw bbb;
+
+    label.urt ("$a$", point 7/2 of lid);
+    label.ulft("$a$", point 1/2 of lid);
+    label.lft ("$a$", point 3/2 of aaa);
+    
+    label.rt("$b$", point 3/2 of bbb);
+    label.lrt("$b$", point 1/2 of base);
+    label.llft("$b$", point 7/2 of base);
+
+
+    label("$3P_2$", p(0, -1, 0));
+);
+
+draw P1 shifted 120 left;
+draw P2 shifted 120 right;
+draw P3 shifted 240 down;
+
+label.top(btex  
+\def\V#1{\mathop{\textrm{V}}\nolimits\!\left(#1\right)} $\displaystyle
+    \V{P_1} = {h\over b-a}\cdot \V{P_2} = {h\over b-a}\cdot{1\over3}\left(b^3-a^3\right)
+     = {h\over3}\left(a^2+ab+b^2\right)$ etex, 
+     point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{\textit{The Moscow Papyrus}, c.\@ 1850 BCE}
 \end{document}
