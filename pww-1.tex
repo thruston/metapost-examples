@@ -54,6 +54,7 @@ endfig;}
 \dominitoc[n]
 \maketitle
 \tableofcontents
+
 \chapter{Geometry and Algebra}
 
 \minitoc
@@ -1403,7 +1404,7 @@ P3 = image(
     draw subpath (1, 3) of base;
     draw p(-b, b, b) -- point 2 of base -- point 2 of lid;
 
-    drawoptions(withcolor 1/4);
+    drawoptions(withcolor 1/2);
     for $=1,3,5: draw point $ of aaa -- c; endfor
 
      drawoptions();
@@ -1427,13 +1428,189 @@ draw P1 shifted 120 left;
 draw P2 shifted 120 right;
 draw P3 shifted 240 down;
 
-label.top(btex  
-\def\V#1{\mathop{\textrm{V}}\nolimits\!\left(#1\right)} $\displaystyle
-    \V{P_1} = {h\over b-a}\cdot \V{P_2} = {h\over b-a}\cdot{1\over3}\left(b^3-a^3\right)
+label.top(btex  $\displaystyle
+    V_{P_1} = {h\over b-a}\cdot V_{P_2} = {h\over b-a}\cdot{1\over3}\left(b^3-a^3\right)
      = {h\over3}\left(a^2+ab+b^2\right)$ etex, 
      point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
 \contrib{\textit{The Moscow Papyrus}, c.\@ 1850 BCE}
+
+\section{The volume of a hemisphere via Cavalieri's Principle}
+
+\vfill
+$$
+\begin{mplibcode}
+input arrow_label
+input isometric-projection
+set_projection(18, -32);
+
+numeric r, h, s, tau;
+tau = 6.283185307179586;
+r * tau = 400 / ipscale;  
+h = 3/4 r;
+s = r +-+ h;
+
+z0 = p(0,0,0); 
+z1 = p(0,0,r);
+z2 = p(0,r,r);
+z3 = p(0,r,0);
+z4 = p(tau * r, 0, 0);
+
+z5 = p(tau * (r-h), h, 0);
+z6 = p(tau * (r-h), h, h);
+z7 = p(0, h, r);
+z8 = p(0, h, 0);
+
+ z9 = p(0, 0, 5r);
+z10 = p(0, r, 5r);
+z11 = p(0, h, 5r);
+
+z12 = z9 shifted p(2r, 0, 0);
+z13 = z10 shifted p(r, 0, 0);
+z14 = 1/2[z9, z12];
+z15 = z14 shifted p(0, 0, -r);
+z16 = z14 shifted p(0, 0, +r);
+
+z17 = z14 + p(-s, h, 0);
+z18 = z14 + p(0, h, -s);
+z19 = z14 + p(+s, h, 0);
+z20 = z14 + p(0, h, +s);
+
+path disc, base, arc, arch; 
+base = for i=0 upto 11: z14 + p(r*cosd(30i), 0, r*sind(30i)) .. endfor cycle;
+disc = for i=0 upto 11: z14 + p(s*cosd(30i), h, s*sind(30i)) .. endfor cycle;
+numeric a, b;
+a = directiontime down of base;
+b = directiontime up of base;
+
+arc = point a of base .. point a of disc .. z13 .. point b of disc .. point b of base;
+
+drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+draw z1--z9--z12; draw z2--z10--z13; draw z7--z11;
+draw z9--z10;
+
+drawoptions(dashed withdots scaled 1/4 withcolor 1/2);
+draw z0--z1--z4; draw z1--z2; 
+draw z14 -- center disc;
+fill disc withcolor Blues 7 1;
+draw z13 -- center disc -- z19 -- z14;
+draw subpath (b, a) of base;
+draw subpath (b, a) of disc;
+
+fill z5--z6--z7--z8--cycle withcolor Oranges 7 1;
+draw z6--z7--z8;
+
+drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+draw z11 -- center disc;
+
+drawoptions();
+draw z0--z4--z2--z3--z0; draw z3--z4; draw z8--z5--z6;
+draw arc;
+draw subpath (a, 12 + b) of base;
+draw subpath (a, 12 + b) of disc;
+
+path circ, trap, crad;
+circ = fullcircle scaled (2s*ipscale) shifted center disc shifted 144 up;
+crad = center circ -- point 3/4 of circ;
+trap = (origin -- (tau*(r-h), 0) -- (tau*(r-h), h) -- (0, r) -- cycle) 
+     shifted (0, -1/2h)
+     scaled ipscale shifted (0, ypart center circ);
+fill circ withcolor Blues 7 1;  
+draw circ;
+fill trap withcolor Oranges 7 1; draw trap;
+
+label("${}={}$", 1/2[point 3/2 of trap, point 4 of circ]); 
+
+drawoptions(withcolor Blues 7 6);
+arrow_label(3/4[z1, z9], 3/4[z7, z11], "$h$", 0);
+arrow_label(z0 shifted p(0,0,-3/4), z3 shifted p(0,0,-3/4), "$r$", 0);
+arrow_label(z0 shifted p(0,0,-3/2), z4 shifted p(0,0,-3/2), "$2\pi r$", 0);
+arrow_label(point 0 of trap, point 1 of trap, "$2\pi(r-h)$", 9);
+label.lft("$r$", point -1/2 of trap);
+label.rt("$h$", point 3/2 of trap);
+label.lrt("$h$", 5/8[z5, z6]);
+label.top("$r$", 1/2[z2, z3]);
+label.top("$r$", 1/2[z0, z1]);
+label.lrt("$r$", 1/2[z14, z19]);
+drawdblarrow crad;
+label.ulft("$\sqrt{r^2-h^2}$", point 5/8 of crad);
+
+drawoptions();
+label.urt("$S$", point 7/2 of arc);
+label.urt("$P$", 5/8[z2, z4]);
+
+z21 = 1/2[z13, point 6 of circ];
+drawarrow (up--down) scaled 10 shifted z21 withcolor Blues 7 7;
+drawarrow (up--down) scaled 10 shifted (xpart point 1/2 of trap, y21) withcolor Oranges 7 7;
+
+label.bot(btex  $\displaystyle V_S = V_P = {1\over3}r^2\cdot2\pi r = {2\over3} \pi r^3$ etex, 
+     point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
+
+%-----------------------------------------
+\chapter{Trigonometry, Calculus, \& Analytic Geometry}
+
+\minitoc
+
+\section{Sine of the sum}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric x, y, z, r;
+pair A, B, C, P;
+
+x = 75; y = 46; x + y + z = 180;
+r = 180;
+A = r * dir (270 - z);
+B = r * dir (270 + z);
+C - A = whatever * dir x;
+C - B = whatever * dir (180-y);
+P = whatever[A,B]; C - P = whatever * up;
+
+path am[];
+am1 = fullcircle scaled 42 rotated angle (B-A) shifted A cutafter (A--C);
+am2 = fullcircle scaled 42 rotated angle (C-B) shifted B cutafter (B--A);
+am3 = fullcircle scaled 42 rotated angle (A-C) shifted C cutafter (C--B);
+am4 = fullcircle scaled 42 rotated angle A cutafter (origin -- 1/2[A,B]);
+forsuffixes $=1,2: draw am$ withcolor 3/4; endfor
+forsuffixes $=3,4: draw am$ withcolor Reds 6 5; endfor
+
+draw subpath (1,3) of unitsquare scaled 6 shifted 1/2[A,B] withcolor 3/4;
+draw subpath (1,3) of unitsquare scaled 6 shifted P withcolor 3/4;
+
+draw fullcircle scaled 2r withcolor Blues 7 6;
+fill fullcircle scaled 2  withcolor Blues 7 6;
+
+draw C--P dashed evenly withcolor 3/4;
+draw A--B--C--A--origin--1/2[A,B];
+
+label.urt("$\alpha$", point arctime 3/4 arclength am1 of am1 of am1);
+label.lft("$\beta$", point arctime 1/2 arclength am2 of am2 of am2);
+label.lrt("$\gamma$", point arctime 1/2 arclength am3 of am3 of am3);
+label.llft("$\gamma$", point arctime 1/2 arclength am4 of am4 of am4);
+label.urt("$a$", 1/2[B,C]);
+label.ulft("$b$", 1/2[C, A]);
+label.bot("$c$", 1/2[A, B]);
+label.top("$c/2$", 5/16[A, B]);
+label.top("$r$", 1/2 A);
+
+label.top("$\sin(\alpha+\beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta$ for $\alpha+\beta < \pi$",
+   point 5/2 of bbox currentpicture shifted 42 up);
+
+label.bot(btex \vbox{\openup 6pt\halign{\hss # \hss\cr
+$c = a \cos\beta + b \cos\alpha$\cr
+$r=1/2$ \quad $\Longrightarrow$ \quad $\sin\gamma = {c/2\over1/2} = c$,\enspace $\sin\alpha=a$,\enspace $\sin\beta=b$\cr
+$\sin\bigl(\alpha+\beta\bigr) = \sin\bigl(\pi - (\alpha+\beta)\bigr) = \sin\gamma =
+\sin\alpha\cos\beta + \sin\beta\cos\alpha$\cr}} etex, point 1/2 of bbox currentpicture shifted 12 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
 \end{document}
