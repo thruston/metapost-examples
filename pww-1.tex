@@ -1603,11 +1603,7 @@ label.top("$r$", 1/2 A);
 label.top("$\sin(\alpha+\beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta$ for $\alpha+\beta < \pi$",
    point 5/2 of bbox currentpicture shifted 42 up);
 
-label.bot(btex \vbox{\openup 6pt\halign{\hss # \hss\cr
-$c = a \cos\beta + b \cos\alpha$\cr
-$r=1/2$ \quad $\Longrightarrow$ \quad $\sin\gamma = {c/2\over1/2} = c$,\enspace $\sin\alpha=a$,\enspace $\sin\beta=b$\cr
-$\sin\bigl(\alpha+\beta\bigr) = \sin\bigl(\pi - (\alpha+\beta)\bigr) = \sin\gamma =
-\sin\alpha\cos\beta + \sin\beta\cos\alpha$\cr}} etex, point 1/2 of bbox currentpicture shifted 12 down);
+label.bot("\vbox{\openup 6pt\halign{\hss # \hss\cr $c = a \cos\beta + b \cos\alpha$\cr $r=1/2$ \quad $\Longrightarrow$ \quad $\sin\gamma = {c/2\over1/2} = c$,\enspace $\sin\alpha=a$,\enspace $\sin\beta=b$\cr $\sin\bigl(\alpha+\beta\bigr) = \sin\bigl(\pi - (\alpha+\beta)\bigr) = \sin\gamma = \sin\alpha\cos\beta + \sin\beta\cos\alpha$\cr}}", point 1/2 of bbox currentpicture shifted 12 down);
 
 \end{mplibcode}
 $$
@@ -1619,16 +1615,169 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+numeric x, y, a, b;
+x = 56; y = 42; a = 120 / cosd(x); a * cosd(x) = b * cosd(y);
 
-label.bot("$\sin\bigl(\alpha-\beta\bigr) = \sin\alpha\cos\beta - \cos\alpha\sin\beta$",
-   point 1/2 of bbox currentpicture shifted 13 down);
+path t[]; 
+t1 = origin -- b * dir y -- a * dir x -- cycle;
+t2 = origin -- (xpart point 1 of t1, 0) -- point 1 of t1 -- cycle;
+
+path a[];
+a1 = fullcircle scaled 64 cutafter subpath (2,3) of t1;
+a2 = fullcircle scaled 36 cutafter subpath (2,3) of t2;
+a3 = fullcircle scaled 64 cutbefore subpath (2,3) of t2 cutafter subpath (2,3) of t1;  
+
+picture P[];
+P1 = image(
+    fill t1 withcolor Blues 8 1;
+    pair p; p = whatever[point 2 of t1, point 3 of t1];
+    p - point 1 of t1 = whatever * ((point 3 of t1 - point2 of t1) rotated 90);
+    drawoptions(withcolor Blues 7 3);
+    draw subpath (1,3) of unitsquare scaled 5 
+        rotated angle (point 3 of t1 - point 2 of t1) 
+        shifted p withpen pencircle scaled 1/4;
+    draw p -- point 1 of t1;
+    drawoptions(withcolor Blues 7 5);
+    pair q, r; 
+    q = 7/8 point arctime 1/2 arclength a3 of a3 of a3; r = q + (8, -8);
+    draw r .. q dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
+    draw a3; label("$\alpha-\beta$", r+(4,-4));
+    drawoptions();
+    draw t1; 
+    label.ulft("$a$", point -5/8 of t1);
+    label.lrt("$b$", point   5/8 of t1);
+);
+P2 = image(
+    fill t1 withcolor Blues 8 1;
+    fill t2 withcolor Oranges 8 1;
+    drawoptions(withcolor Oranges 7 3);
+    draw subpath (1,3) of unitsquare scaled 5 
+        rotated 90
+        shifted point 1 of t2
+        withpen pencircle scaled 1/4;
+    drawoptions(withcolor Reds 7 5);
+    draw a1; label.rt("$\alpha$", point arctime 1/2 arclength a1 of a1 of a1);
+    drawoptions(withcolor Oranges 7 5);
+    draw a2; label.rt("$\beta$", point arctime 1/2 arclength a2 of a2 of a2);
+    drawoptions();
+    draw t1; draw subpath (0,2) of t2;
+    label.ulft("$a$", point -9/16 of t1);
+    label.lrt("$b$", point   9/16 of t1);
+    label.rt(textext("\strut$a\sin\alpha$") rotated 90, 1/2[point 1 of t2, point 2 of t1]);
+    label.bot("$b\cos\beta$", point 1/2 of t2);
+);
+P3 = image(
+    fill t2 withcolor Oranges 8 1;
+    drawoptions(withcolor Oranges 7 3);
+    draw subpath (1,3) of unitsquare scaled 5 
+        rotated 90
+        shifted point 1 of t2
+        withpen pencircle scaled 1/4;
+    drawoptions(withcolor Oranges 7 5);
+    draw a2; label.rt("$\beta$", point arctime 1/2 arclength a2 of a2 of a2);
+    drawoptions();
+    draw t2;
+    label.ulft("$b$", point  -9/16 of t2);
+    label.rt(textext("\strut$b\sin\beta$") rotated 90, point 3/2 of t2);
+    label.bot("$a\cos\alpha$", point 1/2 of t2);
+);
+draw P1;
+draw P2 shifted 124 right;
+draw P3 shifted 280 right;
+label("$=$", (128, 60));
+label("$-$", (288, 60));
+
+label.bot(btex \vbox{\openup 6pt\halign{\hfil $#$&${}=#$\hfil\cr
+\frac12\cdot a\cdot b\sin\bigl(\alpha-\beta\bigr)&\frac12\cdot a\sin\alpha \cdot
+b\cos\beta - \frac12\cdot a\cos\alpha\cdot b\sin\beta\cr
+        \sin\bigl(\alpha-\beta\bigr)&\sin\alpha\cos\beta -
+        \cos\alpha\sin\beta\cr}} etex, 
+point 1/2 of bbox currentpicture shifted 13 down);
 \end{mplibcode}
 $$
 \vfill
 $$
 \begin{mplibcode}
-label.bot("$\cos\bigl(\alpha-\beta\bigr) = \cos\alpha\cos\beta - \cos\alpha\cos\beta$", 
-   point 1/2 of bbox currentpicture shifted 13 down);
+numeric a, b, alpha, beta;
+alpha = 72; beta = 42; a = 120; a * sind(alpha) = b * cosd(beta);
+
+path t[]; 
+t1 = origin -- a * sind(alpha) * up -- a * cosd(alpha) * left -- cycle; 
+t2 = origin -- b * sind(beta) * right -- b * cosd(beta) * up -- cycle;
+
+pair p; p = whatever[point 1 of t1, point 2 of t1]; 
+p - point 1 of t2 = whatever * ((point 2 of t1-point 1 of t1) rotated 90);
+
+path a[];
+a1 = fullcircle scaled 24 rotated 0 shifted point 2 of t1 cutafter subpath (1,2) of t1;
+a2 = fullcircle scaled 24 rotated 270 shifted point 2 of t2 cutafter subpath (1,2) of t2;
+a3 = fullcircle scaled 32 rotated (90+beta) shifted point 1 of t2 cutafter (p--point 1 of t2);
+
+picture P[];
+
+P1 = image(
+    fill t1 withcolor Blues 8 1;
+    fill t2 withcolor Oranges 8 1;
+
+    drawoptions(withcolor Blues 7 3);
+    draw subpath (1,3) of unitsquare scaled 5 
+        rotated angle (point 2 of t1 - point 1 of t1) 
+        shifted p withpen pencircle scaled 1/4;
+    draw p -- point 1 of t2;
+    drawoptions(withcolor Blues 7 5);
+    draw a1; label("$\alpha$", point arctime 1/2 arclength a1 of a1 of a1 + (5,5));
+    drawoptions(withcolor Oranges 7 5);
+    draw a2; label("$\beta$", point arctime 1/2 arclength a2 of a2 of a2 + (2,-8));
+    drawoptions(withcolor Reds 7 5);
+    pair q, r; 
+    q = 3/4[point 1 of t2, point arctime 1/2 arclength a3 of a3 of a3]; r = q + (9, 12);
+    draw r .. q dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
+    draw a3; label("$\alpha-\beta$", r + 4 up);
+    drawoptions();
+    draw subpath (1,3) of unitsquare scaled 5 withcolor Oranges 7 3;
+    draw t1; draw subpath (0, 2) of t2;
+    label.ulft("$a$", point 3/2 of t1);
+    label.urt("$b$", point 3/2 of t2);
+);
+P2 = image(
+    fill t1 withcolor Blues 8 1;
+
+    drawoptions(withcolor Blues 7 3);
+    draw subpath (1,3) of unitsquare scaled 5 rotated 90 withpen pencircle scaled 1/4;
+    drawoptions(withcolor Blues 7 5);
+    draw a1; label("$\alpha$", point arctime 1/2 arclength a1 of a1 of a1 + (5,5));
+    drawoptions();
+    draw t1;
+    label.rt  (textext("\strut$b\cos\beta$") rotated 90, point 1/2 of t1);
+    label.ulft("$a$", point 3/2 of t1);
+    label.bot ("\strut$a\cos\alpha$", point 5/2 of t1);
+);
+P3 = image(
+    fill t2 withcolor Oranges 8 1;
+    drawoptions(withcolor Oranges 7 5);
+    draw a2; label("$\beta$", point arctime 1/2 arclength a2 of a2 of a2 + (2,-8));
+    drawoptions();
+    draw subpath (1,3) of unitsquare scaled 5 withcolor Oranges 7 3;
+    draw t2;
+    label.bot("\strut$b\sin\beta$", point 1/2 of t2);
+    label.urt("$b$", point 3/2 of t2);
+    label.lft(textext("\strut$a\sin\alpha$") rotated 90, point 5/2 of t2);
+);
+
+draw P1 shifted 200 left;
+draw P2 shifted 20 left;
+draw P3 shifted 60 right;
+label("$=$", (-84, 64));
+label("$+$", (20, 64));
+
+label.bot(btex \vbox{\openup 6pt\halign{\hfil $#$&${}=#$\hfil\cr
+\frac12 \cdot a \cdot b\cos\bigl(\alpha-\beta\bigr)&
+\frac12 \cdot a\cos\alpha \cdot b\cos\beta +
+\frac12 \cdot a\sin\alpha \cdot b\sin\beta\cr
+        \cos\bigl(\alpha-\beta\bigr)&\cos\alpha\cos\beta +
+        \sin\alpha\sin\beta\cr}} etex, 
+point 1/2 of bbox currentpicture shifted 13 down);
+
 \end{mplibcode}
 $$
 \vfill
