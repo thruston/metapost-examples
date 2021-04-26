@@ -1782,4 +1782,92 @@ point 1/2 of bbox currentpicture shifted 13 down);
 $$
 \vfill
 \contrib{Sidney H.\@ Kung}
+
+\section{The law of cosines I}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b, theta;
+path A, B, C, Am, Bm;
+a = 136; b = 9/16 a; theta = 40;
+
+A = unitsquare scaled a rotated -90;
+B = unitsquare scaled b rotated theta;
+C = point 3 of A 
+ -- point 1 of B rotatedabout(point 3 of A, -90)
+ -- point 3 of A rotatedabout(point 1 of B, +90) 
+ -- point 1 of B -- cycle;
+
+z0 = whatever[point 0 of A, point 3 of A];
+point 1 of B - z0 = whatever * up;
+path arc; 
+arc = quartercircle rotated 180 scaled 2 abs(point 1 of B - z0) 
+      shifted point 1 of B
+      cutbefore subpath (0,1) of B;
+
+Am = unitsquare scaled -abs(z0 - point 3 of A) shifted point 3 of A;
+Bm = unitsquare scaled abs(point 0 of arc - point 1 of B) rotated theta shifted point 0 of arc;
+
+picture P[];
+
+P1 = image(
+draw subpath (1,3) of unitsquare scaled 6 shifted z0 withcolor 1/2;
+draw z0 -- point 1 of B dashed evenly scaled 1/2;
+
+draw arc dashed withdots scaled 1/4;
+
+fill A withcolor Oranges 7 1;
+fill B withcolor Oranges 7 1;
+fill C withcolor Blues 7 1;
+
+fill Am withcolor Blues 7 1;
+fill Bm withcolor Blues 7 1;
+
+draw A;
+draw B;
+draw C;
+draw Am;
+draw Bm;
+
+label.bot ("$a$", point 3/2 of A);
+label.ulft("$b$", point 5/2 of B);
+label.urt ("$c$", point 3/2 of C);
+
+label("$\theta$", 16 dir 1/2 theta);
+label.bot("\strut$b\cos\theta$", 1/2 z0);
+draw thelabel.top("$b\sin\theta$", origin) rotated theta shifted point 1/2 of Bm;
+);
+P2 = image(
+    Bm := Bm rotatedabout(point 1 of B, 90-theta);
+    draw subpath (1,3) of unitsquare scaled 6 shifted z0 withcolor 1/2;
+    forsuffixes $=Am, Bm, C: fill $ withcolor Blues 7 1; draw $; endfor
+    label("$\left(a - b \cos\theta \right)^2$", center Am);
+    label("$\left(b \sin\theta \right)^2$", center Bm);
+    label("$c^2$", center C);
+);
+
+draw P1;
+draw P2 shifted 200 right;
+drawarrow 160 right -- 190 right withpen pencircle scaled 2 withcolor Blues 7 5;
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$&${}=#$\hfil\cr
+c^2 & \left(b\sin\theta\right)^2 + \left(a - b\cos\theta\right)^2\cr
+&b^2\sin^2\theta + a^2 - 2ab\cos\theta + b^2\cos^2\theta\cr
+&a^2 + b^2\left(\sin^2\theta + \cos^2\theta\right) - 2ab\cos\theta\cr
+&a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 32 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Timothy A.\@ Sipka}
+
+\section{The law of cosines II}
+
+\vfill
+$$
+\begin{mplibcode}
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
 \end{document}
