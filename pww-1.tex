@@ -1900,4 +1900,108 @@ c^2 = a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shif
 $$
 \vfill
 \contrib{Sidney H.\@ Kung}
+
+\section{The law of cosines III (via Ptolemy's theorem)}
+
+\vfill
+$$
+\begin{mplibcode}
+path c; numeric a, b;  
+c = fullcircle scaled 421;
+a = 1/4; b = -7/8;
+
+z0 = point a of c; z1 = point 4-a of c;
+z3 = point b of c; z2 = point 4-b of c;
+
+draw fullcircle scaled 42 rotated angle (z0-z3) shifted z3 cutafter (z2--z3) withcolor Reds 7 6;
+draw fullcircle scaled 42 rotated angle (z3-z2) shifted z2 cutafter (z1--z2) withcolor Reds 7 6;
+
+draw z0--z2--z3--z0--z1;
+draw z2--z1--z3 dashed evenly;
+
+draw c withcolor Blues 7 7;
+
+label.top("$a+2b\cos\bigl(\pi-\theta\bigr)$", 1/2[z0, z1]);
+label.bot("$a$", 1/2[z2, z3]);
+label.lft("$b$", 1/2[z1, z2]);
+label.rt ("$b$", 1/2[z3, z0]);
+label.ulft("$c$", 3/4[z2, z0]);
+label.urt ("$c$", 3/4[z3, z1]);
+
+label("$\theta$", z3 + 8 (unitvector(z0-z3)+unitvector(z1-z3)));
+label("$\theta$", z2 + 8 (unitvector(z0-z2)+unitvector(z1-z2)));
+
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$ \hfil\cr
+c \cdot c = b \cdot b + \Bigl(a + 2b \cos\bigl(\pi-\theta\bigr)\Bigr) \cdot a\cr
+c^2 = a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
+
+\section{The double-angle formulae}
+
+\vfill
+$$
+\begin{mplibcode}
+path h; pair A, B, C, D, O; numeric theta;
+
+h = halfcircle scaled 420;
+
+O = origin;
+A = point 4 of h;
+B = point 0 of h;
+C = point 5/4 of h;
+D = (xpart C, ypart A);
+
+2theta = angle C;
+
+draw unitsquare scaled 8 rotated angle (C-D) shifted D withcolor 3/4;
+draw unitsquare scaled 8 rotated angle (A-C) shifted C withcolor 3/4;
+
+draw A--C--B withcolor Reds 7 7;
+draw O--C--D withcolor Reds 7 7;
+
+drawoptions(withcolor Blues 7 6);
+draw h; 
+label.ulft("$x^2 + y^2 = 1$", point 3 of h);
+drawoptions();
+
+primarydef o through p = (1+o/arclength(p))[point 1 of p, point 0 of p] -- (1+o/arclength(p))[point 0 of p, point 1 of p] enddef;
+drawarrow 16 through (A--B);
+drawarrow 16 through (O--point 2 of h);
+
+dotlabel.bot("$A$", A);
+dotlabel.bot("$B$", B);
+dotlabel.urt("$C \smash{\;\bigl(\cos2\theta, \sin2\theta\bigr)}$", C);
+dotlabel.bot("$D$", D);
+dotlabel.llft("$O$", O);
+
+label("$\theta$", 28 dir 1/2 theta shifted A);
+label("$2\theta$", 20 dir theta);
+
+label("$x$", B shifted 24 right);
+label("$y$", point 2 of h shifted 24 up);
+
+draw thelabel.top("$2\cos\theta$", origin) rotated theta      shifted 1/2[A, C];
+draw thelabel.top("$2\sin\theta$", origin) rotated (theta-90) shifted 1/2[B, C];
+
+label.bot("$\triangle ACD \sim \triangle ABC$", point 1/2 of bbox currentpicture shifted 42 down);
+path p; p = bbox currentpicture shifted 20 down;
+
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$\hfil\cr
+CD \Big/ AC = BC \Big/ AB\cr
+\sin 2\theta \big/ 2 \cos\theta = 2 \sin\theta \big/ 2\cr
+\sin 2\theta = 2\sin\theta \cos\theta\cr}} etex, point 1/4 of p);
+
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$\hfil\cr
+AD \Big/ AC = AC \Big/ AB\cr
+\bigl(1 + \cos 2\theta \bigr) \big/ 2 \cos\theta = 2 \cos\theta \big/ 2\cr
+\cos 2\theta = 2\cos^2\theta - 1\cr}} etex, point 3/4 of p);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelson}
 \end{document}
