@@ -50,6 +50,9 @@ endfig;}
 \setcounter{tocdepth}{0}
 \def\contrib#1{\rightline{— #1}}
 \def\implies{\ensuremath\enspace\Longrightarrow\enspace}
+\def\sint{\sin\theta}
+\def\cost{\cos\theta}
+
 \begin{document}
 \dominitoc[n]
 \maketitle
@@ -1835,15 +1838,15 @@ label.ulft("$b$", point 5/2 of B);
 label.urt ("$c$", point 3/2 of C);
 
 label("$\theta$", 16 dir 1/2 theta);
-label.bot("\strut$b\cos\theta$", 1/2 z0);
-draw thelabel.top("$b\sin\theta$", origin) rotated theta shifted point 1/2 of Bm;
+label.bot("\strut$b\cost$", 1/2 z0);
+draw thelabel.top("$b\sint$", origin) rotated theta shifted point 1/2 of Bm;
 );
 P2 = image(
     Bm := Bm rotatedabout(point 1 of B, 90-theta);
     draw subpath (1,3) of unitsquare scaled 6 shifted z0 withcolor 1/2;
     forsuffixes $=Am, Bm, C: fill $ withcolor Blues 7 1; draw $; endfor
-    label("$\left(a - b \cos\theta \right)^2$", center Am);
-    label("$\left(b \sin\theta \right)^2$", center Bm);
+    label("$\left(a - b \cost \right)^2$", center Am);
+    label("$\left(b \sint \right)^2$", center Bm);
     label("$c^2$", center C);
 );
 
@@ -1851,10 +1854,10 @@ draw P1;
 draw P2 shifted 200 right;
 drawarrow 160 right -- 190 right withpen pencircle scaled 2 withcolor Blues 7 5;
 label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$&${}=#$\hfil\cr
-c^2 & \left(b\sin\theta\right)^2 + \left(a - b\cos\theta\right)^2\cr
-&b^2\sin^2\theta + a^2 - 2ab\cos\theta + b^2\cos^2\theta\cr
-&a^2 + b^2\left(\sin^2\theta + \cos^2\theta\right) - 2ab\cos\theta\cr
-&a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 32 down);
+c^2 & \left(b\sint\right)^2 + \left(a - b\cost\right)^2\cr
+&b^2\sin^2\theta + a^2 - 2ab\cost + b^2\cos^2\theta\cr
+&a^2 + b^2\left(\sin^2\theta + \cos^2\theta\right) - 2ab\cost\cr
+&a^2 + b^2 - 2ab\cost\cr}} etex, point 1/2 of bbox currentpicture shifted 32 down);
 \end{mplibcode}
 $$
 \vfill
@@ -1889,12 +1892,12 @@ draw thelabel.top("$a$", 1/2 point 4 of c) rotated 45a;
 draw thelabel.top("$c$", 1/2 (abs(z0), 0)) rotated 45a;
 draw thelabel.top("$a-c$", 1/2[(abs(z0), 0), point 0 of c]) rotated 45a;
 
-draw thelabel.top("$2a\cos\theta-b$", origin) rotated -1/2(180-45b) shifted 1/2[z0, point b of c];
+draw thelabel.top("$2a\cost-b$", origin) rotated -1/2(180-45b) shifted 1/2[z0, point b of c];
 draw thelabel.top("$b$",              origin) rotated -1/2(180-45b) shifted 1/2[z0, point 0 of c];
 
 label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$ \hfil\cr
-\bigl(2a\cos\theta - b\bigr) \cdot b = \bigl( a - c \bigr) \cdot \bigl(a + c \bigr)\cr
-c^2 = a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+\bigl(2a\cost - b\bigr) \cdot b = \bigl( a - c \bigr) \cdot \bigl(a + c \bigr)\cr
+c^2 = a^2 + b^2 - 2ab\cost\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
 
 \end{mplibcode}
 $$
@@ -1933,7 +1936,7 @@ label("$\theta$", z2 + 8 (unitvector(z0-z2)+unitvector(z1-z2)));
 
 label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$ \hfil\cr
 c \cdot c = b \cdot b + \Bigl(a + 2b \cos\bigl(\pi-\theta\bigr)\Bigr) \cdot a\cr
-c^2 = a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+c^2 = a^2 + b^2 - 2ab\cost\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
 
 \end{mplibcode}
 $$
@@ -1984,24 +1987,155 @@ label("$2\theta$", 20 dir theta);
 label("$x$", B shifted 24 right);
 label("$y$", point 2 of h shifted 24 up);
 
-draw thelabel.top("$2\cos\theta$", origin) rotated theta      shifted 1/2[A, C];
-draw thelabel.top("$2\sin\theta$", origin) rotated (theta-90) shifted 1/2[B, C];
+draw thelabel.top("$2\cost$", origin) rotated theta      shifted 1/2[A, C];
+draw thelabel.top("$2\sint$", origin) rotated (theta-90) shifted 1/2[B, C];
 
 label.bot("$\triangle ACD \sim \triangle ABC$", point 1/2 of bbox currentpicture shifted 42 down);
 path p; p = bbox currentpicture shifted 20 down;
 
 label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$\hfil\cr
 CD \Big/ AC = BC \Big/ AB\cr
-\sin 2\theta \big/ 2 \cos\theta = 2 \sin\theta \big/ 2\cr
-\sin 2\theta = 2\sin\theta \cos\theta\cr}} etex, point 1/4 of p);
+\sin 2\theta \big/ 2 \cost = 2 \sint \big/ 2\cr
+\sin 2\theta = 2\sint \cost\cr}} etex, point 1/4 of p);
 
 label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$\hfil\cr
 AD \Big/ AC = AC \Big/ AB\cr
-\bigl(1 + \cos 2\theta \bigr) \big/ 2 \cos\theta = 2 \cos\theta \big/ 2\cr
+\bigl(1 + \cos 2\theta \bigr) \big/ 2 \cost = 2 \cost \big/ 2\cr
 \cos 2\theta = 2\cos^2\theta - 1\cr}} etex, point 3/4 of p);
 
 \end{mplibcode}
 $$
 \vfill
-\contrib{Roger B.\@ Nelson}
+\contrib{Roger B.\@ Nelsen}
+
+\section{The half-angle tangent formulae}
+
+\vfill
+$$
+\begin{mplibcode}
+path h; pair A, B, C, D, O; numeric theta;
+
+h = halfcircle scaled 420;
+
+O = origin;
+A = point 4 of h;
+B = point 0 of h;
+C = point 5/4 of h;
+D = (xpart C, ypart A);
+
+theta = angle C;
+
+draw unitsquare scaled 8 rotated angle (C-D) shifted D withcolor 3/4;
+draw unitsquare scaled 8 rotated angle (A-C) shifted C withcolor 3/4;
+
+drawoptions(withcolor Reds 7 7);
+draw A--C--B;
+draw O--C--D;
+
+drawoptions();
+label("$\theta/2$", 38 dir 1/4 theta shifted A);
+label("$\theta/2$", 42 dir (270 + 1/4 theta) shifted C);
+label("$\theta$", 20 dir 1/2 theta);
+
+drawoptions(withcolor Blues 7 6);
+draw h; 
+label.ulft("$x^2 + y^2 = 1$", point 3 of h);
+
+drawoptions();
+primarydef o through p = (1+o/arclength(p))[point 1 of p, point 0 of p] -- (1+o/arclength(p))[point 0 of p, point 1 of p] enddef;
+drawarrow 16 through (A--B);
+drawarrow 16 through (O--point 2 of h);
+
+label("$x$", B shifted 24 right);
+label("$y$", point 2 of h shifted 24 up);
+
+label.bot("$1$", 1/2 A);
+label.ulft("$1$", 1/2 C);
+label.bot("$\cost$", 1/2 D);
+label.bot("$1-\cost$", 1/2[B, D]);
+draw thelabel.top("$\sint$", origin) rotated 90 shifted 1/2[C,D];
+
+label.bot(btex $\displaystyle
+\tan \theta\big/2 = {\sint\over 1+\cost} = {1-\cost\over\sint}
+$ etex, point 1/2 of bbox currentpicture shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{R.\@ J.\@ Walker}
+
+\section{Mollweide's equation}
+
+\vfill
+$$
+\begin{mplibcode}
+
+z1 = 210 left;
+z2 = 210 right;
+z3 = 180 dir 113;
+
+pair t; t = unitvector(z1-z3) + unitvector(z2-z3);
+z4 - z3 = whatever * t;
+z4 - z1 = whatever * t rotated 90;
+
+z5 = whatever[z1,z4] = whatever[z2,z3];
+z6 = whatever[z1,z4]; 
+z7 = whatever[z1,z4];
+
+z6 - z2 = whatever * (z3 - z4);
+z7 - z2 = whatever * (z3 - z1);
+
+draw subpath (1,3) of unitsquare scaled 8 rotated angle (z4-z1) shifted z4 withcolor 3/4;
+draw subpath (1,3) of unitsquare scaled 8 rotated angle (z1-z6) shifted z6 withcolor 3/4;
+
+draw z3--z4 dashed withdots scaled 1/2;
+draw z2--z6 dashed withdots scaled 1/2;
+
+drawoptions(withcolor Blues 8 7);
+draw halfcircle scaled 48 shifted z1 cutafter (z1--z3);
+label("$\alpha$", z1 + 32 dir 1/2 angle (z3-z1));
+
+drawoptions(withcolor Greens 8 7);
+draw reverse halfcircle scaled 48 shifted z2 cutafter (z2--z3);
+label("$\beta$", z2 + 32 dir (90 + 1/2 angle (z3-z2)));
+
+drawoptions(withcolor Oranges 8 7);
+draw halfcircle scaled 48 rotated angle (z4-z3) shifted z3 cutafter (z2--z3);
+draw halfcircle scaled 48 rotated angle (z7-z2) shifted z2 cutafter (z2--z6);
+label("${\gamma\over2}$", z3 + 20 (unitvector(z4-z3) + unitvector(z2-z3)));
+
+drawoptions(withcolor Reds 8 7);
+picture a; a = image(
+    for s=48,52:
+        draw halfcircle scaled s rotated angle (z3-z2) shifted z5 cutafter (z5--z1);
+    endfor
+);
+draw a;
+draw a rotatedabout(z5, 180);
+draw a rotatedabout(z5, 180) reflectedabout(z2,z6);
+label("${\alpha+\beta\over2}$", z5 + 22 (unitvector(z1-z5) + unitvector(z3-z5)));
+
+drawoptions(withcolor Purples 8 7);
+draw halfcircle scaled 108 shifted z1 cutafter (z1--z4);
+pair s, t; s = z1 + 58 dir 1/2 angle (z4-z1); t = s + (32, -18);
+label.bot("$\alpha-\beta\over2$", t);
+drawarrow t {up} .. {left} s withpen pencircle scaled 1/4;
+
+drawoptions();
+draw z1--z2--z3--cycle;
+draw z1--z7--z2;
+
+label.urt ("$a$", 1/2[z2, z3]);
+label.ulft("$b$", 1/2[z3, z1]);
+label.bot ("$c$", 1/2[z1, z2]);
+label.lrt ("$a-b$", 1/2[z2, z7]);
+
+label.top(btex $\displaystyle
+(a-b)\cos{\gamma\over2} = c \sin\left(\alpha-\beta\over2\right)
+$ etex, point 5/2 of bbox currentpicture shifted 42 up);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{H.\@ Arthur DeKleine}
 \end{document}
