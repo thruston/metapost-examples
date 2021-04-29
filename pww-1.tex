@@ -1865,6 +1865,36 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+path c; numeric a, b;  
+c = fullcircle scaled 421;
+a = 0.98; b = 2.718;
+z0 = whatever[point a of c, point a+4 of c] = whatever[point 0 of c, point b of c];
+
+fill center c -- point 0 of c -- z0 -- cycle withcolor Greens 7 1;
+
+% mark the angles
+draw unitsquare scaled 8 rotated angle (point 4 of c - point b of c) shifted point b of c withcolor 3/4;
+draw halfcircle scaled 64 shifted point 0 of c cutbefore (point 0 of c -- point b of c) withcolor Reds 7 7;
+label("$\theta$", 26 dir (180 - 1/4(180 - 45b)) shifted point 0 of c); 
+
+draw point a of c -- point a + 4 of c;
+draw point 4 of c -- point 0 of c -- point b of c -- cycle;
+draw c withcolor Blues 7 7;
+drawdot center c withpen pencircle scaled dotlabeldiam withcolor Blues 7 7;
+
+label.bot("$a$", 1/2 point 0 of c);
+label.bot("$a$", 1/2 point 4 of c);
+
+draw thelabel.top("$a$", 1/2 point 4 of c) rotated 45a;
+draw thelabel.top("$c$", 1/2 (abs(z0), 0)) rotated 45a;
+draw thelabel.top("$a-c$", 1/2[(abs(z0), 0), point 0 of c]) rotated 45a;
+
+draw thelabel.top("$2a\cos\theta-b$", origin) rotated -1/2(180-45b) shifted 1/2[z0, point b of c];
+draw thelabel.top("$b$",              origin) rotated -1/2(180-45b) shifted 1/2[z0, point 0 of c];
+
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$ \hfil\cr
+\bigl(2a\cos\theta - b\bigr) \cdot b = \bigl( a - c \bigr) \cdot \bigl(a + c \bigr)\cr
+c^2 = a^2 + b^2 - 2ab\cos\theta\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
 
 \end{mplibcode}
 $$
