@@ -2138,4 +2138,46 @@ $ etex, point 5/2 of bbox currentpicture shifted 42 up);
 $$
 \vfill
 \contrib{H.\@ Arthur DeKleine}
+
+\section{Tangent indenties}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric s, theta;
+theta = 28;
+s = 120;
+
+path c, t;
+c = fullcircle scaled 2s;
+
+z0 = whatever * dir theta;
+z1 = whatever * dir theta;
+z2 = (x1, y0) = (xpart point 0 of c, ypart point 6 of c);
+
+drawoptions(withcolor 3/4);
+draw unitsquare scaled 6 rotated 0   shifted point 6 of c;
+draw unitsquare scaled 6 rotated 90  shifted z2;
+draw unitsquare scaled 6 rotated 180 shifted point 0 of c;
+draw unitsquare scaled 6 rotated 270 shifted center c;
+
+drawoptions(withcolor Blues 8 6);
+draw c; 
+
+drawoptions();
+draw z0--z1--z2--cycle;
+draw point 0 of c -- center c -- point 6 of c;
+
+drawoptions(withcolor Blues 8 6);
+drawdot center c withpen pencircle scaled dotlabeldiam;
+
+drawoptions(withcolor Reds 
+
+drawoptions();
+
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{William Romaine}
 \end{document}
