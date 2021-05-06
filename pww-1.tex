@@ -2139,7 +2139,7 @@ $$
 \vfill
 \contrib{H.\@ Arthur DeKleine}
 
-\section{Tangent indenties}
+\section{Tangent, cotangent, secant, and cosecant}
 
 \vfill
 $$
@@ -2161,19 +2161,43 @@ draw unitsquare scaled 6 rotated 90  shifted z2;
 draw unitsquare scaled 6 rotated 180 shifted point 0 of c;
 draw unitsquare scaled 6 rotated 270 shifted center c;
 
-drawoptions(withcolor Blues 8 6);
+drawoptions(withcolor Blues 8 8);
 draw c; 
 
 drawoptions();
 draw z0--z1--z2--cycle;
 draw point 0 of c -- center c -- point 6 of c;
 
-drawoptions(withcolor Blues 8 6);
+drawoptions(withcolor Blues 8 8);
 drawdot center c withpen pencircle scaled dotlabeldiam;
 
-drawoptions(withcolor Reds 
+drawoptions(withcolor Reds 8 7);
+label("$\theta$", z0 + 24 dir 1/2 theta);
+label("$\theta$", center c + 24 dir 1/2 theta);
 
 drawoptions();
+label.top("$1$", 1/2[point 0 of c, center c]);
+label.lft("$1$", 1/2[point 6 of c, center c]);
+label.bot("$1$", 1/2[point 6 of c, z2]);
+label.rt ("$1$", 1/2[point 0 of c, z2]);
+label.rt ("$\tan\theta$", 1/2[point 0 of c, z1]);
+label.bot("$\cot\theta$", 1/2[point 6 of c, z0]);
+
+picture p; 
+p = thelabel.top("$\csc\theta$", origin);
+unfill bbox p rotated theta shifted 1/2[z0, center c];
+       draw p rotated theta shifted 1/2[z0, center c];
+draw thelabel.top("$\sec\theta$", origin) rotated theta shifted 1/2[z1, center c];
+
+label.bot(btex \vbox{\openup 8pt\halign{\hfil $#$ \hfil\cr
+\tan^2\theta + 1 = \sec^2 \theta\cr
+\cot^2\theta + 1 = \csc^2 \theta\cr
+\left(\tan\theta + 1\right)^2 +  
+\left(\cot\theta + 1\right)^2 = 
+\left(\sec\theta + \csc\theta\right)^2\cr}} etex, point 1/2 of bbox currentpicture shifted 32 down);
+
+label.bot(btex also $\displaystyle \tan\theta = {\tan\theta+1\over\cot\theta + 1}$ etex,
+point 1/2 of bbox currentpicture shifted 24 down);
 
 
 \end{mplibcode}
