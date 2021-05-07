@@ -2204,4 +2204,103 @@ point 1/2 of bbox currentpicture shifted 24 down);
 $$
 \vfill
 \contrib{William Romaine}
+
+%------------------------
+\section{Substitution to make a rational function of sine and cosine}
+\vfill
+$$
+\begin{mplibcode}
+numeric theta, u; theta = 60; u = 144;
+z0 = u * left;
+z1 = origin; 
+x2 = x1; z2 = whatever * dir 1/2 theta shifted z0;
+y3 = y1; z2 - z3 = whatever * (z2-z0) rotated 90;
+z4 = z1 shifted (z2-z3);
+z5 = z2 shifted (z2-z3);
+x6 = x5; y6 = y1;
+picture P[];
+P0 = image(
+    draw z0--z1--z2--cycle withpen pencircle scaled 1;
+    label.bot("$1$", 1/2[z0, z1]);
+    label.rt ("$z$", 1/2[z1, z2]);
+    label("$\theta/2$", 32 dir 1/4 theta shifted z0 shifted 2 down) withcolor Reds 8 7;
+);
+
+P1 = image(
+    draw unitsquare scaled 6 rotated 90 withcolor 1/2;
+    draw P0;
+);
+
+P2 = image(
+    draw unitsquare scaled 6 rotated 90 withcolor 1/2;
+    draw z1--z3--z2; 
+    draw P0;
+    label.bot("$z^2$", 1/2[z1, z3]);
+);
+
+P3 = image(
+    draw unitsquare scaled 6 shifted z1 withcolor 1/2;
+    draw unitsquare scaled 6 shifted z4 withcolor 1/2;
+    draw z5--z4--z2 -- cycle -- z0;
+    draw z1--z3--z2; 
+    draw P0;
+    
+    picture par_mark; par_mark = image(
+        draw (up--down) scaled 3 rotated -10 shifted 3/4 left;
+        draw (up--down) scaled 3 rotated -10 shifted 3/4 right;
+    );
+        
+    draw par_mark rotated angle (z2-z3) shifted 1/2[z2,z3] withcolor Blues 8 7;
+    draw par_mark rotated angle (z2-z3) shifted 1/2[z2,z5] withcolor Blues 8 7;
+
+    label.ulft("$1+z^2$", 1/2[z0, z5]);
+    label.bot("$z^2$", 1/2[z1, z3]);
+    label.rt ("$z$", 1/2[z4, z5]);
+    label("$\theta/2$", 36 dir 3/4 theta shifted z0) withcolor Reds 8 7;
+);
+P4 = image(
+    draw unitsquare scaled 6 rotated 90 shifted z6 withcolor 1/2;
+    draw z1--z2--z0--z3--z5;
+    draw z0--z6--z5--cycle withpen pencircle scaled 1;
+    picture t; t = thelabel("$\theta$", 18 dir 1/2 theta shifted z0);
+    unfill bbox t; draw t withcolor Reds 8 7;
+    label.ulft("$1+z^2$", 1/2[z0, z5]);
+    label.bot("$z^2$", 1/2[z1, z3]);
+    label.bot("$z^2$", 1/2[z1, z6]);
+    label.bot("$1-z^2$", 1/2[z0, z6]);
+    label.rt("$2z$", 1/2[z5, z6]);
+);
+
+
+P2 := P2 shifted (7/4u, 0);
+P3 := P3 shifted (0,    -7/4u);
+P4 := P4 shifted (7/4u, -7/4u);
+
+draw P1;
+draw P2;
+draw P3;
+draw P4;
+
+drawoptions(withpen pencircle scaled 2 withcolor Blues 8 7);
+interim linecap := butt;
+interim linejoin := mitered;
+interim bboxmargin := 16;
+picture a; a = image(drawarrow (left--right) scaled 21);
+drawoptions();
+
+for i=1 upto 3:
+    draw a rotated angle (center P[i+1] - center P[i]) shifted 1/2[center P[i], center P[i+1]];
+endfor
+
+label.bot(btex 
+    $z=\tan\left(\theta/2\right) \mathbin{\:\Longrightarrow\:} 
+    \hbox{$\displaystyle\sin\theta = {2z   \over 1 + z^2}$ \quad and\quad
+          $\displaystyle\cos\theta = {1-z^2\over 1 + z^2}$}$ etex, 
+          point 1/2 of bbox currentpicture
+            shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
 \end{document}
