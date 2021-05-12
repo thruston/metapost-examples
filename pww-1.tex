@@ -2303,4 +2303,73 @@ label.bot(btex
 $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
+
+%------------------------
+\section{Sums of arctangents}
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 42;
+picture P[];
+P1 = image(
+    path t[];
+    t1 = origin -- (2u, 0) -- (2u, u) -- cycle;
+    t2 = origin -- (3u, -u) -- (3u, 0) -- cycle;
+
+    fill t1 withcolor Oranges 7 1;
+    fill t2 withcolor Blues 7 1;
+
+    for x= 0 upto 3: draw (down -- up) shifted (x, 0) scaled u withcolor 3/4; endfor
+    for y=-1 upto 1: draw (origin -- 3 right) shifted (0, y) scaled u withcolor 3/4; endfor
+
+    draw fullcircle scaled 3/2 u 
+        rotated angle point 1 of t2 
+        cutafter subpath (2, 3) of t1 
+        withcolor Reds 7 6;
+
+    draw t1 -- subpath (0, 2) of t2 -- point 1 of t1 withpen pencircle scaled 1;
+    draw point 1 of t2 -- point 2 of t1 withpen pencircle scaled 1;
+
+    label.bot("$\displaystyle \arctan \frac12 + \arctan \frac13 = \frac\pi4$",
+       point 1/2 of bbox currentpicture shifted 21 down);
+);
+P2 = image(
+    path t[];
+    t1 = origin -- (-u, 0) -- (-u, -u) -- cycle;
+    t2 = origin -- (-u, 2u) -- (-u, 0) -- cycle;
+    t3 = origin -- (5u, 5u) -- (-u, 2u) -- cycle;
+
+    fill t1 withcolor Greens 7 1;
+    fill t2 withcolor Oranges 7 1;
+    fill t3 withcolor Blues 7 1;
+
+    numeric y; y = -2;
+    for x=-10+1, -10+1, -10+2, -10+3, -10+5, 15, 35:
+        draw ((floor (x/10), incr y) -- (x - 10 * floor (x/10), y)) scaled u withcolor 3/4;
+    endfor
+    numeric x; x = -2;
+    for y=-10+3, -10+3, -10+4, 14, 25, 35, 35:
+        draw ((incr x, floor (y/10)) -- (x, y - 10 * floor (y/10))) scaled u withcolor 3/4;
+    endfor
+
+    draw halfcircle scaled 3/2 u 
+        rotated angle point 1 of t3
+        withcolor Reds 7 6;
+
+    draw                  t1 withpen pencircle scaled 1;
+    draw subpath (0,2) of t2 withpen pencircle scaled 1;
+    draw subpath (0,2) of t3 withpen pencircle scaled 1;
+
+    label.bot("$\displaystyle \arctan 1 + \arctan 2 + \arctan 3 = \pi$",
+       point 1/2 of bbox currentpicture shifted 21 down);
+
+);
+draw P1;
+label.bot(P2, point 1/2 of bbox currentpicture shifted 42 down);
+
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Edward M.\@ Harris}
 \end{document}
