@@ -2451,7 +2451,6 @@ xpart am = xpart bm = xpart m;
 am - fa = whatever * (tb - ta);
 bm - fb = whatever * (tb - ta);
 
-
 path base, lid, curve;
 base = fa -- a -- b -- fb;
 lid = fa -- ta -- tb -- fb;
@@ -2519,4 +2518,61 @@ label("$\le$", (12u, -10u));
 $$
 \vfill
 \contrib{Frank Burk}
+
+%------------------------
+\section{Integration by parts}
+\vfill
+$$
+\begin{mplibcode}
+path ff, xx, yy;
+pair p, q, r, s;
+
+ff = (80, 55) {dir 10} .. (333, 233);
+xx = 5 left -- 13 right + (xpart point 1 of ff, 0);
+yy = 5 down -- 13 up    + (0, ypart point 1 of ff);
+
+numeric t; t = 1/12;
+
+p = (xpart point t of ff, 0);
+q = (xpart point 1-t of ff, 0);
+r = (0, ypart point t of ff);
+s = (0, ypart point 1-t of ff);
+
+fill p -- subpath(t, 1-t) of ff -- q -- cycle withcolor Oranges 7 1;
+fill r -- subpath(t, 1-t) of ff -- s -- cycle withcolor Blues 7 1;
+
+drawoptions(withpen pencircle scaled 1/4);
+draw p -- point t   of ff -- r;
+draw q -- point 1-t of ff -- s;
+
+drawarrow xx;
+drawarrow yy;
+draw ff withpen pencircle scaled 3/4 withcolor Reds 8 7;
+
+label.rt("$\left\{\:\vcenter{\halign{$#$\hfil\cr u=f(x)\cr v=g(x)\cr}}\right.$", point 1 of ff);
+
+label.rt ("$u$", point 1 of xx);
+label.top("$v$", point 1 of yy);
+
+interim labeloffset := 8;
+dotlabel.lft("$s=g(b)$", s); 
+dotlabel.lft("$r=g(a)$", r);
+dotlabel.bot("$p=f(a)$", p); 
+dotlabel.bot("$q=f(b)$", q);
+dotlabel.llft("$0$", origin);
+
+% Blues[7][1] = 1/256 (239,243,255); 0.93359375 0.94921875 0.99609375 
+% Oranges 7 1 = 1/256 (254,237,222)  0.9921875 0.92578125 0.8671875   
+% 
+label.bot(btex \vbox{\openup 16pt\halign{\hfil $\displaystyle # $\hfil\cr
+\hbox{Area\ \pdfliteral{0.93359375 0.94921875 0.99609375 rg}\vrule height 5mm width 8mm depth 2mm\pdfliteral{0 g}} + 
+\hbox{Area\ \pdfliteral{0.9921875 0.92578125 0.8671875 rg}\vrule height 5mm width 8mm depth 2mm\pdfliteral{0 g}} = qs - pr\cr
+\int_r^s u\:dv + \int_p^q v\: du = uv \: \bigg|_{(p, r)}^{(q, s)}\cr
+\int_a^b f(x) g'(x) \:dx = f(x) g(x) \: \Big|_a^b - \int_a^b g(x) f'(x) \: dx\cr
+}} etex, point 1/2 of bbox currentpicture shifted 21 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Richard Courant}
 \end{document}
