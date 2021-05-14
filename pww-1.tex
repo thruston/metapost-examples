@@ -2430,4 +2430,93 @@ label.bot(btex $\displaystyle
 $$
 \vfill
 \contrib{R.\@ L.\@ Eisenman}
+
+%------------------------
+\section{The midpoint rule is better than the trapezoidal rule for concave
+functions}
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 12;
+pair a, b, fa, fb, ta, tb, m, fm, am, bm;
+xpart a = xpart fa = xpart ta = -4u = -xpart b = - xpart fb = - xpart tb;
+ypart a = ypart b = 0;
+ypart ta = 8u;
+ypart tb = 11u;
+ypart fa = 2u;
+ypart fb = 9u;
+m = 1/2[a, b];
+fm = 1/2[ta, tb];
+xpart am = xpart bm = xpart m;
+am - fa = whatever * (tb - ta);
+bm - fb = whatever * (tb - ta);
+
+
+path base, lid, curve;
+base = fa -- a -- b -- fb;
+lid = fa -- ta -- tb -- fb;
+curve = fa {dir 85} .. fm {tb-ta} .. fb;
+
+picture P[];
+P1 = image(
+fill lid & reverse curve & cycle withcolor Blues 8 2;
+draw base;
+draw lid;
+draw curve withcolor Blues 8 7;
+label.bot("$a$", a);
+label.bot("$b$", b);
+dotlabel.bot("$a+b \over2$", m);
+dotlabel.ulft("$f\left(a+b \over2\right)$", fm);
+);
+P2 = image(
+    fill lid -- fm -- cycle withcolor Blues 8 2;
+    draw base;
+    draw lid;
+    draw curve withcolor Blues 8 7;
+    draw fa -- fm -- fb;
+    draw fa -- am -- fm dashed evenly scaled 1/2;
+    draw bm -- fb       dashed evenly scaled 1/2;
+    drawdot m withpen pencircle scaled dotlabeldiam;
+);
+P3 = image(
+    fill fa -- am -- bm -- fb -- fm -- cycle withcolor Blues 8 2;
+    draw base;
+    draw lid;
+    draw curve withcolor Blues 8 7;
+    draw fa -- fm -- fb;
+    draw fa -- am -- fm; 
+    draw bm -- fb;
+    draw fa -- fb dashed evenly scaled 1/2;
+    drawdot m withpen pencircle scaled dotlabeldiam;
+);
+P4 = image(
+    fill fa -- fm -- fb -- cycle withcolor Blues 8 2;
+    draw fa -- fm -- fb -- cycle;
+    draw base;
+    draw lid;
+    draw curve withcolor Blues 8 7;
+    drawdot m withpen pencircle scaled dotlabeldiam;
+);
+P5 = image(
+    fill curve -- cycle withcolor Blues 8 2;
+    draw curve -- cycle;
+    draw base;
+    drawdot m withpen pencircle scaled dotlabeldiam;
+);
+
+draw P1;
+draw P2 shifted (12u, 0);
+draw P3 shifted (24u, 0);
+draw P4 shifted (6u, -16u);
+draw P5 shifted (18u, -16u);
+
+label("$\le$", (6u, 6u));
+label("$=$", (18u, 6u));
+label("$=$", (0u, -10u));
+label("$\le$", (12u, -10u));
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Frank Burk}
 \end{document}
