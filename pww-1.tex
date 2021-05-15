@@ -2575,4 +2575,72 @@ label.bot(btex \vbox{\openup 16pt\halign{\hfil $\displaystyle # $\hfil\cr
 $$
 \vfill
 \contrib{Richard Courant}
+
+%------------------------
+\section{The graphs of $f$ and $f^{-1}$ are reflections about the line $y=x$}
+\vfill
+$$
+\begin{mplibcode}
+z0 = -8(1,1);
+z1 = 221(1,1);
+path xx, yy, xy;
+xx = (x0, 0) -- (x1, 0);
+yy = xx rotated 90;
+xy = z0 -- z1;
+
+
+picture P[];
+P0 = image(
+drawarrow xx;
+drawarrow yy;
+draw xy withcolor Blues 8 7;
+draw thelabel.ulft("$y=x$", origin) rotated 45 shifted point 1 of xy withcolor Blues 8 7;
+);
+
+P1 = image(
+    path ff, ff';
+    ff = point 1/3 of xx shifted 12 up .. {dir 5} point 1 of xx shifted 72 up;
+    ff' = ff reflectedabout(z0, z1);
+    numeric a, b; (a, b) = point 3/8 of ff;
+    drawoptions(dashed evenly withpen pencircle scaled 1/4);
+    draw (a,b) -- (b, a) -- (b, b) -- (a,b) -- (a, a) -- (b, a);
+    drawoptions(withcolor Reds 8 7);
+    draw ff; label.rt("$y=f(x)$", point 1 of ff);
+    draw ff' dashed withdots scaled 1/4; 
+    label.top("$x=f(y)$, $y=f^{-1}(x)$", point 1 of ff');
+    drawoptions();
+    draw P0;
+
+    dotlabel.lrt("$(a, b)$", (a, b));
+    dotlabel.lrt("$(a, a)$", (a, a));
+    dotlabel.lrt("$(b, b)$", (b, b));
+    dotlabel.ulft("$(b, a)$", (b, a));
+    label.top("$a-b$", 1/2(a+b, 2a));
+);
+P2 = image(
+    path ff, ff';
+    ff = point 7/8 of yy shifted 21 right .. {dir -8} point 1 of xx shifted 55 up;
+    ff' = ff reflectedabout(z0, z1);
+    numeric a, b; (a, b) = point 1/4 of ff;
+    drawoptions(dashed evenly withpen pencircle scaled 1/4);
+    draw (a,b) -- (b, b) -- (b, a) -- (a, a) -- cycle;
+    drawoptions(withcolor Reds 8 7);
+    draw ff; label.rt("$y=f(x)$", point 1 of ff);
+    draw ff' dashed withdots scaled 1/4; 
+    label.top("$x=f(y)$, $y=f^{-1}(x)$", point 1 of ff');
+    drawoptions();
+    draw P0;
+    dotlabel.llft("$(a, b)$", (a, b));
+    dotlabel.lrt("$(a, a)$", (a, a));
+    dotlabel.lrt("$(b, b)$", (b, b));
+    dotlabel.llft("$(b, a)$", (b, a));
+);
+
+label.top(P1, origin);
+label.bot(P2, 21 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Ayoub B.\@ Ayoub}
 \end{document}
