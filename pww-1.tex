@@ -2704,4 +2704,99 @@ label.bot("\mathsurround 6pt $QF=QD$ and $m_1\cdot m_2 = -1,$ therefore $\alpha=
 $$
 \vfill
 \contrib{Ayoub B.\@ Ayoub}
+
+%------------------------
+\section{Area under an arch of the cycloid}
+\vfill
+$$
+\begin{mplibcode}
+input arrow_label
+picture P[];
+path c, cycloid, base; 
+numeric pi, r, s; r = 42; s = 1; pi = 3.141592653589793;
+c = fullcircle scaled 2r rotated 90;  
+cycloid = point 0 of c rotated -180 shifted (-pi * r, 0) for t = s-180 step s until 180: 
+    -- point 0 of c rotated -t shifted (t / 180 * pi * r, 0) endfor;
+base = point 0 of cycloid shifted 21 left -- point infinity of cycloid shifted 21 right;
+P0 = image(
+    draw center c -- c withcolor Blues 8 7;
+    label.rt("$r$", 1/2 point 0 of c);
+);
+P1 = image(
+    draw P0;
+    draw cycloid withcolor Blues 8 7;
+    draw base;
+    drawarrow subpath (7, 5.8) of c scaled 1.1 withcolor Reds 8 7;
+    dotlabel.top("$P$", point 0 of c);
+    arrow_label(point 0 of cycloid, point infinity of cycloid, "$2\pi r$", 10);
+);
+P2 = image(
+    draw P0;
+    label("$+$", (-3/2r, 0));
+    label("$+$", (+3/2r, 0));
+    path cusp, psuc;
+    cusp = (subpath (0, 1/2 length cycloid) of cycloid & subpath (0, 4) of c -- cycle) shifted (-2r, 0);
+    psuc = cusp reflectedabout(up, down);
+    numeric n, k; n = 13; k = 1;
+    for $=cusp, psuc:
+        draw point 0 of $ -- (xpart point 0 of $, ypart point 180 of $) dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+        for i=1 upto n:
+            hide(numeric t, u, v, w; path b, a;
+               b = subpath(0, -1) of $ shifted (0, 2r/n * i - r/n);
+               (t, u) = b intersectiontimes subpath (0, 180) of $;
+               (v, w) = b intersectiontimes subpath (180, 184) of $;
+               a = unitsquare shifted 1/2 down yscaled (2r/n)
+                xscaled xpart (point v of b - point t of b)
+                shifted point u of $;)
+            fill a withcolor Oranges 8 1; draw a withcolor Oranges 8 3;
+            if i+2 = n:
+                drawarrow 1/3[point u of $, (xpart point 0 of $, ypart point u of $)] 
+                    -- 7/8[point u of $, (xpart point 0 of $, ypart point u of $)] withcolor Oranges 8 5;
+            fi
+        endfor
+        draw $ withcolor Blues 8 7;
+        arrow_label(point 180 of $, point -1 of $, "$2r$", 0);
+        arrow_label(point 0 of $, point -1 of $, "$\pi r$", if odd incr k: - fi 8);
+    endfor
+);
+P3 = image(
+    draw P0;
+    label("$+$", (-3/2r, 0));
+    label("$+$", (+3/2r, 0));
+    path cusp, psuc;
+    cusp = (subpath (0, 1/2 length cycloid) of cycloid & subpath (0, 4) of c -- cycle) shifted (-2r, 0);
+    psuc = cusp reflectedabout(up, down);
+    numeric n, k; n = 13; k = 1;
+    for $=cusp, psuc:
+        path a[];
+        for i=1 upto n:
+            hide(numeric t, u, v, w; path b, a;
+               b = subpath(0, -1) of $ shifted (0, 2r/n * i - r/n);
+               (t, u) = b intersectiontimes subpath (0, 180) of $;
+               (v, w) = b intersectiontimes subpath (180, 184) of $;
+               a[i] = unitsquare shifted 1/2 down yscaled (2r/n)
+                xscaled xpart (point v of b - point t of b)
+                shifted (xpart point 0 of $, ypart point u of $);)
+                fill a[i] withcolor Oranges 8 1; draw a[i] withcolor Oranges 8 3;
+        endfor
+        draw point 0 of $ -- point 3 of a[n]
+            for i=n downto 1: .. point 3/2 of a[i] endfor .. point -1 of $ -- cycle
+            withcolor Blues 8 7;
+        draw point -1 of $ -- (xpart point 0 of $, ypart point 180 of $) dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+        arrow_label(point 180 of $, point -1 of $, "$2r$", 0);
+        arrow_label(point 0 of $, point -1 of $, "$\pi r$", if odd incr k: - fi 8);
+    endfor
+);
+draw P1;
+draw P2 shifted (0, -3r);
+draw P3 shifted (0, -6r);
+
+label.bot(btex \vbox{\openup 12pt\halign{\hfil $\displaystyle #$\hfil\cr
+\frac12\pi r \cdot 2r \qquad\qquad + \qquad\qquad \pi r^2 \qquad\qquad + \qquad\qquad \frac12\pi r \cdot 2r \cr
+\hbox to 0pt{\hss\small therefore\qquad}A = 3\pi r^2\cr}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Richard M.\@ Beekman}
 \end{document}
