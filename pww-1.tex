@@ -2799,4 +2799,58 @@ label.bot(btex \vbox{\openup 12pt\halign{\hfil $\displaystyle #$\hfil\cr
 $$
 \vfill
 \contrib{Richard M.\@ Beekman}
+
+%===========================
+\chapter{Inequalities}
+
+\minitoc
+
+\section{The arithmetic mean -- geometric mean inequality I}
+
+\vfill
+$$
+\begin{mplibcode}
+input arrow_label
+path h; h = halfcircle scaled 324;
+z0 = point 2.7818 of h;
+x1 = x0; y1 = 0;
+
+draw point 4 of h -- z0 -- point 0 of h dashed evenly withpen pencircle scaled 1/4;
+drawoptions(withcolor Blues 8 7);
+draw h -- cycle; draw origin -- point 2 of h; draw z0--z1;
+
+drawoptions();
+arrow_label(point 4 of h, z1, "$a$", 8);
+arrow_label(z1, point 0 of h, "$b$", 8);
+
+label.rt("$\sqrt{ab}$", 1/2[z0, z1]);
+label.rt("${a+b\over2}$", 3/4 point 2 of h);
+label.bot("$\displaystyle \sqrt{ab} \le {a+b\over2}$", point 1/2 of bbox currentpicture shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Charles D.\@ Gallant}
+
+
+\section{The arithmetic mean -- geometric mean inequality II}
+\vfill
+$$
+\begin{mplibcode}
+    
+\end{mplibcode}
+$$
+\vfill
+\contrib{Doris Schattschneider}
+
+\section{The arithmetic mean -- geometric mean inequality III}
+\vfill
+$$
+\begin{mplibcode}
+    
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roland H.\@ Eddy}
+
 \end{document}
