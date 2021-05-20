@@ -2811,7 +2811,7 @@ $$
 $$
 \begin{mplibcode}
 input arrow_label
-path h; h = halfcircle scaled 324;
+path h; h = halfcircle scaled .95 \mpdim{\textwidth};
 z0 = point 2.7818 of h;
 x1 = x0; y1 = 0;
 
@@ -2837,7 +2837,20 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-    
+numeric a, b; a + b = 7/8 \mpdim{\textwidth}; a = 610/377 b;
+path r, s; 
+s = unitsquare shifted -(1/2, 1/2) scaled (a-b);
+r = unitsquare xscaled a yscaled -b shifted point 0 of s;
+fill s withcolor Blues 8 2;
+for t=0 upto 3: fill r rotated 90t withcolor Oranges 8 1; draw r rotated 90t; endfor
+label.bot("$a$", point 5/2 of r);
+label.lft("$a$", point 5/2 of r rotated 270);
+label.lft("$b$", point 3/2 of r rotated 180);
+label.bot("$b$", point 3/2 of r rotated 270);
+
+label.bot("$(a+b)^2 - (a-b)^2 = 4ab$", point 1/2 of bbox currentpicture shifted 21 down);
+label.bot("$\displaystyle {a+b\over 2} \ge \sqrt{ab}$", point 1/2 of bbox currentpicture shifted 13 down);
+
 \end{mplibcode}
 $$
 \vfill
@@ -2847,7 +2860,26 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-    
+input arrow_label
+numeric a, b;
+5b = 3a; a + b = \mpdim{\textwidth};
+z1 = (1/2(a+b) +-+ 1/2(a-b), 1/2(b-a));
+path C, c; C = fullcircle scaled a rotated 90; c = fullcircle scaled b rotated 90 shifted z1;
+drawoptions(withcolor Blues 8 5);
+draw origin -- z1; 
+draw (0, y1) -- z1 dashed evenly scaled 1/2;
+draw C -- point 4 of C -- point 4 of c -- c;
+drawoptions();
+arrow_label(point 0 of C, point 4 of C, "$a$", 10);
+arrow_label(point 0 of c, point 4 of c, "$b$", -10);
+arrow_label(point 4 of C, point 4 of c, "$\sqrt{ab}$", 10);
+path aa; aa = (center C -- center c) shifted 12 up;
+drawdblarrow aa; 
+picture t; t = thelabel("$a+b\over2$", point 1/2 of aa); unfill bbox t shifted 2.7 up; draw t;
+
+arrow_label((0, y1), center C, "$a-b\over2$", 12);
+
+label.top("$\displaystyle {a+b\over 2} \ge \sqrt{ab}$, \quad with equality iff $a=b$", point 5 /2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
