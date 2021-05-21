@@ -2855,7 +2855,7 @@ label.bot("$\displaystyle {a+b\over 2} \ge \sqrt{ab}$", point 1/2 of bbox curren
 $$
 \vfill
 \contrib{Doris Schattschneider}
-
+%---------------------
 \section{The arithmetic mean -- geometric mean inequality III}
 \vfill
 $$
@@ -2884,5 +2884,56 @@ label.top("$\displaystyle {a+b\over 2} \ge \sqrt{ab}$, \quad with equality iff $
 $$
 \vfill
 \contrib{Roland H.\@ Eddy}
+
+
+%---------------------
+\section{Two extremum problems}
+\vfill
+$$
+\begin{mplibcode}
+path pp, xx, yy; 
+numeric P, s, minx, maxx;
+s = 2;
+P = 1600;
+minx = 4s; maxx = P/minx; 
+pp = (minx, P/minx) for x=minx+s step s until maxx+eps: -- (x, P/x) endfor; 
+xx = (-minx, 0) -- (maxx+minx, 0);
+yy = xx rotated 90;
+
+z0 = point 3/4 length pp of pp;
+z1 = (x0+y0, 0);
+z2 = (0, x0+y0);
+
+z3 = (2 sqrt(P), 0);
+z4 = (0, 2 sqrt(P));
+
+draw origin -- point 1 of xx rotated 45 dashed evenly withpen pencircle scaled 1/4;
+
+drawoptions(withcolor Reds 8 7); 
+draw pp; 
+label.rt("$xy=P$", point 1/2 of pp);
+
+drawoptions(withcolor Blues 8 7); 
+draw z1 -- z2;
+draw z3 -- z4;
+
+drawoptions();
+dotlabel.urt("$\bigl(x, y\bigr)$", z0);
+dotlabel.urt("$\bigl(\sqrt{\scriptstyle P}, \sqrt{\scriptstyle P}\bigr)$", 1/2(x3, y4));
+dotlabel.bot("$\bigl(S, 0\bigr)$", z1); 
+dotlabel.lft("$\bigl(0, S\bigr)$", z2); 
+dotlabel.bot("$\bigl(2\sqrt{\scriptstyle P}, 0\bigr)$", z3); 
+dotlabel.lft("$\bigl(0, 2\sqrt{\scriptstyle P}\bigr)$", z4); 
+
+drawarrow xx; drawarrow yy;
+label.rt("$x$", point 1 of xx);
+label.top("$y$", point 1 of yy);
+label.top(btex \vbox{\hsize 3.7in\centering
+For a given product, the sum of two positive numbers is minimal when the numbers are
+    equal.} etex, point 5 /2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Paulo Montuchi and Warren Page}
 
 \end{document}
