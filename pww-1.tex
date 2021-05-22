@@ -2894,43 +2894,75 @@ $$
 path pp, xx, yy; 
 numeric P, s, minx, maxx;
 s = 2;
-P = 1600;
+P = 1440;
 minx = 4s; maxx = P/minx; 
 pp = (minx, P/minx) for x=minx+s step s until maxx+eps: -- (x, P/x) endfor; 
 xx = (-minx, 0) -- (maxx+minx, 0);
 yy = xx rotated 90;
 
-z0 = point 3/4 length pp of pp;
+z0 = point 0.666 length pp of pp;
 z1 = (x0+y0, 0);
 z2 = (0, x0+y0);
 
 z3 = (2 sqrt(P), 0);
 z4 = (0, 2 sqrt(P));
 
-draw origin -- point 1 of xx rotated 45 dashed evenly withpen pencircle scaled 1/4;
+picture T[]; 
 
-drawoptions(withcolor Reds 8 7); 
-draw pp; 
-label.rt("$xy=P$", point 1/2 of pp);
+T0 = image(
+    undraw (left--right) scaled 1/2 \mpdim{\textwidth} shifted point 1/2 of xx;
+    draw origin -- point 1 of xx rotated 45 dashed evenly withpen pencircle scaled 1/4;
+    drawarrow xx; drawarrow yy;
+    draw z1 -- z2 withcolor Blues 8 7;
+    label.rt("$x$", point 1 of xx);
+    label.top("$y$", point 1 of yy);
+    dotlabel.urt("$\bigl(x, y\bigr)$", z0);
+    dotlabel.bot("$\bigl(S, 0\bigr)$", z1); 
+    dotlabel.lft("$\bigl(0, S\bigr)$", z2); 
+);
+T1 = image(
+    draw T0;
 
-drawoptions(withcolor Blues 8 7); 
-draw z1 -- z2;
-draw z3 -- z4;
+    drawoptions(withcolor Reds 8 7); 
+    draw pp; 
+    label.rt("$xy=P$", point 1/2 of pp);
 
-drawoptions();
-dotlabel.urt("$\bigl(x, y\bigr)$", z0);
-dotlabel.urt("$\bigl(\sqrt{\scriptstyle P}, \sqrt{\scriptstyle P}\bigr)$", 1/2(x3, y4));
-dotlabel.bot("$\bigl(S, 0\bigr)$", z1); 
-dotlabel.lft("$\bigl(0, S\bigr)$", z2); 
-dotlabel.bot("$\bigl(2\sqrt{\scriptstyle P}, 0\bigr)$", z3); 
-dotlabel.lft("$\bigl(0, 2\sqrt{\scriptstyle P}\bigr)$", z4); 
+    draw z3 -- z4 withcolor Blues 8 7;
 
-drawarrow xx; drawarrow yy;
-label.rt("$x$", point 1 of xx);
-label.top("$y$", point 1 of yy);
-label.top(btex \vbox{\hsize 3.7in\centering
-For a given product, the sum of two positive numbers is minimal when the numbers are
-    equal.} etex, point 5 /2 of bbox currentpicture shifted 21 up);
+    drawoptions();
+    dotlabel.urt("$\bigl(\sqrt{\scriptstyle P}, \sqrt{\scriptstyle P}\bigr)$", 1/2(x3, y4));
+    dotlabel.bot("$\bigl(2\sqrt{\scriptstyle P}, 0\bigr)$", z3); 
+    dotlabel.lft("$\bigl(0, 2\sqrt{\scriptstyle P}\bigr)$", z4); 
+
+    label.top(btex \vbox{\hsize 3.7in\centering
+    For a given product, the sum of two positive numbers is minimal when the numbers are
+        equal.} etex, point 5 /2 of bbox currentpicture shifted 13 up);
+);
+T2 = image(
+    fill unitsquare xscaled x0 yscaled y0 withcolor Reds 7 1;
+    fill unitsquare scaled 1/2(x0+y0) withcolor Blues 7 1;
+    fill unitsquare xscaled 1/2(x0+y0) yscaled y0 withcolor 1/2[Reds 7 1, Blues 7 1];
+    draw unitsquare xscaled x0 yscaled y0 withpen pencircle scaled 1/4;
+    draw unitsquare scaled 1/2(x0+y0)     withpen pencircle scaled 1/4;
+
+    picture eq; eq = image(
+        for t=-1/2, 1/2:
+            draw (up--down) rotated -5 scaled 2 shifted (t, 0) withpen pencircle scaled 1/4;
+        endfor
+    );
+    draw eq shifted (1/4x0+3/4y0, y0);
+    draw eq shifted (3/4x0+1/4y0, y0);
+    draw eq rotated 90 shifted (1/2x0+1/2y0, 1/4x0+3/4y0);
+
+    draw T0;
+    dotlabel.urt("${1\over2}\bigl(S, S\bigr)$", 1/2[z1,z2]);
+    label.top(btex \vbox{\hsize 3.7in\centering
+    For a given sum, the product of two positive numbers is maximal when the numbers are
+        equal.} etex, point 5 /2 of bbox currentpicture shifted 13 up);
+);
+
+label.top(T1, 9 up);
+label.bot(T2, 9 down);
 \end{mplibcode}
 $$
 \vfill
