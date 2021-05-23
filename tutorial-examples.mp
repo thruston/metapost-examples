@@ -8,7 +8,7 @@
 \usepackage{luamplib}
 \mplibtextextlabel{enable}
 \everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}\everyendmplib{endfig;}
-\usepackage{shortvrb}\MakeShortVerb{"} % " 
+\usepackage{shortvrb}\MakeShortVerb{"} % "
 \title{Some examples for Metapost}
 \date{March 2021}
 \author{Toby Thurston}
@@ -20,9 +20,9 @@
 This short document sets outs some intermediate examples of technical drawing with \MP.
 Some of the diagrams are adapted from the excellent TikZ manuals, to facilitate comparison.
 You will find some commentary in the text here, but there is more in the source file.
-The focus is on what you can do with the "plain" \MP\ format; the reason for this is that 
+The focus is on what you can do with the "plain" \MP\ format; the reason for this is that
 it is (relatively) simple and has a nice consistent syntax.  The usual style presented here
-is to define points and paths; then draw them; then add text and labels.  
+is to define points and paths; then draw them; then add text and labels.
 
 \definecolor{sin}{rgb}{0.8671875, 0.17578125, 0.1484375}
 \definecolor{cos}{rgb}{0.19140625, 0.5078125, 0.73828125}
@@ -43,7 +43,7 @@ z1 = u * dir 30;
 z2 = whatever * z1; x2 = u;
 
 path angle_mark;
-angle_mark = origin -- fullcircle scaled 3/4u cutafter (origin -- z1) -- cycle;
+angle_mark = origin -- subpath (0, 1/45 angle z1) of fullcircle scaled 3/4u -- cycle;
 
 % grid
 for i=-1, -1/2, 1/2, 1:
@@ -85,7 +85,7 @@ draw_blank(po shifted (u, -9));
 draw_blank(mo shifted (-u, -9));
 draw_blank(mh shifted (-1/2u, -9));
 
-picture cartouche; 
+picture cartouche;
 cartouche = thelabel.rt(btex \vbox{\hsize 160pt \small\raggedright\noindent
 The \textcolor{alpha}{angle $\alpha$} is $30^\circ$ in the example
 ($\pi/6$ in radians).  The \textcolor{sin}{sine of $\alpha$}, which
@@ -95,18 +95,19 @@ By the Theorem of Pythagoras we have
 ${\color{cos}\cos^2\alpha} + {\color{sin}\sin^2\alpha} = 1$. Thus the
 length of the blue line, which is the \textcolor{cos}{cosine of $\alpha$}, must be
 $${\ca} = \sqrt{1-1/4} = \sqrt3/2.$$%
-This shows that $\ta$, which is the height of the orange line, is 
+This shows that $\ta$, which is the height of the orange line, is
 $$\ta={\sa\over\ca}=1/\sqrt3.$$} etex, point 3/2 of bbox currentpicture shifted 5.2 right);
 
-vardef rounded_bbox expr p = 
-    path b, c; 
-    b = bbox p; 
-    c = reverse quartercircle scaled 2 reflectedabout (up, right) scaled 4;
-    for t=0 upto 3: c rotated 90t shifted point t of b -- endfor cycle
+vardef rounded_bbox expr p =
+    (llcorner p -- lrcorner p) shifted (bboxmargin * down) ..
+    (lrcorner p -- urcorner p) shifted (bboxmargin * right) ..
+    (urcorner p -- ulcorner p) shifted (bboxmargin * up) ..
+    (ulcorner p -- llcorner p) shifted (bboxmargin * left) ..
+    cycle
 enddef;
 
 interim bboxmargin := 6;
-fill rounded_bbox cartouche withcolor Reds 8 1; 
+filldraw rounded_bbox cartouche withcolor Reds 8 1;
 draw cartouche;
 \end{mplibcode}
 $$

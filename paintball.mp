@@ -1,4 +1,4 @@
-vardef paint_ball(expr C, c, a, b, n) = 
+vardef paint_ball(expr C, c, a, b, n) =
     save p; picture p; p = image(
     for i=0 upto n:
         fill interpath(i/n, C, c) withcolor (i/n)[a, b];
