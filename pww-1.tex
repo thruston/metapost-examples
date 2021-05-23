@@ -7,11 +7,10 @@
 \addtokomafont{section}{\clearpage}
 \usepackage{luamplib}
 \mplibtextextlabel{enable}
-\everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}
-\everyendmplib{
-numeric wd, tw;
+\everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);
+numeric tw; tw = \mpdim{\textwidth};}
+\everyendmplib{numeric wd;
 wd = xpart (urcorner bbox currentpicture - llcorner bbox currentpicture);
-tw = \mpdim{\textwidth};
 if wd > tw: currentpicture := currentpicture scaled (tw/wd); fi
 endfig;}
 \usepackage{minitoc}
@@ -2967,5 +2966,58 @@ label.bot(T2, 9 down);
 $$
 \vfill
 \contrib{Paulo Montuchi and Warren Page}
+
+%---------------------
+\section{The HM–GM–AM–QM inequalities I}
+\vfill
+$$
+\begin{mplibcode}
+    pair A, G, H, M, P, Q, R;
+    path c;
+    c = fullcircle scaled 233;
+    A = center c;
+    P = point 4 of c;
+    Q = point 6 of c;
+    R = point 8 of c;
+    M - P = (tw-18, 0);
+    G = c intersectionpoint halfcircle scaled abs(M-A) shifted 1/2[A, M];
+    H = (xpart G, ypart A);
+
+    drawoptions(withcolor 3/4);
+    draw unitsquare scaled 8 shifted H;
+    draw unitsquare scaled 8 rotated angle (Q-A) shifted A;
+    draw unitsquare scaled 8 rotated angle (A-G) shifted G;
+
+    drawoptions(withcolor Blues 8 4);
+    draw c;
+    drawoptions(withcolor Blues 8 8);
+    draw P -- (M -- G -- A -- Q -- cycle);
+    draw G -- H;
+
+    drawoptions(withcolor Reds 8 7);
+    label.ulft("$a-b\over2$", 1/2[A, G]);
+    label.lft("$a-b\over2$", 1/2[A, Q]);
+    label.bot("$a+b\over2$",                           1/2[A, M]);
+    label.top("$2ab\over a+b$",                        1/2[H, M]);
+    label.urt("$\scriptstyle\sqrt{ab}$",                           1/2[G, M]);
+    label.lrt("$\scriptstyle\sqrt{\frac12\left(a^2+b^2\right)}$",  1/2[Q, M]);
+
+    drawoptions();
+    dotlabel.llft("$A$", A);
+    dotlabel.llft("$R$", R);
+    dotlabel.lft("$P$", P);
+    dotlabel.rt("$M$", M);
+    dotlabel.bot("$Q$", Q);
+    dotlabel.bot("$H$", H);
+    dotlabel.urt("$G$", G);
+
+    label.bot("$PM=a$, \quad $RM=b$, \quad $a>b>0$", point 1/2 of bbox currentpicture shifted 21 down); 
+    label.bot("$HM < GM < AM < QM$", point 1/2 of bbox currentpicture shifted 13 down); 
+    label.bot("${2ab\over a+b} < \sqrt{ab} < {a+b\over 2} < \sqrt{\frac12\left(a^2+b^2\right)}$", point 1/2 of bbox currentpicture shifted 13 down); 
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
 
 \end{document}
