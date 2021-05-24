@@ -3020,4 +3020,62 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------------
+\section{The HM–GM–AM–QM inequalities II}
+\vfill
+$$
+\begin{mplibcode}
+pair A, B, C, D, E, F, G;
+D = origin; A = - C;
+C - A = (tw, 0);
+B = 7/26[A, C];
+E = (B -- B shifted 400 up) intersectionpoint halfcircle scaled abs(A-C);
+F - B = whatever * (E - D);
+F - E = whatever * (E - D) rotated 90;
+G = E - B rotated angle (E - F);
+
+
+draw halfcircle scaled abs (A-C) withcolor 7/8;
+
+drawoptions(withcolor Blues 8 4);
+draw subpath (1, 3) of unitsquare scaled 8 rotated angle (D-B) shifted B;
+draw subpath (1, 3) of unitsquare scaled 8 rotated angle (B-F) shifted F;
+draw subpath (1, 3) of unitsquare scaled 8 rotated angle (D-E) shifted E;
+
+drawoptions(withcolor Blues 8 7);
+draw A -- C;
+draw B -- E -- D;
+draw B -- F -- G -- D;
+
+drawoptions(withcolor Reds 8 7);
+
+label.llft("$2ab\over a+b$",         1/2[B, F]);
+label.lft("$\scriptstyle\sqrt{ab}$", 1/2[B, E]);
+label.urt("$a+b\over2$",             1/2[D, E]);
+label.rt ("$\scriptstyle\sqrt{\frac12\left(a^2+b^2\right)}$", 1/2[D, G]);
+
+drawoptions();
+input arrow_label;
+arrow_label(A, B, "$a$", 10);
+arrow_label(B, C, "$b$", 10);
+label.top("$b-a\over2$", 1/2[B, D]);
+label.top("$b-a\over2$", 1/2[E, G]);
+interim labeloffset := 6;
+dotlabel.urt("$A$", A);
+dotlabel.ulft("$B$\enspace", B);
+dotlabel.ulft("$C$", C);
+dotlabel.urt("$D$", D);
+dotlabel.ulft("$E$", E);
+dotlabel.ulft("$F$", F);
+dotlabel.ulft("$G$", G);
+
+label.bot("$AB=a$,\quad $BC=b$,\quad $AD=DC={a+b\over2}$", point 1/2 of bbox currentpicture shifted 42 down);
+label.bot("$BE \perp AB$,\quad $DE=AD$", point 1/2 of bbox currentpicture shifted 13 down);
+label.bot("$FE \perp ED$,\quad $FB \parallel ED$, \quad $EG=BD={b-a\over2}$", point 1/2 of bbox currentpicture shifted 13 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
+
 \end{document}
