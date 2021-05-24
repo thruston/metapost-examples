@@ -3078,4 +3078,95 @@ $$
 \vfill
 \contrib{Sidney H.\@ Kung}
 
+
+
+%---------------------
+\section{The HM–GM–AM–QM inequalities III}
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 20; 
+path U, A, B;
+U = unitsquare shifted -(1/2, 1/2) scaled u;
+A = unitsquare scaled 3u shifted point 2 of U rotated 90;
+B = unitsquare scaled 4u shifted point 0 of U;
+
+picture P[];
+P1 = image(
+    for t=0, 180:
+        fill A rotated t withcolor Greens 8 1;
+        fill B rotated t withcolor Reds 8 1;
+    endfor
+    fill U withcolor Reds 8 2;
+    for t=0, 180:
+        draw subpath (1, 3) of A rotated t;
+        draw B rotated t;
+    endfor
+
+    label.top("$a$", point 3/2 of A);
+    label.lft("$a$", point 5/2 of A);
+    label.top("$b$", point 5/2 of B);
+    label.lft("$b$", point 3/2 of B rotated 180);
+
+    label.rt(btex \vbox{\openup 12pt\halign{\hbox to 64pt{\hfil$#$}&${}\ge #$\hfil\cr
+    2a^2 + 2b^2&\left(a+b\right)^2\cr
+    \sqrt{{1\over2}\left(a^2+b^2\right)} & \displaystyle {a+b\over2}\cr}} etex,
+    point 3/2 of bbox currentpicture shifted 34 right);
+);
+
+P2 = image(
+    path T; T = point 0 of U -- point 1 of A -- point 1 of A rotated 90 -- cycle;
+    for t=0, 90, 180, 270:
+        fill T rotated t withcolor Blues 8 2;
+    endfor
+    for t=0, 90, 180, 270:
+        draw T rotated t;
+    endfor
+    draw U scaled 7;
+
+    label.top("$\sqrt a$", point 3/2 of A);
+    label.lft("$\sqrt a$", point 3/2 of A rotated 90);
+    label.top("$\sqrt b$", point 5/2 of B);
+    label.lft("$\sqrt b$", point 5/2 of B rotated 90);
+    draw thelabel.top("$\sqrt{a+b}$", origin) 
+        rotated angle (point 1 of T - point 2 of T)
+        shifted 1/2[point 1 of T, point 2 of T];
+
+    label.rt(btex \vbox{\openup 12pt\halign{\hbox to 64pt{\hfil$#$}&${}\ge #$\hfil\cr
+    \left(\sqrt{a + b}\right)^2&4\cdot\frac12\sqrt{\vphantom{b}a}\sqrt{b}\cr
+    \displaystyle{{a+b}\over2} & \sqrt{ab}
+    \cr}} etex,
+    point 3/2 of bbox currentpicture shifted 34 right);
+
+);
+P3 = image(
+    path R; R = point 0 of U -- point 1 of A -- point 2 of A -- point 1 of A rotated 90 -- cycle;
+    for t=0, 90, 180, 270:
+        fill R rotated t withcolor Oranges 8 2;
+    endfor
+    for t=0, 90, 180, 270:
+        draw R rotated t;
+    endfor
+
+    label.top("$a\over a+b$", point 3/2 of A);
+    label.lft("$a\over a+b$", point 3/2 of A rotated 90);
+    label.top("$b\over a+b$", point 5/2 of B);
+    label.lft("$b\over a+b$", point 5/2 of B rotated 90);
+
+    label.rt(btex \vbox{\openup 12pt\halign{\hbox to 64pt{\hfil$#$}&${}\ge #$\hfil\cr
+    1 & \displaystyle 4\cdot{a\over a+b} \cdot {b\over a+b}\cr
+    \sqrt{ab} & \displaystyle{2ab\over a+b} \cr}} etex,
+    point 3/2 of bbox currentpicture shifted 34 right);
+
+);
+
+draw P1;
+draw P2 shifted (9u * down);
+draw P3 shifted (18u * down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 \end{document}
