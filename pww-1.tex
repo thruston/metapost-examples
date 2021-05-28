@@ -3169,4 +3169,104 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------------
+\section{Five means — and their means}
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b; a + b + 32 = tw; b = 4a;
+path xx, yy, qq, ss, pp, arc, harc, hpp;
+xx = 10 left -- (a+b+20) * right;
+qq = xx rotated 45;
+yy = xx rotated 90;
+ss = (-10, a + b + 10) -- (a + b + 10, -10);
+arc = quartercircle scaled 2 (a++b);
+harc = subpath(1/2,3/2) of quartercircle scaled (sqrt(2) * (a+b)); 
+
+numeric s, ix; ix = sqrt(a*b); s = 4;
+pp = (ix, ix) for x=s+ix step s until a+b-8: -- (x, b/x*a) endfor;
+pp := reverse pp reflectedabout(origin, point 1 of qq) & pp; 
+numeric s, ix; ix = 1/2 sqrt(2) * (a++b); s = 4;
+hpp = (ix, ix) for x=s+ix step s until b+eps: -- (x, a / 2x * a + b / 2x * b) endfor;
+hpp := reverse hpp reflectedabout(origin, point 1 of qq) & hpp; 
+
+drawoptions(withcolor Greens 8 7);
+draw pp;
+draw hpp;
+label.rt("$xy=ab$", point infinity of pp);
+label.rt("$2xy=a^2+b^2$", point infinity of hpp);
+
+drawoptions(withcolor Oranges 8 7);
+draw arc;
+draw harc;
+begingroup;
+    interim ahlength := 2;
+    z0 = 1/3[point infinity of pp, point infinity of hpp];
+    z1 = 2/3[point infinity of pp, point infinity of hpp];
+    path aa, bb;
+    aa = (z0 -- point 0 of harc) cutafter fullcircle scaled 4 shifted point 0 of harc;
+    numeric t, u;
+    (t, u) = arc intersectiontimes (aa shifted (z1-z0));
+    bb = (z1 -- point t of arc) cutafter fullcircle scaled 4 shifted point t of arc;
+
+    drawarrow aa withpen pencircle scaled 1/4 withcolor Oranges 8 5;
+    drawarrow bb withpen pencircle scaled 1/4 withcolor Oranges 8 5;
+
+    label.rt("$2\left(x^2 + y^2\right) = \left(a+b\right)^2$", z0);
+    label.rt("$x^2 + y^2 = a^2 + b^2$", z1);
+
+endgroup;
+
+drawoptions(withcolor Blues 8 7);
+draw qq; draw thelabel.top("$x=y$", origin) rotated 45 shifted point 0.9 of qq;
+draw ss; draw thelabel.top("$x+y=a+b$", origin) rotated -45 shifted point 0.9 of ss;
+
+def connect(expr p, q, P, Q) = 
+    draw (p, 0) -- (p, q) -- (0, q);
+    label.bot("\strut" & P, (p, 0));
+    label.lft("\strut" & Q, (0, q));
+    fill fullcircle scaled dotlabeldiam shifted (p, q);
+enddef;
+
+drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
+connect(a, b, "$a$", "$b$");
+connect(b, a, "$b$", "$a$");
+numeric am, gm, rms, hm, ch;
+am = 1/2(a+b);
+gm = sqrt(a*b);
+rms = 1/2 sqrt 2 * (a++b);
+hm = 2a / (a+b) * b;
+ch = a / (a+b) * a + b / (a+b) * b;
+
+draw (hm, ch) -- (am, ch) -- (am, am) -- (ch, am) -- (ch, hm);
+draw (gm, rms) -- (gm, gm) -- (rms, gm);
+
+connect(am, am, "$am$", "$am$");
+connect(gm, gm, "$gm$", "$gm$");
+connect(rms, rms, "$rms$", "$rms$");
+connect(ch, hm, "$cm$", "$hm$");
+connect(hm, ch, "$hm$", "$cm$");
+
+picture opendot; opendot = image(
+fill fullcircle scaled dotlabeldiam; 
+unfill fullcircle scaled 1/2 dotlabeldiam;
+);
+
+draw opendot shifted (hm, am);
+draw opendot shifted (gm, rms);
+draw opendot shifted (am, ch);
+draw opendot shifted (am, hm);
+draw opendot shifted (rms, gm);
+draw opendot shifted (ch, am);
+
+drawoptions();
+drawarrow xx; label.rt("$x$", point 1 of xx);
+drawarrow yy; label.top("$y$", point 1 of yy);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 \end{document}
