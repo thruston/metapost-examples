@@ -3269,4 +3269,67 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+%---------------
+\section{$e^\pi > \pi^e$}
+
+\vfill
+$$
+\begin{mplibcode}
+path ff, xx, yy;
+def f(expr x) = 1/256 mlog(x) / x enddef;
+numeric minx, maxx, s, u, v;
+minx = 13/8; s = 1/16; maxx = 19/4;
+u = 89;
+v = 3328-256;
+ff = ((minx, f(minx)) for x=minx+s step s until maxx: .. (x, f(x)) endfor) xscaled u yscaled v;
+xx = (point 0 of ff -- (xpart point infinity of ff, ypart point 0 of ff)) shifted 30 down;
+yy = (point 0 of ff -- point 0 of ff shifted (0, 0.1v)) shifted 30 left;
+
+numeric pi, e, fpi, fe;
+pi = 3.141592653589793 u;
+e = 2.718281828459045 u;
+fpi = f(3.141592653589793) * v;
+fe = f(2.718281828459045) * v;
+
+path ee, pp;
+
+ee = (e, ypart point 0 of xx) -- (e, fe) -- (xpart point 0 of yy, fe);
+pp = (pi, ypart point 0 of xx) -- (pi, fpi) -- (xpart point 0 of yy, fpi);
+
+draw ee withcolor Reds 8 4;
+draw pp withcolor Oranges 8 4;
+draw ff withcolor Blues 8 7;
+
+drawarrow xx;
+drawarrow yy;
+
+for x=2 upto 4: 
+    draw (down--up) scaled 2 shifted (x * u, ypart point 0 of xx);
+    label.bot("$" & decimal x & "$", (x * u, ypart point 0 of xx - 2));
+endfor
+for y=32, 35, 38,: 
+    draw (left--right) scaled 2 shifted (xpart point 0 of yy, y/100 * v);
+    label.lft("$" & decimal (y/100) & "$", (xpart point 0 of yy - 2, y/100 * v));
+endfor
+
+drawoptions(withcolor Reds 8 7);
+label.bot("$e$", point 0 of ee shifted 4 down);
+label.lft("$1/e$", point 2 of ee shifted 2 left);
+
+drawoptions(withcolor Oranges 8 7);
+label.bot("$\pi$", point 0 of pp shifted 4 down);
+label.lft("$\ln\pi/\pi$", point 2 of pp shifted 2 left);
+
+drawoptions(withcolor Blues 8 7);
+label.urt("$\displaystyle y={\ln x\over x}$", point 42 of ff);
+
+drawoptions();
+label.rt("$x$", point 1 of xx);
+label.top("$y$", point 1 of yy);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Fouad Nakhli}
+
 \end{document}
