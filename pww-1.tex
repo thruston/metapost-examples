@@ -3332,4 +3332,62 @@ $$
 \vfill
 \contrib{Fouad Nakhli}
 
+
+%---------------
+\section{$A^B > B^A$ for $e \le A < B$}
+
+\vfill
+$$
+\begin{mplibcode}
+path ff, xx, yy;
+def f(expr x) = 1/256 mlog(x) enddef;
+numeric minx, maxx, s, u, v, A, B, e;
+minx = 1/4; s = 1/4; maxx = 12;
+u = (tw-40)/maxx;
+v = 89;
+ff = ((minx, f(minx)) for x=minx+s step s until maxx: .. (x, f(x)) endfor) xscaled u yscaled v;
+xx = 24 left -- (xpart point infinity of ff + 10, 0);
+yy = (0, ypart point 0 of ff) -- (0, ypart point infinity of ff + 10);
+A = 1/2 maxx;
+B = 3/4 maxx;
+e = 2.718281828459;
+primarydef o through p = (1+o/arclength(p))[point 1 of p, point 0 of p] -- (1+o/arclength(p))[point 0 of p, point 1 of p] enddef;
+
+forsuffixes $=e, A, B:
+    z$ = ($ * u, f($) * v);  
+    draw ($ * u, 0) -- z$;
+    path p; p = 32 through (origin -- z$);
+    draw p withcolor Reds 8 7;
+    if not (str $ = "e"):
+        draw thelabel.rt("$y=m_" & str $ & "x$", origin) rotated angle z$ shifted point 1 of p withcolor Reds 8 8;
+    fi
+endfor
+
+drawoptions(withcolor Blues 8 7);
+draw ff withpen pencircle scaled 3/4;
+label.rt("$y=\ln x$", point 1/2 of ff shifted 4 right);
+
+drawoptions();
+drawarrow xx;
+drawarrow yy;
+label.rt("$x$", point 1 of xx);
+label.top("$y$", point 1 of yy);
+
+dotlabel.lrt("\strut $0$", (0, 0));
+dotlabel.lrt("\strut $1$", (u, 0));
+dotlabel.bot("\strut $e$", (e*u, 0)); 
+dotlabel.bot("\strut $A$", (A*u, 0)); 
+dotlabel.bot("\strut $B$", (B*u, 0)); 
+
+label.bot(btex \vbox{\openup 12pt\halign{\hfil $#$&${}\quad\mathbin{\Longrightarrow}\quad #$\cr
+e \le A < B & m_A > m_B \cr
+            & {\ln A \over A} > {\ln B \over B}\cr
+            & A^B > B^A\cr
+}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Charles D.\@ Gallant}
+
 \end{document}
