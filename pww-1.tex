@@ -3390,4 +3390,47 @@ $$
 \vfill
 \contrib{Charles D.\@ Gallant}
 
+
+%---------------
+\section{The mediant property}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b, c, d;
+b + d + 16 = tw;
+b = 2a;
+a = 3/4 c = d;
+
+path t[];
+t1 =  origin -- (b,   0) -- (b,   a)   -- cycle;
+t2 = (origin -- (d,   0) -- (d,   c)   -- cycle) shifted point 2 of t1;
+t3 =  origin -- (b+d, 0) -- (b+d, a+c) -- cycle;
+
+fill t1 withcolor Blues 8 1;
+fill t2 withcolor Oranges 8 1;
+
+forsuffixes $=1,2,3: draw subpath (1,3) of unitsquare scaled 6 rotated 90
+    shifted point 1 of t$ withcolor 3/4; endfor
+
+draw subpath(1, 3) of t1; 
+draw subpath(-1, 1) of t2; 
+draw t3;
+
+label.rt("$a$", point 3/2 of t1);
+label.rt("$c$", point 3/2 of t2);
+label.rt("$a$", 1/2[point 1 of t3, point 1 of t2]);
+
+label.bot("$b$", point 1/2 of t1);
+label.bot("$d$", point 1/2 of t2);
+label.bot("$b$", 1/2[point 1 of t3, point 1 of t1]);
+
+label.top(btex $\displaystyle {a\over b} < {c \over d} \quad \Longrightarrow \quad
+{a\over b} < {a+c\over b+d} < {c\over d}$ etex, point 5/2 of bbox currentpicture shifted 42 up);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Richard A.\@ Gibbs}
+
 \end{document}
