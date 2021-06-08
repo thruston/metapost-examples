@@ -3425,12 +3425,121 @@ label.bot("$b$", point 1/2 of t1);
 label.bot("$d$", point 1/2 of t2);
 label.bot("$b$", 1/2[point 1 of t3, point 1 of t1]);
 
-label.top(btex $\displaystyle {a\over b} < {c \over d} \quad \Longrightarrow \quad
+label.top(btex $\displaystyle {a\over b} < {c \over d} \quad \Rightarrow \quad
 {a\over b} < {a+c\over b+d} < {c\over d}$ etex, point 5/2 of bbox currentpicture shifted 42 up);
 
 \end{mplibcode}
 $$
 \vfill
 \contrib{Richard A.\@ Gibbs}
+
+
+%---------------
+\section{Regle des nombres moyens – two proofs}
+
+\vfill
+$$
+\begin{mplibcode}
+path xx, yy;
+xx = 12 left -- 233 right;
+yy = 12 down -- 144 up;
+
+z1 = .95(1/4[point 1 of xx, point 1 of yy]);
+z3 = .95(3/4[point 1 of xx, point 1 of yy]);
+z2 = 1/2[z1, z3];
+
+drawoptions(withcolor Blues 8 7);
+draw origin -- z1 -- z3 -- cycle;
+draw origin -- z2;
+picture m; m = image(draw (up--down) scaled 2 rotated -5 shifted 1/2 left;
+                     draw (up--down) scaled 2 rotated -5 shifted 1/2 right); 
+draw m rotated angle (z3 - z1) shifted 1/2[z1, z2];
+draw m rotated angle (z3 - z1) shifted 1/2[z2, z3];
+
+draw thelabel.top("$y=m_1 x$", origin) rotated angle z1 shifted 3/4 z1;
+draw thelabel.top("$y=m_2 x$", origin) rotated angle z2 shifted 3/4 z2;
+draw thelabel.top("$y=m_3 x$", origin) rotated angle z3 shifted 3/4 z3;
+
+drawoptions();
+drawarrow xx; label.rt("$x$", point 1 of xx);
+drawarrow yy; label.top("$y$", point 1 of yy);
+
+dotlabel.urt("$(b,a)$", z1);
+dotlabel.urt("$\left({b+d\over2},{a+c\over2}\right)$", z2);
+dotlabel.urt("$(d,c)$", z3);
+drawdot origin withpen pencircle scaled dotlabeldiam;
+
+label(image(undraw origin -- tw * right), point 1/2 of bbox currentpicture);
+label.rt("I.", point 3 of bbox currentpicture);
+label.top(btex $\displaystyle a, b, c, d > 0; \quad {a\over b} < {c \over d} \quad \Longrightarrow \quad
+{a\over b} < {a+c\over b+d} < {c\over d}$ etex, point 5/2 of bbox currentpicture shifted 13 up);
+label.bot(btex $m_1 < m_3 \quad \Longrightarrow \quad m_1 < m_2 < m_3$ etex,  
+    point 1/2 of bbox currentpicture shifted 13 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Li Changming}
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b, c, d, u;
+u = 89;
+55a = 34b; b = d = 1;
+64c = 61d;
+
+path A, B, C, D, A', B';
+
+A =  unitsquare scaled u yscaled (a/b);
+A' = unitsquare scaled u yscaled (c/d);
+B =  unitsquare scaled u yscaled (a/b) xscaled (b/(b+d)) shifted point 1 of A shifted 42 right;
+B' = A' shifted point 0 of B;
+C =  unitsquare scaled u yscaled (c/d) xscaled (d/(b+d)) shifted point 1 of B;
+D = A' shifted point 1 of C shifted 42 right;
+
+draw A' dashed evenly scaled 1/2;
+draw B' dashed evenly scaled 1/2;
+
+fill A withcolor Oranges 8 2;
+fill B withcolor Oranges 8 2;
+fill C withcolor Blues 8 2;
+fill D withcolor Blues 8 2;
+
+draw A;
+draw B;
+draw C;
+draw D;
+
+vardef superlabel(expr t, z) = 
+    interim bboxmargin := 6;
+    save P; picture P; P = thelabel(t, origin);
+    save s; path s; s = superellipse(point 3/2 of bbox P, point 5/2 of bbox P, point 7/2 of bbox P, point 1/2 of bbox P, 0.78); 
+    unfill s shifted z; draw P shifted z;
+enddef;
+
+superlabel("$a\over b$", center A);
+superlabel("$a\over b+d$", center B);
+superlabel("$c\over b+d$", center C);
+superlabel("$c\over d$", center D);
+
+input arrow_label
+arrow_label(point 0 of A, point 1 of A, "$1$",          14);
+arrow_label(point 0 of B, point 1 of B, "$b\over b+d$", 14);
+arrow_label(point 0 of C, point 1 of C, "$d\over b+d$", 14);
+arrow_label(point 0 of D, point 1 of D, "$1$",          14);
+
+arrow_label(1/2[point 1 of A, point 0 of B], 1/2[point 2 of A, point 3 of B], "$a\over b$", 0);
+arrow_label(1/2[point 1 of C, point 0 of D], 1/2[point 2 of C, point 3 of D], "$c\over d$", 0);
+
+label(image(undraw origin -- tw * right), point 1/2 of bbox currentpicture);
+label.rt("II.", point 3 of bbox currentpicture);
+
+label.bot(btex $\displaystyle
+{a\over b} < {a\over b+d} + {c \over b+d} < {c\over d}$ etex, point 1/2 of bbox currentpicture shifted 21 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
 
 \end{document}
