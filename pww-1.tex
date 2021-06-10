@@ -3542,4 +3542,98 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------
+\section{The sum of a positive number and its reciprocal is at least two}
+
+\vfill
+$$
+\begin{mplibcode}
+input superlabel
+input arrow_label
+
+picture P[];
+
+P1 = image(
+    numeric x; x = 89/72;
+    path box[]; 
+    box1 = unitsquare scaled 72 xscaled x yscaled (1/x);
+    box2 = box1 rotated 90;  box2 := box2 shifted (point 1 of box1 - point 3 of box2);
+    box3 = box1 rotated 180; box3 := box3 shifted (point 1 of box2 - point 3 of box3);
+    box4 = box1 rotated 270; box4 := box4 shifted (point 1 of box3 - point 3 of box4);
+
+    forsuffixes $=1,2,3,4:
+        fill box$ withcolor if odd $: Oranges else: Blues fi 8 2;
+        superlabel("$1$", center box$);
+    endfor
+    forsuffixes $=1,2,3,4:
+        draw subpath (-2, 1) of box$;
+    endfor
+    label.bot("\strut$x$"         ,   point  1/2 of box1);
+    label.bot("\strut${1\over x}$",   point -1/2 of box2);
+    label.lft("$x$"         ,   point 1/2 of box4);
+    label.lft("${1\over x}$",   point -1/2 of box1);
+    label.top("I.", point 3 of bbox currentpicture shifted 3.25 up);
+);
+P2 = image(
+    path xx, yy;
+    xx = 8 left -- 150 right;
+    yy = xx rotated 90;
+    numeric u; u = 100/3;
+    for i=1 upto 4:
+        draw (left--right) shifted (0, i*u);
+        draw (up--down) shifted (i*u, 0);
+    endfor
+    drawarrow xx; label.rt("$x$", point 1 of xx);
+    drawarrow yy; label.top("$y$", point 1 of yy);
+    path a, b;
+    a = ((-24/100, 224/100) -- (224/100, -24/100)) scaled u;
+    b = ((1,1) for x=1+1/8 step 1/8 until 4: -- (x, 1/x) endfor) scaled u;
+    b := reverse b reflectedabout(origin, point 0 of b) & b;
+
+    draw b withcolor Oranges 8 7;
+    draw a withcolor Blues 8 7;
+    label.urt("$y={1\over x}$", point 40 of b) withcolor Oranges 8 7;
+    label.lrt("$y=2-x$", point 1 of a shifted 3 up) withcolor Blues 8 7;
+    label.llft("II.", point 3 of bbox currentpicture);
+);
+numeric x, u; x = 7/4; u = 80;
+z1 = (0, x - 1/x) scaled u;
+z2 = (-2, 0) scaled u;
+z3 = -z2;
+z4 = origin rotatedabout(z1, 90);
+z5 = whatever[z1, z3]; x5 = x4;
+
+P3 = image(
+    draw unitsquare scaled 8 rotated 90 withcolor 1/2;
+    draw origin -- z1 -- z2 -- cycle;
+    label.bot("$2$", 1/2 z2);
+    label.rt("$x-{1\over x}$", 1/2z1);
+    label.ulft("$x+{1\over x}$", 1/2[z1, z2]);
+    label("III.", point 3 of bbox currentpicture);
+);
+P4 = image(
+    fill origin -- z1 -- z3 -- cycle withcolor Oranges 8 2;
+    fill z4 -- z1 -- z5 -- cycle withcolor Blues 8 2;
+    draw z1 -- origin -- z3 -- z1 -- z4 -- z5;
+    draw z5 -- (x5, 0) dashed withdots scaled 1/2;
+    
+    label.bot("$x$", 1/2 z3);
+    label.lft("$1$", 1/2 z1);
+    label.rt("$1\over x$", 1/2[z4, z5]);
+    label("IV.", point 3 of bbox currentpicture shifted 4 left);
+    label.top("$1$", 1/2[z1, z4]);
+);
+
+draw P1 shifted 180 left;
+draw P2 shifted 32 right;
+draw P3 shifted (-32, -180);
+draw P4 shifted (+32, -180);
+    
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 \end{document}
