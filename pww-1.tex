@@ -3550,7 +3550,6 @@ $$
 $$
 \begin{mplibcode}
 input superlabel
-input arrow_label
 
 picture P[];
 
@@ -3630,6 +3629,87 @@ draw P2 shifted 32 right;
 draw P3 shifted (-32, -180);
 draw P4 shifted (+32, -180);
     
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
+%---------------
+\section{Aristarchus' inequalities}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, v, a, b, halfpi; 
+u = 160;
+v = 89;
+a = 1.2;
+b = 0.8a;
+halfpi = 1.5707963267948966;
+
+vardef sin(expr x) = sind(57.29577951308232 x) enddef;
+vardef cos(expr x) = cosd(57.29577951308232 x) enddef;
+vardef tan(expr x) = sin(x)/cos(x) enddef;
+
+numeric ma; ma = a + 1/8;
+path ss, tt, sbb, tbb;
+ss = origin for x=1/32 step 1/32 until ma+eps: -- (x * u, sin(x) * v) endfor; 
+tt = origin for x=1/32 step 1/32 until a+1/32: -- (x * u, tan(x) * v) endfor; 
+
+sbb = origin -- (ma * u, sin(b) / b * ma * v);
+tbb = origin -- (ma * u, tan(b) / b * ma * v);
+
+
+path xx, yy;
+xx = 12 left -- 12 right shifted (halfpi * u, 0); 
+yy = xx rotated 90;
+
+draw ss  withcolor Blues 8 7;
+draw sbb withcolor Blues 8 5;
+draw tt  withcolor Oranges 8 7;
+draw tbb withcolor Oranges 8 5;
+
+for $=a,b:
+    draw ($*u, 0) -- ($*u, tan($)*v) dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+    drawdot ($*u, sin($)*v) withpen pencircle scaled dotlabeldiam;
+    drawdot ($*u, tan($)*v) withpen pencircle scaled dotlabeldiam;
+endfor
+drawdot (a*u, sin(b)/b*a*v) withpen pencircle scaled dotlabeldiam;
+drawdot (a*u, tan(b)/b*a*v) withpen pencircle scaled dotlabeldiam;
+
+drawarrow xx; label.rt("$x$", point 1 of xx);
+drawarrow yy; label.top("$y$", point 1 of yy);
+
+label.rt("$y=\sin x$", point infinity of ss shifted down);
+label.top("$y=\tan x$", point infinity of tt);
+
+label.urt("$y={\sin \beta \over \beta}x$", point infinity of sbb shifted 4 down);
+label.urt("$y={\tan \beta \over \beta}x$", point infinity of tbb shifted 3 down);
+
+vardef hbarlabel@#(expr t, z) = 
+    draw (left--right) scaled 3/2 shifted z;
+    interim labeloffset := 5;
+    label@#(t, z);
+enddef;
+vardef vbarlabel@#(expr t, z) = 
+    draw (down--up) scaled 3/2 shifted z;
+    interim labeloffset := 5;
+    label@#(t, z);
+enddef;
+
+hbarlabel.lft("$1$", (0, v));
+dotlabel.llft("$0$", origin);
+vbarlabel.bot("\strut $\beta$", (b * u, 0));
+vbarlabel.bot("\strut $\alpha$", (a * u, 0));
+vbarlabel.bot("\strut $\pi/2$", (halfpi * u, 0));
+
+label.top("$\displaystyle 0 < β < α < {π \over 2} \implies {\sin α \over \sin β} < {α \over β} < {\tan α \over \tan β}$", 
+point 5/2 of bbox currentpicture shifted 42 up);
+label.bot("$\sin α < {\sin β \over β} α $; \quad $\tan α > {\tan β \over β} α $",
+point 1/2 of bbox currentpicture shifted 42 down);
+label.bot("$\displaystyle \therefore\quad {\sin α \over \sin β} < {α \over β} < {\tan α \over \tan β}$", 
+point 1/2 of bbox currentpicture shifted 8 down);
 
 \end{mplibcode}
 $$
