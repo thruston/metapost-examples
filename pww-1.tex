@@ -3716,4 +3716,74 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------
+\section{The Cauchy-Schwartz inequality}
+
+\vfill
+$$
+\begin{mplibcode}
+path t[]; z0 = 89 dir 280; z1 = 75 dir 200;
+t1 = (x1, y0) -- z0 -- z1 -- cycle;
+t2 = (xpart point 2 of (t1 rotated 180), ypart point 1 of t1) 
+         -- point 2 of (t1 rotated 180)     -- point 1 of t1 -- cycle;
+
+picture P[];
+
+for i=1,2:
+    if i = 2:
+        t1 := t1 rotated - angle (point 1 of t1 - point 2 of t1);
+        t1 := t1 shifted - point 3/2 of t1;
+        t1 := t1 shifted - (0, 1/2 abs (point 1 of t2 - point 2 of t2));
+
+        t2 := t2 rotated (90 - angle (point 1 of t2 - point 2 of t2));
+        t2 := t2 shifted (point 1 of t1 - point 2 of t2); 
+    fi
+
+    P[i] = image(
+        if i=2:
+            draw unitsquare scaled 6 shifted point 2 of t1;
+            label.top("$\sqrt{a^2+b^2}$", point 3/2 of t1);
+            label.lft("$\sqrt{x^2+y^2}$", point 3/2 of t2);
+        fi
+        forsuffixes r=0, 180:
+            fill t1 rotated r withcolor Blues 8 2;
+            fill t2 rotated r withcolor Oranges 8 2;
+            draw unitsquare scaled 6 rotated angle (point 1 of t1 - point 0 of t1) shifted point 0 of t1 rotated r;
+            draw unitsquare scaled 6 rotated angle (point 1 of t2 - point 0 of t2) shifted point 0 of t2 rotated r;
+            draw t1 rotated r;
+            draw t2 rotated r;
+            if i=1:
+                label("$|a|$", point  3/7 of t1 shifted 8 down rotated r);
+                label("$|b|$", point -3/7 of t1 shifted 8 left rotated r);
+                label("$|x|$", point  3/7 of t2 shifted 8 right rotated r);
+                label("$|y|$", point -3/7 of t2 shifted 8 down rotated r);
+            fi
+        endfor
+    );
+endfor
+
+label("$\le$", origin);
+label.lft(P1, 12 left);
+label.rt(P2, 12 right);
+
+label.top(btex 
+$\left|  \langle a,b \rangle \cdot            \langle x,y \rangle \right| \le 
+ \left\| \langle a,b \rangle \right\| \left\| \langle x,y \rangle \right\|$
+etex, point 5/2 of bbox currentpicture shifted 42 up);
+
+label.bot(btex
+$\left(|a| + |y|\right)\left(|b| + |x|\right) \le 2\left(\frac12 |a| |b| + \frac12 |x| |y|\right) 
++ \sqrt{a^2 + b^2} \sqrt{x^2 + y^2}$ 
+etex, point 1/2 of bbox currentpicture shifted 21 down);
+
+label.bot(btex
+$\therefore\quad \left| ax + by \right | \le |a||x| + |b| |y| \le \sqrt{a^2 + b^2} \sqrt{x^2 + y^2}$
+etex, point 1/2 of bbox currentpicture shifted 16 down);
+\end{mplibcode}
+$$
+
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 \end{document}
