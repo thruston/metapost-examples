@@ -3786,4 +3786,107 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------
+\section{Bernoulli's inequality}
+
+
+\vfill
+$$
+\begin{mplibcode}
+picture P[];
+P1 = image(
+    numeric u; u = 53; 
+    path xx, yy, ff, dff;
+    xx = (-12, 0) -- (12 + 2.5u, 0);
+    yy = (0, -12-u) -- (0, 12 + 2.5u);
+    
+    numeric s; s = 1/8;
+    vardef f(expr x) = x**1.9 - 1 enddef;
+    ff = ((0, f(0)) for x = s step s until 2: .. (x, f(x)) endfor) scaled u;
+
+    dff = (3/2 left -- 2 right) 
+        scaled u 
+        rotated angle direction 1/s of ff
+        shifted point 1/s of ff;
+
+    drawoptions(withcolor Blues 7 5);
+    draw dff; label.rt("$y=r(x-1)$", point infinity of dff);
+
+    drawoptions(withcolor Blues 7 7);
+    draw ff; label.rt("$y=x^r - 1$", point infinity of ff);
+
+    drawoptions();
+    drawarrow xx; label.rt("$x$", point 1 of xx);
+    drawarrow yy; label.top("$y$", point 1 of yy);
+    
+    dotlabel.llft("$0$", origin);
+    dotlabel.lft("$-1$", u * down);
+    dotlabel.lrt("$1$", u * right);
+    unfill fullcircle scaled 3/4 dotlabeldiam shifted (u* right);
+
+    label.top("\hbox to \textwidth{I. First semester calculus\hss}", 
+                point 5/2 of bbox currentpicture shifted 8 up);
+);
+numeric u, v, r; 
+u = 76; v = 1/8 u; r = 3.1415;
+path xx, yy, ff; 
+xx = 12 left -- 7/4u * right;
+yy = 12 down -- 12v * up;
+vardef f(expr t) = (t*u, t**(r-1) * r * v) enddef;
+ff = origin for t = 1/8 step 1/8 until 7/4: .. f(t) endfor;
+
+P20 = image(
+    draw ff withcolor Blues 7 7; label.urt("$y=rt^{r-1}$", point infinity of ff) withcolor Blues 7 7;
+    drawarrow xx; label.rt("$t$", point infinity of xx);
+    drawarrow yy; label.top("$y$", point infinity of yy);
+    dotlabel.llft("$0$", origin);
+    dotlabel.bot("$1$", (u, 0));
+    dotlabel.lft("$r$", (0, r*v));
+);
+
+P21 = image(
+    numeric a, b; a = 8; b = 12;
+    fill subpath(a, b) of ff -- (xpart point b of ff, 0) -- (xpart point a of ff, 0) -- cycle
+        withcolor Blues 7 1;
+    draw (0, ypart point a of ff) -- point a of ff dashed withdots scaled 1/2;
+    draw (xpart point a of ff, 0) -- point a of ff -- (xpart point b of ff, ypart point a of ff);
+    draw point b of ff -- (xpart point b of ff, 0);
+    dotlabel.bot("\strut $x$",(xpart point b of ff, 0));
+    draw P20;
+    label.top("$x>1$", point 5/2 of bbox currentpicture);
+    label.bot("$x^r-1 = \int_1^x rt^{r-1}\,dt > r(x-1)$", point 1/2 of bbox currentpicture shifted 8 down);
+);
+P22 = image(
+    numeric a, b; a = 4; b = 8;
+    fill subpath(a, b) of ff -- (xpart point b of ff, 0) -- (xpart point a of ff, 0) -- cycle
+        withcolor Blues 7 1;
+    draw (0, ypart point b of ff) -- (xpart point a of ff, ypart point b of ff) dashed withdots scaled 1/2;
+    draw (xpart point a of ff, 0) -- (xpart point a of ff, ypart point b of ff) -- point b of ff;
+    draw point b of ff -- (xpart point b of ff, 0);
+    dotlabel.bot("\strut $x$",(xpart point a of ff, 0));
+    draw P20;
+    label.top("$0 < x < 1$", point 5/2 of bbox currentpicture);
+    label.bot("$1-x^r = \int_x^1 rt^{r-1}\,dt < r(1-x)$", point 1/2 of bbox currentpicture shifted 8 down);
+);
+
+P2 = image(
+    label.lft(P21, 12 left);
+    label.rt(P22, 12 right);
+    label.top("\hbox to \textwidth{II. Second semester calculus\hss}", 
+                point 5/2 of bbox currentpicture shifted 8 up);
+);
+
+label.top(P1, 7 up);
+label.bot(P2, 7 down);
+
+
+label.top("$x>0$, $x \ne 1$, $r>1$: $x^r - 1 > r(x-1)$", point 5/2 of bbox
+currentpicture shifted 13 up);
+\end{mplibcode}
+$$
+
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 \end{document}
