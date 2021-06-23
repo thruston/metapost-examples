@@ -15,6 +15,8 @@ if wd > tw: currentpicture := currentpicture scaled (tw/wd); fi
 endfig;}
 \usepackage{minitoc}
 \mtcsetrules{*}{off}
+% some tex defs
+\DeclareMathOperator{\slope}{m}
 %--------------------
 \title{Proofs without words I\\[6pt]{\Large Exercises in \MP}}
 \date{March 2021 —\\[4in]
@@ -3883,6 +3885,98 @@ label.bot(P2, 7 down);
 
 label.top("$x>0$, $x \ne 1$, $r>1$: $x^r - 1 > r(x-1)$", point 5/2 of bbox
 currentpicture shifted 13 up);
+\end{mplibcode}
+$$
+
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
+
+%---------------
+\section{Napier's inequality}
+
+
+\vfill
+$$
+\begin{mplibcode}
+picture P[];
+numeric u, v, s; 
+u = 64; v = 42; 
+
+path xx, yy, ff; 
+xx = 12 left -- 12 right + 4u * right;
+vardef f(expr x) = (x * u, mlog(x) / 256 * v) enddef;
+s = 1/8;
+ff = f(1/8) for t = 1/8+s step s until 4: .. f(t) endfor;
+yy = (0, ypart point 0 of ff - 12) -- (0, ypart point infinity of ff + 12);
+
+P1 = image(
+    
+    numeric a, b; a = 3; b = 21; path L[];
+    L1 = (left--right) scaled u rotated angle direction b of ff shifted point b of ff;
+    L2 = point a of ff -- point b of ff;
+    L3 = (left--right) scaled u rotated angle direction a of ff shifted point a of ff;
+
+    drawoptions(dashed withdots scaled 1/4 withcolor Blues 7 6);
+    forsuffixes $=1,2,3: draw L$; endfor
+    label.ulft("$L_1$", point 7/8 of L1);
+    label.ulft("$L_3$", point 7/8 of L3);
+    label.lrt("$L_2$", point 1/4 of L2);
+
+    drawoptions(withcolor Reds 7 7);
+    draw ff; label.rt("\rlap{$y=\ln x$}", point infinity of ff);
+
+
+    drawoptions();
+    forsuffixes $=a, b: 
+        draw (up--down) shifted (xpart point $ of ff, 0); 
+        label.top("$" & str $ & "$", (xpart point $ of ff, 0)); 
+
+        fill fullcircle scaled dotlabeldiam shifted point $ of ff;
+        unfill fullcircle scaled 2/3 dotlabeldiam shifted point $ of ff;
+
+    endfor
+
+    drawarrow xx; label.rt("$x$", point 1 of xx);
+    drawarrow yy; label.top("$y$", point 1 of yy);
+    label.bot("$\slope\left(L_1\right) < \slope\left(L_2\right) < \slope\left(L_3\right)$", point 1/2 of bbox currentpicture);
+    label.top("\hbox to \textwidth{I. First semester calculus\hss}", point 5/2 of bbox currentpicture shifted 8 up);
+);
+path yy, ff;
+ff = (1/4 u, 4 v) for x=1/4 + s step s until 4: .. (x * u, v / x) endfor;
+yy = 12 down -- (0, 12 + ypart point 0 of ff);
+
+P2 = image(
+    z0 = (xpart point a of ff, 0);
+    z1 = (xpart point b of ff, 0);
+    path A, B, C;
+    numeric w; w = abs (z1-z0);
+    A = unitsquare xscaled w yscaled ypart point a of ff shifted z0;
+    B = unitsquare xscaled w yscaled ypart point b of ff shifted z0;
+    C = z1 -- z0 -- subpath(a,b) of ff -- cycle;
+    fill C withcolor Blues 7 1;
+    fill B withcolor Blues 7 2;
+    draw subpath (2,3) of B withcolor 1/2;
+    draw subpath (1,4) of A withcolor 1/2; 
+
+    label.bot("\strut$a$", z0);
+    label.bot("\strut$b$", z1);
+
+    drawoptions(withcolor Reds 7 7);
+    draw ff; label.top("\rlap{$y=\frac1x$}", point infinity of ff);
+    drawoptions();
+    drawarrow xx; label.rt("$x$", point 1 of xx);
+    drawarrow yy; label.top("$y$", point 1 of yy);
+    label.bot("$\frac1b(b-a) < \int_a^b \frac1x\,dx < \frac1a(b-a)$", point 1/2 of bbox currentpicture);
+    label.top("\hbox to \textwidth{II. Second semester calculus\hss}", point 5/2 of bbox currentpicture shifted 8 up);
+);
+
+
+    label.top(P1, 7 up);
+    label.bot(P2, 7 down);
+
+    label.top("$b > a > 0$ \quad implies\quad $\displaystyle {1\over b} < {\ln b - \ln a\over b - a } < {1\over a}$", 
+        point 5/2 of bbox currentpicture shifted 13 up);
 \end{mplibcode}
 $$
 
