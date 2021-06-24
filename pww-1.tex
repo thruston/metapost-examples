@@ -16,7 +16,7 @@ endfig;}
 \usepackage{minitoc}
 \mtcsetrules{*}{off}
 % some tex defs
-\DeclareMathOperator{\slope}{m}
+\def\slope{\mathop{\mathrm m}\nolimits}
 %--------------------
 \title{Proofs without words I\\[6pt]{\Large Exercises in \MP}}
 \date{March 2021 —\\[4in]
@@ -3982,5 +3982,80 @@ $$
 
 \vfill
 \contrib{Roger B.\@ Nelsen}
+
+%=============================
+\chapter{Integer sums}
+
+\minitoc
+%---------------------------
+\section{Sums of integers I}
+
+\vfill
+$$
+\begin{mplibcode}
+input paintball    
+numeric n; n = 7;
+for i=1 upto n-1:
+    for j=1 upto n:
+        draw if j > i: bball else: rball fi shifted ((j, -i) scaled 280/n);
+        if i=j: draw (up--origin--right) shifted (j+1/2, -i-1/2) scaled (280/n); fi
+    endfor
+endfor
+clip currentpicture to bbox currentpicture scaled 0.975;
+label.bot("$1+2+\cdots + n = \frac12 n (n+1)$", 
+point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Ancient Greek}
+
+%---------------------------
+\section{Sums of integers II}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric n; n = 7;
+path t; t = (origin -- right -- up -- cycle) rotatedabout(1/2[right, up], 180);
+for i=1 upto n:
+    for j=0 upto n-i:
+        draw (up--origin--right) shifted (i, j) scaled (280/n);
+    endfor
+    fill t shifted (i, n-i) scaled (280/n) withcolor Purples 8 3;
+    draw t shifted (i, n-i) scaled (280/n);
+endfor
+label.bot("$1+2+\cdots + n = \frac{n^2}2 + \frac n2$", 
+point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Ian Richards}
+
+
+%---------------------------
+\section{Sums of odd integers I}
+
+\vfill
+$$
+\begin{mplibcode}
+input paintball
+numeric n; n = 12;
+picture half;
+half = image(
+    for i=1 upto n:
+        for j=1 upto i:
+            draw if odd i: rball else: bball fi shifted ((i, j) scaled (280/n));
+        endfor
+        if i < n: draw (origin -- i * up) shifted (i+1/2, 1/2) scaled (280/n); fi
+    endfor
+);
+draw half; draw half reflectedabout(origin, (100, 100));
+
+label.bot("$1+3+5+\cdots + (2n-1) = n^2$", 
+point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Nichomachus of Gerasa}
 
 \end{document}
