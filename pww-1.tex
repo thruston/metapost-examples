@@ -4089,4 +4089,64 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+
+%---------------------------
+\section{Sums of odd integers III}
+
+\vfill
+$$
+\begin{mplibcode}
+picture P[]; path t; numeric n; n = 6;
+t = for i=0 upto 2: 16 down rotated 120i -- endfor cycle;
+
+pair u, v;
+u = point 2 of t - point 0 of t;
+v = point 1 of t - point 2 of t;
+
+P1 = image(
+    fill t withcolor Blues 8 2; label("$\Delta$", origin);
+    for i=0 upto n-1:
+        for j=0 upto i:
+            draw t shifted (j * v) shifted (i * u);
+        endfor
+        label.lrt( 
+            if i=n-1: "$2n-1$" 
+            elseif i=n-2: "\rotatebox{105}{$\ddots$}" 
+            else: "$" & decimal (2i+1) & "$" fi, 
+            point 2/3 of t shifted (i * v) shifted (i * u));
+    endfor
+);
+P2 = image(
+    path s, s';
+    s = t shifted -(xpart point 1 of t, ypart point 0 of t);
+    s' = s scaled n;
+
+    forsuffixes $=s, s':
+        fill $ withcolor Blues 8 2; draw $;
+    endfor
+    z1 = point 2 of s' scaled 1.1;
+    drawoptions(dashed evenly scaled 1/2 withcolor 1/2);
+    drawarrow origin -- z1;
+    drawarrow origin -- (x1, 0);
+    drawarrow origin -- (0, y1);
+    drawoptions();
+    label("$\Delta$", 1/3[point 3/2 of s, point 0 of s]);
+    label("$n^2\Delta$", 1/3[point 3/2 of s', point 0 of s']);
+    label.llft("$1$", point -2/3 of s);
+    label.llft("$n$", point -1/2 of s');
+);
+
+interim bboxmargin := 12;
+label.ulft(P1, origin);
+label.urt(P2, origin shifted down);
+
+label.bot("$\Delta+3\cdot\Delta+\cdots + (2n-1)\cdot\Delta = A = n^2\cdot\Delta$", 
+    point 1/2 of bbox currentpicture shifted 24 down);
+label.bot("$\displaystyle\sum_{i=1}^n \left(2i - 1\right) = n^2$",
+    point 1/2 of bbox currentpicture shifted 4 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Jenő Lehel}
+
 \end{document}
