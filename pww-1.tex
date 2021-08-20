@@ -4149,4 +4149,45 @@ $$
 \vfill
 \contrib{Jenő Lehel}
 
+
+%---------------------------
+\section{Squares and sums of integers I}
+
+\vfill
+$$
+\begin{mplibcode}
+input paintball
+for n=2 upto 4:
+    numeric y; y = - 20 n * n;
+    picture p; p = image(
+        for i=1 upto n:
+            for j=1 upto n:
+                draw rball shifted 28(i, j);
+            endfor
+        endfor
+        path b; b = bbox currentpicture;
+        drawoptions(dashed evenly withpen pencircle scaled 1/4);
+        for i=1 upto n-1:
+            for j=-1, 1:
+                draw (left-- 2 right) scaled 40n rotated 45 shifted ((28i-14)*j, 0);
+            endfor
+        endfor
+        drawoptions();
+        clip currentpicture to b;
+    );
+    label(p, (-80, y));
+    label("$" 
+        for i=1 upto n: & decimal i & "+" endfor
+        for i=n-1 downto 2: & decimal i & "+" endfor 
+        & "1 =" & decimal n & "^2$", 
+        (80, y));
+endfor
+
+    label.bot("$1+2+\cdots+(n-1) + n + (n-1) + \cdots + 2 + 1 = n^2$",
+    point 1/2 of bbox currentpicture shifted 42 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Ancient Greek}
+
 \end{document}
