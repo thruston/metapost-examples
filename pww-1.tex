@@ -4247,4 +4247,68 @@ $$
 \vfill
 \contrib{Hee Sik Kim}
 
+%---------------------------
+\section{Arithmetic progressions with sum equal to square of number of terms}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u;
+u = 21;
+vardef folded_bar(expr n, k) = 
+    if k < 2:
+        unitsquare xscaled (n + k)
+    else:
+        numeric p, q; 
+        if odd k:
+            p = n + (k - 1) / 2; q = n + k - p - 1;
+            origin -- (p, 0) -- (p, -q) -- (p + 1, -q) -- (p + 1, 1)
+        else:
+            p = n + k / 2; q = n + k - p + 1;
+            origin -- (p, 0) -- (p, q) -- (p - 1, q) -- (p - 1, 1)
+        fi -- up -- cycle
+    fi
+enddef;
+
+
+y = 0;
+for n = 1 upto 4:
+    y := y - 2(n-1) * u - u;
+    for k = 0 upto 2n - 2:
+        path s;
+        s = folded_bar(n, k) scaled u
+            shifted (0, y + 1/2 u * (if odd k: k+1 else: -k fi));
+        fill s withcolor 
+            if k = 0: Purples 8 1
+            elseif odd floor(k/2): Blues[8][2]
+            else: Oranges[8][2]
+            fi;
+    endfor
+    
+    for i = 1 upto 2n - 2:
+        draw ((n-1) * down -- n * up) scaled u shifted (i * u, y) dashed withdots scaled 1/2;
+        draw (origin -- (2n-1) * right) scaled u shifted (0, y + (i-n+1) * u) dashed withdots scaled 1/2;
+    endfor
+
+    for k = 0 upto 2n - 2:
+        path s;
+        s = folded_bar(n, k) scaled u
+            shifted (0, y + 1/2 u * (if odd k: k+1 else: -k fi));
+        draw s;
+    endfor
+endfor
+
+
+label.rt(btex \vbox{\openup 6pt \halign{$#$\hss\cr
+n = 4\cr 4 + 5 + 6 + 7 + 8 + 9 + 10 = 7^2\cr}} etex, 
+    (8u, y + 1/2 u));
+
+label.llft("$\displaystyle \sum_{k=n}^{3n-2} k = \left(2n-1\right)^2$; $n=1,2,3,\dots$", 
+    urcorner currentpicture);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{James O.\@ Chilaka}
+
 \end{document}
