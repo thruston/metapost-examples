@@ -4311,4 +4311,113 @@ $$
 \vfill
 \contrib{James O.\@ Chilaka}
 
+
+%---------------------------
+\section{Sums of squares I}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(22, -34);
+picture P[], cube, semicube, redcube;
+cube = image(
+    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 4;
+    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 2;
+    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
+    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
+         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
+         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
+);
+semicube = image(
+    fill p( 0, 0, 0) -- p(0, 0, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Blues 8 4;
+    fill p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Blues 8 2;
+    fill p( 0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1/2, 0) -- p(0, 1/2, 0) -- cycle withcolor background;
+    draw p(-1, 1/2, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1/2, 0) --
+         p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 0, 1) --
+         p( 0, 0, 0) -- p(0, 1/2, 0) -- p(0, 1/2, 1);
+);
+redcube = image(
+    fill p( 0, 0, 0) -- p(0, 0, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 6;
+    fill p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 4;
+    fill p( 0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1/2, 0) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 2;
+    draw p(-1, 1/2, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1/2, 0) --
+         p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 0, 1) --
+         p( 0, 0, 0) -- p(0, 1/2, 0) -- p(0, 1/2, 1);
+);
+
+P1 = image(
+    pair a, b; 
+    a = p(0, 2, 3);
+    b = p(-5, 2, 0);
+    for k= 0 upto 3:
+        for j = k upto 3:
+            for i = k upto 3:
+                draw cube shifted p(i-3, k, 3-j);
+                draw cube shifted a shifted p(i-3, j, 3-k);
+                draw cube shifted b shifted p(k, i, 3-j);
+            endfor
+        endfor
+    endfor
+    label.lrt("$n$", p(0, 0, 2));
+    label.llft("$n$", p(-2, 0, 0));
+);
+P2 = image(
+    pair a, b; 
+    a = p(0, 1.1, 0.1);
+    b = p(-4.1, 0.1, 0);
+    for k= 0 upto 3:
+        for j = k upto 3:
+            for i = k upto 3:
+                draw cube shifted b shifted p(k, i, 3-j);
+                draw cube shifted p(i-3, k, 3-j);
+                draw cube shifted a shifted p(i-3, j, 3-k);
+            endfor
+        endfor
+    endfor
+);
+P3 = image(
+    for i=-4 upto 0:
+        for j = 0 upto 3:
+            for k = 3 downto 0:
+                draw cube shifted p(i, j, k);
+            endfor
+        endfor
+    endfor
+    for k = 3 downto 0:
+        for i = -k upto 0:
+            draw semicube shifted p(i, 4, k);
+            draw redcube  shifted p(i, 4.5, k);
+        endfor
+    endfor
+);
+P4 = image(
+    for i=-4 upto 0:
+        for j = 0 upto 3:
+            for k = 3 downto 0:
+                draw cube shifted p(i, j, k);
+            endfor
+        endfor
+    endfor
+    for k = 3 downto 0:
+        for i = -4 upto 0:
+            draw if i < -k: redcube else: semicube fi shifted p(i, 4, k);
+        endfor
+    endfor
+    label.lrt("$n$", p(0, 0, 2));
+    label.llft("$n+1$", p(-2, 0, 0));
+    label.lft("$n+\frac12$", p(-5, 2, 0));
+);
+draw P1 shifted 12 down;
+draw P2 shifted 243 right;
+draw P3 shifted 233 down;
+draw P4 shifted 233 down shifted 243 right;
+label.top("$ 1^2 + 2^2 + \cdots + n^2 = \frac13 n \left(n+1\right)\left(n+ \frac12\right)$", 
+    point 5/2 of bbox currentpicture shifted 21 up);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Man-Keung Siu}
+
 \end{document}
