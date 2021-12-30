@@ -4420,4 +4420,156 @@ $$
 \vfill
 \contrib{Man-Keung Siu}
 
+\section{Sums of squares II}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, N; u = 14.4; N = 6;
+picture P[];
+P1 = image(
+    for n = 1 upto N:
+        for m = n downto 1:
+            path s; s = unitsquare scaled (-m * u) shifted (0, - n / 2 * n * u);
+            fill s withcolor Spectral[7][m+1];
+            for k = 1 upto m - 1:
+                draw subpath (2, 3) of s shifted (0, k*u);
+                draw subpath (1, 2) of s shifted (k*u, 0);
+            endfor
+            draw s withpen pencircle scaled 3/2;
+        endfor
+    endfor
+);
+P2 = image(
+    for n = 1 upto N:
+        path s; s = unitsquare xscaled (2n - 1) yscaled (N - n + 1) scaled u
+        shifted ((N + 1 - n, -2 - N * n + n*(n-1)/2) scaled u);
+        fill s withcolor Spectral[7][1+n];
+        for k = 0 upto N - n:
+            draw (left--right) scaled (N+1/2) scaled u 
+                shifted point 1/2 of s shifted (0, k*u)
+                if k=0: withpen pencircle scaled 3/2 fi;
+        endfor
+        draw s withpen pencircle scaled 3/2;
+    endfor
+    for k=0 upto 2N + 1:
+        draw ((k, -2) -- (k, - 2 - N / 2 * (N + 1))) scaled u
+            if (k=0) or (k=2N+1): withpen pencircle scaled 3/2 fi;
+    endfor
+    draw ((0, -2) -- (2N+1, -2)) scaled u withpen pencircle scaled 3/2;
+    label.bot("$2n+1$", point 1/2 of bbox currentpicture);
+    label.lft(TEX("$1+2+\cdots+n$") rotated 90, point -1/2 of bbox currentpicture);
+);
+
+
+draw P1;
+draw P2 shifted 80 right;
+
+label.top(btex 
+$3\left(1^2 + 2^2 + \cdots + n^2\right) = 
+    \left(2n+1\right)\left(1 + 2 + \cdots + n\right)$ etex, 
+    point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Dan Kalman}
+
+
+\chapter{Miscellaneous}
+
+\minitoc
+
+\section{The problem of the calissons}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(100/3, -45);
+picture P[], cube, white_cube;
+cube = image(
+    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 4;
+    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 2;
+    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
+    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
+         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
+         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
+);
+white_cube = image(
+    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor background;
+    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor background;
+    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
+    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
+         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
+         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
+);
+
+P0 = image(
+    draw p(-5, 6, 3) -- p(-4, 6, 3) -- p(-4, 6, 5) -- p(-4, 5, 5);
+    draw p(-5, 6, 4) -- p(-4, 6, 4) -- p(-4, 5, 4) -- p(-4, 5, 5) -- p(-3, 5, 5) -- p(-3, 6, 5);
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withpen pencircle scaled 3/2;
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withcolor 3/4;
+);
+
+P1 = image(
+    for i = 0 upto 5:
+        draw p(-i, 1, 0) -- p(-i, 1, 5) -- p(-i, 6, 5);
+        draw p(0, 1, i) -- p(-5, 1, i) -- p(-5, 6, i);
+        draw p(-5, i+1, 0) -- p(-5, i+1, 5) -- p(0, i+1, 5);
+    endfor
+    numeric x, z;
+    x = -4; z = 4;
+    for k = 5, 5, 5, 5, 3, 
+            5, 5, 5, 4, 3,
+            5, 5, 1, 1, 0, 
+            4, 1, 0, 0, 0, 
+            3, 0, 0, 0, 0:
+        for y=1 upto k:
+            draw white_cube shifted p(x, y, z);
+        endfor
+        z := z - 1;
+        if z < 0:
+            z := 4;
+            x := x + 1;
+        fi
+    endfor
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withpen pencircle scaled 3/2;
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withcolor 3/4;
+);
+P2 = image(
+    fill p(-5, 1, 0) -- p(-5, 1, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- cycle withcolor Blues 8 4;
+    fill p( 0, 1, 0) -- p( 0, 1, 5) -- p(-5, 1, 5) -- p(-5, 1, 0) -- cycle withcolor Blues 8 2;
+    for i = 0 upto 5:
+        draw p(-i, 1, 0) -- p(-i, 1, 5) -- p(-i, 6, 5);
+        draw p(0, 1, i) -- p(-5, 1, i) -- p(-5, 6, i);
+        draw p(-5, i+1, 0) -- p(-5, i+1, 5) -- p(0, i+1, 5);
+    endfor
+    numeric x, z;
+    x = -4; z = 4;
+    for k = 5, 5, 5, 5, 3, 
+            5, 5, 5, 4, 3,
+            5, 5, 1, 1, 0, 
+            4, 1, 0, 0, 0, 
+            3, 0, 0, 0, 0:
+        for y=1 upto k:
+            draw cube shifted p(x, y, z);
+        endfor
+        z := z - 1;
+        if z < 0:
+            z := 4;
+            x := x + 1;
+        fi
+    endfor
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withpen pencircle scaled 3/2;
+    draw p(0,1,0) -- p(0, 1, 5) -- p(0, 6, 5) -- p(-5, 6, 5) -- p(-5, 6, 0) -- p(-5, 1, 0) -- cycle withcolor 3/4;
+);
+
+draw P0 shifted 160 up;
+draw P1 shifted 100 left;
+draw P2 shifted 100 right;
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Guy David and Carlos Tomei}
 \end{document}
