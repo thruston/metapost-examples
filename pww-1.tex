@@ -4473,6 +4473,133 @@ $3\left(1^2 + 2^2 + \cdots + n^2\right) =
 $$
 \vfill
 \contrib{Dan Kalman}
+%---------------------------
+\section{Sums of squares IV}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, N; u = 14.4; N = 6;
+
+numeric x, y; x = 0; y = -1;
+for n = 1 upto N:
+    label("$" & decimal n & "$", (x + n / 2, 1/2) scaled u);
+    draw unitsquare scaled 1/2 (n * n + n) scaled u rotated -90
+        if n < N: dashed evenly scaled 1/2 fi;
+    fill unitsquare scaled n shifted (x, y) scaled u withcolor Purples 8 3;
+    for m = 0 upto n:
+        draw (origin -- n * right) shifted (x, y + m) scaled u;
+        draw (origin -- n * up)    shifted (x + m, y) scaled u;
+    endfor
+    if n > 3:
+        label("$(1" for i=2 upto n-1: & "+" & decimal i endfor & ")\cdot(" & decimal n & ")$",
+            1/2[(0, y+n) scaled u, (x,y) scaled u]);
+    fi
+    x := x + n;
+    y := y - (n+1);
+endfor
+
+
+label.top(btex $\displaystyle
+    \sum_{k=1}^n k^2 = \left(\sum_{k=1}^n k \right)^2
+    - 2 \sum_{k=1}^{n-1} \left( \left(k+1\right) \sum_{i=1}^k i \right)
+$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{James O.\@Chilaka}
+%---------------------------
+\section{Sums of squares V}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, N, m; u = 16; N = 6; 2m = N * N + N;
+path s[];
+for n=1 upto N:
+    s[n] = unitsquare xscaled -m shifted (0, -n) scaled u;
+    fill s[n] withcolor if odd n: Oranges else: Blues fi 8 2;
+    m := m - n;
+endfor
+numeric m; 2m = N * N + N;
+for n=1 upto N:
+    for k=1 upto n-1:
+        draw ((k - m, 0) -- (k - m, -n)) scaled u dashed evenly scaled 1/2;
+    endfor
+    draw (-m * u, 0) -- subpath (1, 0) of s[n]
+        if n=N: -- subpath (3, 2) of s1 fi;
+    m := m - n;
+endfor
+
+label.top(btex $\displaystyle
+    \sum_{i=1}^n\sum_{j=i}^n j = \sum_{i=1}^{n} i^2
+$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Pi-Chun Chuang}
+%---------------------------
+\section{Alternating sums of squares}
+
+\vfill
+\noindent I.
+$$
+\mathord{\;\vcenter{\begin{mplibcode}
+input paintball
+draw rball;
+\end{mplibcode}}\;}
+-
+\mathord{\;\vcenter{\begin{mplibcode}
+input paintball
+for i=0 upto 1:
+    for j=0 upto 1:
+        draw if i+j=0: rball else: bball fi shifted (18i, 18j);
+    endfor
+endfor
+\end{mplibcode}}\;}
++
+\mathord{\;\vcenter{\begin{mplibcode}
+input paintball
+for i=0 upto 2:
+    for j=0 upto 2:
+        draw if i+j<3: rball else: bball fi shifted (18i, 18j);
+    endfor
+endfor
+\end{mplibcode}}\;}
+-
+\mathord{\;\vcenter{\begin{mplibcode}
+input paintball
+for i=0 upto 3:
+    for j=0 upto 3:
+        draw if i+j<3: rball else: bball fi shifted (18i, 18j);
+    endfor
+endfor
+\end{mplibcode}}\;}
+= \; -
+\mathord{\vcenter{\begin{mplibcode}
+input paintball
+for i=0 upto 3:
+    for j=0 upto 3:
+        if i+j >= 3: draw bball shifted (18i, 18j) fi;
+    endfor
+endfor
+\end{mplibcode}}\;}
+$$
+\medskip
+$$\sum_{k=1}^n \left(-1\right)^{k+1} k^2 
+= \left(-1\right)^{n+1} T_n 
+= \left(-1\right)^{n+1} \frac{n(n+1)}{2}
+$$
+\contrib{Dave Logothetti}
+\bigskip
+\noindent II.
+$$
+\begin{mplibcode}
+picture L[];
+\end{mplibcode}
+$$
+\contrib{Steven L.\@ Snover}
+\vfill
 
 
 \chapter{Miscellaneous}
