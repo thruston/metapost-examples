@@ -4591,11 +4591,50 @@ $$\sum_{k=1}^n \left(-1\right)^{k+1} k^2
 = \left(-1\right)^{n+1} \frac{n(n+1)}{2}
 $$
 \contrib{Dave Logothetti}
-\bigskip
+\vfill
 \noindent II.
 $$
 \begin{mplibcode}
 picture L[];
+numeric u; u = 24;
+for n=1 upto 5:
+    L[n] = image(
+        path p; p = origin 
+            for i=1 upto   n: -- (i*u, 0) endfor
+            for i=n downto 1: -- (i*u, -u) endfor
+            for i=2 upto   n: -- (u, -i*u) endfor
+            for i=n downto 1: -- (0, -i*u) endfor -- cycle;
+        fill p withcolor if odd n: Blues else: Oranges fi 8 2;
+        for i=1 upto n:
+            draw point i of p -- point 2n - i + 1 of p;
+            draw point -i of p -- point i - 2n - 1 of p;
+        endfor
+        draw p withpen pencircle scaled 3/2;
+    );
+endfor
+
+picture P[];
+P1 = image(
+    for i=1 upto 5:
+        draw L[i] shifted ((-i, i) scaled u);
+    endfor
+) shifted (-4u, 0);
+P2 = image(
+    for i=1 upto 3:
+        draw L[2i-1] shifted ((-i-2, i+2) scaled u);
+    endfor
+) shifted (4u, 0);
+
+draw P1;
+draw P2;
+bboxmargin := 16;
+drawarrow point 3/2 of bbox P1 -- point -1/2 of bbox P2;
+
+label.bot(btex $\displaystyle
+n^2 - \left(n-1\right)^2 + \cdots + \left(-1\right)^{n-1}\left(1\right)^2
+= \sum_{k=0}^n \left(-1\right)^k\left(n-k\right)^2 
+= \frac{n(n+1)}{2}$ etex, point 1/2 of bbox currentpicture);
+
 \end{mplibcode}
 $$
 \contrib{Steven L.\@ Snover}
