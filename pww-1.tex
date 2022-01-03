@@ -4640,6 +4640,91 @@ $$
 \contrib{Steven L.\@ Snover}
 \vfill
 
+\section{Sums of squares of Fibonacci numbers}
+\vfill
+$$
+\begin{mplibcode}
+    numeric u; u = 12;
+    for i=1 upto 34:
+        draw ((i, 0) -- (i, -21)) scaled u dashed withdots scaled 1/4;
+    endfor
+    for i=1 upto 20:
+        draw ((0, -i) -- (34, -i)) scaled u dashed withdots scaled 1/4;
+    endfor
+    numeric y; y = 0;
+    for i=1, 2, 5, 13:
+        y := y + i * u;
+        draw unitsquare scaled (u * i) shifted (0, -y) withpen pencircle scaled 3/2;
+        draw unitsquare scaled y shifted (u * i, -y) withpen pencircle scaled 3/2;
+    endfor
+
+
+    label.bot("$F_1=F_2=1$; $F_{n+2}=F_{n+1} + F_n$ \quad hence\quad $F_1^2+F_2^2+\cdots+F_n^2=F_nF_{n+1}$",
+    point 1/2 of bbox currentpicture shifted 13 down);
+
+                
+\end{mplibcode}
+$$
+\vfill
+\contrib{Alfred Brousseau}
+
+%--------------------
+\section{Sums of cubes I}
+
+\vfill
+$$
+\begin{mplibcode}
+    numeric u, n, x, y; 
+    u = 9;
+    n = 8;
+    x = y = 0;
+    for i=1 upto n:
+        y := y - (i*u); 
+        for j=0 upto floor (i/2) - 1:
+            path s; s = unitsquare scaled (i*u) shifted (i*u*j, y);
+            fill s withcolor if odd i: Blues else: Oranges fi 8 2;
+        endfor
+        for j=1 upto ceiling (i/2):
+            path s; s = unitsquare scaled (i*u) shifted (x, -i*u*j);
+            fill s withcolor if odd i: Blues else: Oranges fi 8 2;
+            if 2j = i:
+                fill center s -- subpath (-1/2, 1/2) of s -- cycle
+                    withcolor Oranges 8 3;
+            fi
+        endfor
+        x := x + (i*u); 
+    endfor
+    numeric x, y;
+    x = y = 0;
+    for i=1 upto n:
+        y := y - (i*u); 
+        for j=0 upto floor (i/2) - 1:
+            path s; s = unitsquare scaled (i*u) shifted (i*u*j, y);
+            draw s;
+        endfor
+        for j=1 upto ceiling (i/2):
+            path s; s = unitsquare scaled (i*u) shifted (x, -i*u*j);
+            draw s;
+        endfor
+        x := x + (i*u); 
+    endfor
+
+    numeric N; N = 1/2 n * (n + 1);
+    for i=1 upto N-1:
+        draw (i*u, 0) -- (i*u, -1/2 u);
+        draw (0, -i*u) -- (1/2u, -i*u);
+    endfor
+    draw unitsquare scaled u xscaled N yscaled -N withpen pencircle scaled 1;
+
+
+
+
+    label.top("$1^3+2^3+3^3+\cdots+n^3 = \left(1+2+3+\cdots+n\right)^2$",
+    point 5/2 of bbox currentpicture shifted 13 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Solomon W.\@Golomb}
 
 \chapter{Miscellaneous}
 
