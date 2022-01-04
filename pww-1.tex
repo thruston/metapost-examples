@@ -4725,6 +4725,49 @@ $$
 $$
 \vfill
 \contrib{Solomon W.\@Golomb}
+%--------------------
+\section{Sums of cubes II}
+
+\vfill
+$$
+\begin{mplibcode}
+    numeric u, N;
+    u = 9;
+    N = 8;
+    path s; s = unitsquare scaled u yscaled -1;
+    for n = N downto 1:
+        numeric t; t = n / 2 * (n + 1);
+        fill s scaled t withcolor if odd n: Blues else: Oranges fi 8 2;
+    endfor
+    numeric t; t = N / 2 * (N + 1);
+    for i = 1 upto t - 1:
+        draw (i*u, 0) -- (i*u, -t*u);
+        draw (0, -i*u) -- (t*u, -i*u);
+    endfor
+    for n = N downto 1:
+        numeric t; t = n / 2 * (n + 1);
+        draw s scaled t withpen pencircle scaled 3/2;
+        for i=n step n until t:
+            draw ((i, -t) -- (i, n-t)) scaled u withpen pencircle scaled 3/2;
+        endfor
+        for i=n step n until t-eps:
+            numeric a; a = if t - i < n: n/2 else: 0 fi;
+            draw ((t-n, a-i) -- (t-a, a-i)) scaled u withpen pencircle scaled 3/2;
+        endfor
+    endfor
+
+
+
+
+
+
+
+    label.top("$1^3+2^3+3^3+\cdots+n^3 = \left(1+2+3+\cdots+n\right)^2$",
+    point 5/2 of bbox currentpicture shifted 13 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{J.\@Barry Love}
 
 \chapter{Miscellaneous}
 
