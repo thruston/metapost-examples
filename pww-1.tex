@@ -4756,18 +4756,130 @@ $$
         endfor
     endfor
 
-
-
-
-
-
-
     label.top("$1^3+2^3+3^3+\cdots+n^3 = \left(1+2+3+\cdots+n\right)^2$",
     point 5/2 of bbox currentpicture shifted 13 up);
 \end{mplibcode}
 $$
 \vfill
-\contrib{J.\@Barry Love}
+\contrib{J.\@ Barry Love}
+%--------------------
+\section{Sums of cubes III}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+picture P[], b_cube, o_cube, r_cube;
+set_projection(100/3, -45);
+vardef cube(expr a, b, c) = image(
+    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor a;
+    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor b;
+    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor c;
+    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
+         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
+         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
+) enddef;
+b_cube = cube(Blues 8 4, Blues 8 2, Blues 8 1);
+o_cube = cube(Oranges 8 4, Oranges 8 2, Oranges 8 1);
+r_cube = cube(Reds 8 4, Reds 8 2, Reds 8 1);
+
+P1 = image(
+for n=1, 2, 3:
+    for i=1 upto n:
+        for j=1 upto n:
+            for k=1 upto n:
+                draw o_cube shifted p(i - 3/4 n * n, n * n / 2 + j, n - k);
+            endfor
+        endfor
+    endfor
+endfor
+);
+P2 = image(
+for n=1, 2, 3:
+    for i=1 upto n:
+        for j=1 upto n:
+            for k=1 upto n:
+                draw if k = 1: o_cube elseif k = 2: b_cube else: r_cube fi
+                    shifted p(i - 3/4 n * n, n * n / 2 + j, n - 1.4k);
+            endfor
+        endfor
+    endfor
+endfor
+);
+P3 = image(
+    draw o_cube;
+    for i=1 upto 3:
+        for j=1 upto 3:
+            if (i*j) > 1:
+                draw if (i>1) and (j>1): o_cube else: b_cube fi shifted p(i, j, .5);
+            fi
+        endfor
+    endfor
+    for i=1 upto 6:
+        for j=1 upto 6:
+            if (i>3) or (j>3):
+                draw if (i <= 3): b_cube elseif (j <= 3): r_cube else: o_cube fi shifted p(i, j, 2);
+            fi
+        endfor
+    endfor
+);
+P4 = image(
+    for i=1 upto 6:
+        for j=1 upto 6:
+            draw o_cube shifted p(i, j, 1);
+        endfor
+    endfor
+);
+
+draw P1;
+draw P2 shifted (200, 0);
+draw P3 shifted (-100, -160);
+draw P4 shifted (100, -160);
+
+label.top("$1^3+2^3+3^3+\cdots+n^3 = \left(1+2+3+\cdots+n\right)^2$",
+point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Alan L.\@ Fry}
+%--------------------
+\section{Sums of cubes IV}
+
+\vfill
+$$
+\begin{mplibcode}
+color s[]; s1 = Reds 8 2; s2 = Oranges 8 2; s3 = Blues 8 2;
+numeric u; 36 u = tw;
+for i = 1 upto 5:
+    numeric o; o = 1/2 i * (i + 1);
+    path b; b = unitsquare scaled i shifted -(o, o) scaled u;
+    for r=0 upto 3:
+        for j = 0 upto i-1:
+            if known s[r]:
+                fill b shifted (j*i*u, 0) rotated 90r withcolor s[r];
+            else:
+                drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
+                for k=1 upto i-1:
+                    draw subpath (3,4) of b shifted (j*i*u+k*u, 0);
+                    draw subpath (0,1) of b shifted (j*i*u, k*u);
+                endfor
+                drawoptions();
+            fi
+            draw b shifted (j*i*u, 0) rotated 90r;
+        endfor
+    endfor
+endfor
+input arrow_label
+
+arrow_label((-15u, -15u), (10u, -15u), "$n^2$", 9);
+arrow_label((10u, -15u), (15u, -15u), "$n$", 9);
+
+label.top("$1^3+2^3+3^3+\cdots+n^3 = \frac14 \left(n(n+1)\right)^2$",
+point 5/2 of bbox currentpicture shifted 21 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Antonella Cupillari}
 
 \chapter{Miscellaneous}
 
