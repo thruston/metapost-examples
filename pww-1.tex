@@ -4857,11 +4857,94 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+input colorbrewer-rgb
 input isometric-projection
-set_projection(100/3, -45);
+set_projection(80/3, -30);
 picture P[], b_cube, white_cube;
-b_cube = cube(Blues 8 4, Blues 8 2, background);
+b_cube = cube(Blues 8 4, Blues 8 2, Blues 8 1);
 white_cube = cube(background, background, background);
+numeric N; N = 4;
+P1 = image(
+    for n = N downto 1:
+        numeric a; a = 1/2 n * n - 1/2; 
+        for m = 1 upto n-1:
+            numeric b; b = 1/2 m * m - 1/2; 
+            for z = 1 upto n:
+                for x = 0 upto m-1:
+                    draw if n < N: white_cube else: b_cube fi shifted p(b + x, 0, a + n - z);
+                endfor
+            endfor
+        endfor
+        for x = 0 upto n-1:
+            for z = 1 upto n:
+                draw if n < N: white_cube else: b_cube fi shifted p(a + x, 0, a + n - z);
+            endfor
+        endfor
+    endfor
+    for n = 1 upto N:
+        numeric a; a = 1/2 n * n - 1/2; 
+        for m = n-1 downto 1:
+            numeric b; b = 1/2 m * m - 1/2; 
+            for x = 0 upto n-1:
+                for z = 1 upto m:
+                    draw if n < N: white_cube else: b_cube fi shifted p(a + x, 0, b + m - z);
+                endfor
+            endfor
+        endfor
+    endfor
+);
+
+P2 = image(
+    for y = 0 upto N - 1:
+        for x = 1 upto N - y:
+            for z = N downto 1:
+                draw b_cube shifted p(x, 1.125y - 1, z);
+            endfor
+        endfor
+    endfor
+);
+
+P3 = image(
+    for y = 1 upto N - 1:
+        for x = 1 upto N:
+            for z = N - y downto 1:
+                draw b_cube shifted p(x, 1.125y - 1, z);
+            endfor
+        endfor
+    endfor
+);
+
+P4 = image(
+    for y = 1 upto N:
+        for x = 1 upto N:
+            for z = N downto 1:
+                draw b_cube shifted p(x, y, z);
+            endfor
+        endfor
+    endfor
+    draw p(1, N+1, N+1) 
+        -- p(1, N+1, 1) 
+        -- p(1, N, 1) 
+        -- p(2, N, 1) 
+        -- p(2, N-1, 1) 
+        -- p(3, N-1, 1) 
+        -- p(3, N-2, 1) 
+        -- p(4, N-2, 1) 
+        -- p(4, N-2, N+1) 
+        withpen pencircle scaled 1;
+);
+
+draw P1;
+draw P2 shifted p(12.5, 0, 8);
+draw P3 shifted p(13.5, 0, 0);
+draw P4 shifted p(22, 0, 1);
+drawarrow p(11, 0, 9.5) -- p(12, 0, 9.5);
+drawarrow p(11, 0, 2.5) -- p(12, 0, 2.5);
+drawarrow p(18, 0, 6.5) -- p(19, 0, 6.5);
+
+label.bot("$t_n = 1 + 2 + \cdots + n$ \quad\Rightarrow\quad $t_n^2 - t_{n-1}^2 = n^3$",
+    point 1/2 of bbox currentpicture);
+
 \end{mplibcode}
 $$
 \vfill
