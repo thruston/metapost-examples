@@ -4320,31 +4320,10 @@ $$
 \begin{mplibcode}
 input isometric-projection
 set_projection(22, -34);
-picture P[], cube, semicube, redcube;
-cube = image(
-    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 4;
-    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 2;
-    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
-    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
-         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
-         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
-);
-semicube = image(
-    fill p( 0, 0, 0) -- p(0, 0, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Blues 8 4;
-    fill p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Blues 8 2;
-    fill p( 0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1/2, 0) -- p(0, 1/2, 0) -- cycle withcolor background;
-    draw p(-1, 1/2, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1/2, 0) --
-         p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 0, 1) --
-         p( 0, 0, 0) -- p(0, 1/2, 0) -- p(0, 1/2, 1);
-);
-redcube = image(
-    fill p( 0, 0, 0) -- p(0, 0, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 6;
-    fill p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 4;
-    fill p( 0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1/2, 0) -- p(0, 1/2, 0) -- cycle withcolor Reds 8 2;
-    draw p(-1, 1/2, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1/2, 0) --
-         p(-1, 1/2, 0) -- p(-1, 1/2, 1) -- p(0, 1/2, 1) -- p(0, 0, 1) --
-         p( 0, 0, 0) -- p(0, 1/2, 0) -- p(0, 1/2, 1);
-);
+picture P[], b_cube, b_semicube, r_semicube;
+b_cube = cube(Blues 8 4, Blues 8 2, background);
+b_semicube = semicube(Blues 8 4, Blues 8 2, background);
+r_semicube = semicube(Reds 8 6, Reds 8 4, Reds 8 2);
 
 P1 = image(
     pair a, b; 
@@ -4353,9 +4332,9 @@ P1 = image(
     for k= 0 upto 3:
         for j = k upto 3:
             for i = k upto 3:
-                draw cube shifted p(i-3, k, 3-j);
-                draw cube shifted a shifted p(i-3, j, 3-k);
-                draw cube shifted b shifted p(k, i, 3-j);
+                draw b_cube shifted p(i-3, k, 3-j);
+                draw b_cube shifted a shifted p(i-3, j, 3-k);
+                draw b_cube shifted b shifted p(k, i, 3-j);
             endfor
         endfor
     endfor
@@ -4369,9 +4348,9 @@ P2 = image(
     for k= 0 upto 3:
         for j = k upto 3:
             for i = k upto 3:
-                draw cube shifted b shifted p(k, i, 3-j);
-                draw cube shifted p(i-3, k, 3-j);
-                draw cube shifted a shifted p(i-3, j, 3-k);
+                draw b_cube shifted b shifted p(k, i, 3-j);
+                draw b_cube shifted p(i-3, k, 3-j);
+                draw b_cube shifted a shifted p(i-3, j, 3-k);
             endfor
         endfor
     endfor
@@ -4380,14 +4359,14 @@ P3 = image(
     for i=-4 upto 0:
         for j = 0 upto 3:
             for k = 3 downto 0:
-                draw cube shifted p(i, j, k);
+                draw b_cube shifted p(i, j, k);
             endfor
         endfor
     endfor
     for k = 3 downto 0:
         for i = -k upto 0:
-            draw semicube shifted p(i, 4, k);
-            draw redcube  shifted p(i, 4.5, k);
+            draw b_semicube shifted p(i, 4, k);
+            draw r_semicube  shifted p(i, 4.5, k);
         endfor
     endfor
 );
@@ -4395,13 +4374,13 @@ P4 = image(
     for i=-4 upto 0:
         for j = 0 upto 3:
             for k = 3 downto 0:
-                draw cube shifted p(i, j, k);
+                draw b_cube shifted p(i, j, k);
             endfor
         endfor
     endfor
     for k = 3 downto 0:
         for i = -4 upto 0:
-            draw if i < -k: redcube else: semicube fi shifted p(i, 4, k);
+            draw if i < -k: r_semicube else: b_semicube fi shifted p(i, 4, k);
         endfor
     endfor
     label.lrt("$n$", p(0, 0, 2));
@@ -4771,14 +4750,6 @@ $$
 input isometric-projection
 picture P[], b_cube, o_cube, r_cube;
 set_projection(100/3, -45);
-vardef cube(expr a, b, c) = image(
-    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor a;
-    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor b;
-    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor c;
-    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
-         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
-         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
-) enddef;
 b_cube = cube(Blues 8 4, Blues 8 2, Blues 8 1);
 o_cube = cube(Oranges 8 4, Oranges 8 2, Oranges 8 1);
 r_cube = cube(Reds 8 4, Reds 8 2, Reds 8 1);
@@ -4880,6 +4851,21 @@ point 5/2 of bbox currentpicture shifted 21 up);
 $$
 \vfill
 \contrib{Antonella Cupillari}
+%--------------------
+\section{Sums of cubes V}
+
+\vfill
+$$
+\begin{mplibcode}
+input isometric-projection
+set_projection(100/3, -45);
+picture P[], b_cube, white_cube;
+b_cube = cube(Blues 8 4, Blues 8 2, background);
+white_cube = cube(background, background, background);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger Nelsen}
 
 \chapter{Miscellaneous}
 
@@ -4892,23 +4878,9 @@ $$
 \begin{mplibcode}
 input isometric-projection
 set_projection(100/3, -45);
-picture P[], cube, white_cube;
-cube = image(
-    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 4;
-    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor Blues 8 2;
-    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
-    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
-         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
-         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
-);
-white_cube = image(
-    fill p(0, 0, 0) -- p(0, 0, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor background;
-    fill p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 1, 0) -- cycle withcolor background;
-    fill p(0, 0, 0) -- p(-1, 0, 0) -- p(-1, 1, 0) -- p(0, 1, 0) -- cycle withcolor background;
-    draw p(-1, 1, 0) -- p(-1, 0, 0) -- p(0, 0, 0) -- p(0, 1, 0) --
-         p(-1, 1, 0) -- p(-1, 1, 1) -- p(0, 1, 1) -- p(0, 0, 1) --
-         p(0, 0, 0) -- p(0, 1, 0) -- p(0, 1, 1);
-);
+picture P[], b_cube, white_cube;
+b_cube = cube(Blues 8 4, Blues 8 2, background);
+white_cube = cube(background, background, background);
 
 P0 = image(
     draw p(-5, 6, 3) -- p(-4, 6, 3) -- p(-4, 6, 5) -- p(-4, 5, 5);
@@ -4958,7 +4930,7 @@ P2 = image(
             4, 1, 0, 0, 0, 
             3, 0, 0, 0, 0:
         for y=1 upto k:
-            draw cube shifted p(x, y, z);
+            draw b_cube shifted p(x, y, z);
         endfor
         z := z - 1;
         if z < 0:
