@@ -5008,6 +5008,109 @@ $$
 \vfill
 \contrib{Roger Nelsen}
 
+%----------------
+\section{Sums of cubes VI}
+
+\vfill
+$$
+\begin{mplibcode}
+picture P[];
+P0 = image(
+    label.lrt(btex \vbox{\openup 16pt\halign{\hss ${}#{}$&&\hbox to 36pt{\hss$#$\hss}\cr
+    & 1 & 2 & 3 & \cdots & n\cr
+  + & 2 & 4 & 6 & \cdots & 2n\cr
+  + &  3 & 6 & 9 & \cdots & 3n\cr
+  + & \vdots & \vdots & \vdots & \ddots & \vdots \cr
+  + & n & 2n & 3n& \cdots & n^2\cr
+}} etex, origin));
+
+vardef cartouche(expr w, d, r) = save p; path p; p = 
+    quartercircle rotated 180 shifted ( 1/2,  1/2) scaled r shifted (0-d, -d) -- 
+    quartercircle rotated 270 shifted (-1/2,  1/2) scaled r shifted (w+d, -d) -- 
+    quartercircle rotated   0 shifted (-1/2, -1/2) scaled r shifted (w+d, +d) -- 
+    quartercircle rotated  90 shifted ( 1/2, -1/2) scaled r shifted (0-d, +d) -- 
+    cycle; image(fill p withcolor Oranges 8 2; draw p;)
+enddef;
+vardef boomer(expr n, w, h, d, r) = save p; path p; p = 
+    quartercircle rotated 180 shifted ( 1/2,  1/2) scaled r shifted (  0-d, -h*n-d) -- 
+    quartercircle rotated 270 shifted (-1/2,  1/2) scaled r shifted (w*n+d, -h*n-d) -- 
+    quartercircle rotated   0 shifted (-1/2, -1/2) scaled r shifted (w*n+d,    0+d) -- 
+    if n > 0:
+    quartercircle rotated  90 shifted (+1/2, -1/2) scaled r shifted (w*n-d,    0+d) -- 
+    reverse 
+    quartercircle rotated 270 shifted (-1/2,  1/2) scaled r shifted (w*n-d, -h*n+d) -- 
+    fi
+    quartercircle rotated  90 shifted (+1/2, -1/2) scaled r shifted (  0-d, -h*n+d) -- 
+
+    cycle;
+    image(fill p withcolor Blues 8 2; draw p)
+enddef;
+
+
+P1 = image(
+    picture c; c = cartouche(144, 8, 4);
+    for i=0, 1, 2, 4:
+        draw c shifted (34, -29.4i - 6);
+    endfor
+    draw P0;
+    label.lrt("${}=\quad \sum_{i=1}^n i + 2\sum_{i=1}^n i + \cdots + n\sum_{i=1}^n i$", point 0 of bbox currentpicture shifted 16 down);
+    label.lrt("${}=\quad \left(\sum_{i=1}^n i\right)^2$",                               point 0 of bbox currentpicture shifted 10 down);
+);
+P2 = image(
+    numeric u, v; u = 36; v = 29.4;
+    for i = 0, 1, 2, 4:
+        draw boomer(i, u, v, 8, 4) shifted (33, -6);
+    endfor
+    draw P0;
+    label.lrt("${}=\quad 1 + 2 \cdot 2^2 + 3 \cdot 3^2 + \cdots + n \cdot n^2$", point 0 of bbox currentpicture shifted 16 down);
+    label.lrt("${}=\quad \sum_{i=1}^n i^3$",                                     point 0 of bbox currentpicture shifted 16 down);
+);
+
+draw P1 shifted 112 left;
+draw P2 shifted 112 right;
+\end{mplibcode}
+$$
+\vfill
+\contrib{Farhood Pouryoussefi}
+%----------------------
+\section{Sums of integers and sums of cubes}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric N, u, y; 
+N = 5; y = 0; u = 12;
+for n = 1 upto N:
+    numeric w; w = n * u;
+    path s, t; 
+    s = unitsquare scaled w;
+    y := y - w;
+    label("$" & if n = N: "n" elseif n = N - 1: "\vdots" else: decimal n fi & "$", (-8, y + 1/2 w));
+    label("$" & 
+        if n = N: "n \times n^2" 
+        elseif n = N - 1: "\vdots" 
+        else: decimal n & "\times" & decimal n & "^2"
+        fi & "$", (N * N * u + 4 u, y + 1/2 w));
+    for x = 0 upto n - 1:
+        draw s shifted (x * w, y);
+    endfor
+    t = subpath (3/2, 3) of s shifted ((n - 1) * w, y) -- cycle;
+    fill t withcolor Oranges 8 2;
+    fill t rotatedabout(point 0 of t, 180) withcolor Blues 8 2;
+endfor
+draw origin -- (0, y) -- (N * (N + 1) * u, y) -- cycle withpen pencircle scaled 3/4;
+label.bot("$n(n+1)$", (1/2 N * (N + 1) * u, y));
+label.top(btex
+    \vbox{\openup 12pt\halign{\hss $#$&${}=#$ \hss \cr
+        1 + 2 + \cdots + n & \frac12 n(n+1)\cr
+    1^3 + 2^3 + \cdots + n^3 & \left(\frac12 n (n+1)\right)^2\cr
+    }} etex, point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Georg Schrage}
+
+
 \chapter{Miscellaneous}
 
 \minitoc
