@@ -5109,6 +5109,43 @@ label.top(btex
 $$
 \vfill
 \contrib{Georg Schrage}
+%----------------------
+\section{Sums of odd cubes are triangular numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric N, u, y; 
+N = 5; y = 0; u = 6;
+
+for n = 1 upto N:
+    string s, S; 
+    s = if n = N: "\left(2n-1\right)"
+    else: decimal (2n - 1) fi;
+    S = if n = N - 1: "$\vdots$"
+    else: "$" & s & "^3 = " & s & "\times" & s & "^2 = {}$" fi;
+    label.lft(S, (80, -60n));
+    if n < N - 1:
+        for i = 1 upto 2n - 1:
+            for j = 1 upto 2n - 1:
+                for k = 1 upto 2n - 1:
+                    draw unitsquare scaled u shifted (k * u, j * u) shifted (80 + ((i-1) * (2n+1)) * u, -60n);
+                endfor
+            endfor
+        endfor
+    fi
+endfor
+
+
+label.bot(btex $
+    1^3 + 3^3 + 5^3 + \cdots + \left( 2n   - 1 \right)^3 
+    = 1 +   2 +   3 + \cdots + \left( 2n^2 - 1 \right) 
+    = n^2 \left( 2n^2 - 1 \right)
+$ etex, point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Monte J.\@ Zerger}
 
 
 \chapter{Miscellaneous}
