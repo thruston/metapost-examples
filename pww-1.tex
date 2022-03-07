@@ -5116,37 +5116,138 @@ $$
 $$
 \begin{mplibcode}
 numeric N, u, y; 
-N = 5; y = 0; u = 6;
+N = 4; y = 0; u = 6;
 
+vardef sq(expr n) = image(
+    save S; path S; S = unitsquare scaled u scaled n;
+    fill S withcolor if odd ((n+1)/2): Blues else: Oranges fi 8 2;
+    for i = 0 upto n:
+        draw subpath (0, 1) of S shifted point -i/n of S;
+        draw subpath (0, -1) of S shifted point i/n of S;
+    endfor)
+enddef;
+
+vardef sqmark(expr n) = image(
+    save s; path s; s = unitsquare scaled u;
+    for i = 0 upto n - 1:
+        for j = 0 upto n - 1:
+            fill s shifted ((i, j)*u) withcolor 
+                if odd ((n+1)/2): Blues else: Oranges fi 
+                8 if j > i + floor (n/2): 4 else: 2 fi;
+            draw s shifted ((i, j)*u);
+        endfor
+    endfor)
+enddef;
+
+vardef sqclip(expr n) = image(
+    save s; 
+    for i = 1 upto n + floor (n / 2):
+        for j = 1 upto min(i, n):
+            path s; s = unitsquare shifted (i-1, j-1) scaled u;
+            fill s withcolor if odd ((n+1)/2): Blues else: Oranges fi 8 
+                if 2i < n: 4 else: 2 fi;
+            draw s;
+        endfor
+    endfor)
+enddef;
+
+picture P[];
+P1 = image(
 for n = 1 upto N:
     string s, S; 
-    s = if n = N: "\left(2n-1\right)"
-    else: decimal (2n - 1) fi;
-    S = if n = N - 1: "$\vdots$"
-    else: "$" & s & "^3 = " & s & "\times" & s & "^2 = {}$" fi;
-    label.lft(S, (80, -60n));
-    if n < N - 1:
-        for i = 1 upto 2n - 1:
-            for j = 1 upto 2n - 1:
-                for k = 1 upto 2n - 1:
-                    draw unitsquare scaled u shifted (k * u, j * u) shifted (80 + ((i-1) * (2n+1)) * u, -60n);
-                endfor
-            endfor
-        endfor
-    fi
-endfor
+    s = if n = N: "\left(2n-1\right)" else: decimal (2n - 1) fi;
+    S = "$" & s & "^3 = " & s & "\times" & s & "^2 = {}$";
+    numeric y; y = (n * n + n + n) * -u;
+    label.lft(S, (80, y));
+    for i = 1 upto 2n - 1:
+        draw if (i=1) or (i=2n-1): sqmark(2n - 1) else: sq(2n-1) fi
+          shifted (80, y + 1/2 u)
+          shifted (if i > n: (n-1, i - n - 1/2) else: (i-1, -1/2) fi * (2n+1) * u);
+    endfor
+endfor);
 
+input arrow_label
+P2 = image(
+numeric x, y; x = y = 0;
+for n = 1 upto N:
+    picture C, Up, Left; 
+    C = sq(2n - 1); 
+    Left = sqclip(2n - 1); Up = Left rotated -90 reflectedabout(up, down) shifted ((2n-1, 3n-2) * u);
+    draw C shifted ((x, y) * u);
+    for i = 2 upto n:
+        draw if i < n: C else: Up fi shifted ((x, y + ((i-1) * (2n - 7/8))) * u);
+        draw if i < n: C else: Left shifted ((1-n)*u,0) fi shifted ((x - ((i-1) * (2n - 7/8)), y) * u);
+    endfor
+    x := x + 2n - 1 + 1/8;
+    y := y - 2n - 1 - 1/8;
+endfor
+arrow_label(lrcorner currentpicture, urcorner currentpicture, TEX("$n(2n-1) + (n-1)$") rotated 90, 12);
+);
+
+label.top(P1, 10 up);
+label.bot(P2, 10 down);
 
 label.bot(btex $
     1^3 + 3^3 + 5^3 + \cdots + \left( 2n   - 1 \right)^3 
     = 1 +   2 +   3 + \cdots + \left( 2n^2 - 1 \right) 
     = n^2 \left( 2n^2 - 1 \right)
-$ etex, point 1/2 of bbox currentpicture shifted 21 down);
+$ etex, point 1/2 of bbox currentpicture shifted 34 down);
 \end{mplibcode}
 $$
 \vfill
 \contrib{Monte J.\@ Zerger}
 
+%--------------------
+\section{Sums of fourth powers}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, o; u = 12; o = 0;
+for n = 1 upto 4:
+    path s; s = unitsquare rotated -90 scaled n scaled n shifted (o, -o) scaled u;
+    fill s withcolor Greens 8 2;
+    if n=1:
+        label("$\scriptstyle 1^4$", center s);
+    else:
+        path t, tt; 
+        t = subpath (4, 3) of s -- subpath (3, 4) of s shifted (0, o*u) -- cycle;
+        tt = t reflectedabout(origin, dir -45);
+        fill t withcolor Purples 8 2;
+        fill tt withcolor Purples 8 2;
+        draw subpath (-1, 1) of t; 
+        draw subpath (-1, 1) of tt;
+        label("$" if n=2: & "\scriptstyle" fi & decimal n & "^2\left(1^2" 
+            for i=2 upto n-1: 
+                & "+" & decimal i & "^2" 
+            endfor & "\right)$", center t);
+            fill (superellipse(right, up, left, down, 0.78)) scaled u shifted center s
+                withcolor Greens 9 1;
+        label("$" & decimal n & "^4$", center s);
+    fi
+    o := o + n * n;
+endfor
+path s; s = unitsquare xscaled o yscaled -o scaled u; draw s;
+for i=1 upto o-1:
+    draw (origin -- 2 up) shifted ((i, -o)*u);
+    if i > 5: draw (origin -- 2 down) shifted ((i, 0)*u); fi
+    draw (origin -- 2 left) shifted ((o, -i)*u);
+    draw (origin -- 2 right) shifted ((0, -i)*u);
+endfor
+
+input arrow_label
+arrow_label(point 4 of s, point 3 of s, "$\sum_{i=1}^n i^2$", 24);
+arrow_label(point 3 of s, point 2 of s, "$\sum_{i=1}^n i^2$", 16);
+
+label.top(btex $
+\sum_{i=1}^n i^4 
+= \left(\sum_{i=1}^n i^2 \right)^2 
+- 2 \left(\sum_{k=2}^n \left(k^2 \sum_{i=1}^{k-1} i^2 \right)\right)$
+etex, point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Elizabeth M.\@ Markham}
 
 \chapter{Miscellaneous}
 
