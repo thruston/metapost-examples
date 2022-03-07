@@ -5249,6 +5249,101 @@ $$
 \vfill
 \contrib{Elizabeth M.\@ Markham}
 
+%--------------------
+\section{$k$-th powers as sums of consecutive odd numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u, N; 
+u = 16; N = 5;
+
+for n = N downto 1:
+    path s; s = unitsquare scaled u xscaled (N * N - N + n) yscaled n;
+    fill s withcolor if odd n: Blues else: Oranges fi 8 2;
+endfor
+
+for i=1 upto N * N - N - 1:
+    draw (origin -- up * N * u) shifted (i*u, 0) dashed evenly scaled 1/2;
+endfor
+
+z0 = ((N * N - N) * u, 0);
+draw (origin -- up * N * u) shifted z0;
+
+for i = 1 upto N - 1:
+    draw (x0 + i * u, N * u) -- (x0 + i * u, y0 + i * u) -- (N * N * u, y0 + i * u)
+        dashed evenly scaled 1/2;
+endfor
+
+for n = N downto 1:
+    path s; s = unitsquare scaled u xscaled (N * N - N + n) yscaled n;
+    draw s;
+endfor
+input arrow_label
+
+arrow_label(origin, z0, "$n^{k-1}-n$", 12); 
+arrow_label(z0, (N*N*u, 0), "$n$", 12); 
+arrow_label(origin, (0, N*u), "$n$", -12); 
+
+label.top(btex $
+n^k = \left(n^{k-1} - n + 1\right)
+    + \left(n^{k-1} - n + 3\right) + \cdots 
+    + \left(n^{k-1} - n + 2n - 1\right)$ for $k=2, 3, \dots$
+etex, point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{N.\@ Gopalakrishnan Nair}
+
+%----------------------
+\section{Sums of triangular numbers I}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric t, u, N; t = 0; u = 16; N = 6;
+for n = 1 upto N:
+    path W, M, B; 
+    W = (origin -- (n, 0) -- (n, n) for i = 1 upto n: -- (n-i, n-i+1) -- (n-i, n-i) endfor -- cycle)
+        shifted (t, 0) scaled u;
+    M = W rotatedabout(point n + 3/2 of W, 180);
+    fill M withcolor Reds 8 2;
+    fill W withcolor Greens 8 2;
+    draw M;
+    draw W;
+    t := t + n;
+    B = unitsquare xscaled -t scaled u shifted point 0 of M;
+    fill B withcolor Blues 8 1;
+    draw B;
+    if n = 1:
+        label("$1$", center B);
+        label("$T_1$", center W);
+        label("$T_1$", center M);
+        label.bot("$1$", point 1/2 of W);
+    elseif n < N - 1:
+        label("$1" for i=2 upto n: & "+" & decimal i endfor & "$", center B);
+        label("$T_" & decimal n & "$", 1/2[point 1 of W, point n + 3/2 of W]);
+        label("$T_" & decimal n & "$", 1/2[point 1 of M, point n + 3/2 of W]);
+        label.bot("$" & decimal n & "$", point 1/2 of W);
+    elseif n = N:
+        label("$T_n = 1 + 2 + \cdots + n$", center B);
+        label("$T_n$", 1/2[point 1 of W, point n + 3/2 of W]);
+        label("$T_n$", 1/2[point 1 of M, point n + 3/2 of W]);
+        label.bot("$n$", point 1/2 of W);
+        label.rt("$n+2$", point 3/2 of W shifted (0, u));
+    fi
+
+endfor
+label.top("$T_n = 1 + 2 + \cdots + n$ \quad implies\quad $\displaystyle T_1 + T_2 + \cdots + T_n = \frac{n(n+1)(n+2)}6$",
+point 5/2 of bbox currentpicture shifted 34 up);
+label.bot("$3\left(T_1+T_2+\cdots+T_n\right) = (n+2) \cdot T_n $", point 1/2 of bbox currentpicture shifted 34 down);
+label.bot("$\displaystyle T_1+T_2+\cdots+T_n = \frac{(n+2)}{3} \cdot \frac{n(n+1)}{2} = \frac{n(n+1)(n+2)}6$", point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Monte J.\@ Zerger}
+
+
 \chapter{Miscellaneous}
 
 \minitoc
