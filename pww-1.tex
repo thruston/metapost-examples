@@ -5342,6 +5342,147 @@ label.bot("$\displaystyle T_1+T_2+\cdots+T_n = \frac{(n+2)}{3} \cdot \frac{n(n+1
 $$
 \vfill
 \contrib{Monte J.\@ Zerger}
+%----------------------
+\section{Sums of triangular numbers II}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric t, N; t = 0; N = 5;
+input arrow_label
+input isometric-projection
+ipscale := 14;
+set_projection(25, -30);
+picture P[], r_cube;
+r_cube = cube(Reds 8 4, Reds 8 2, background);
+P7 = image(
+    for n=1 upto N:
+        for i = n downto 1:
+            for j = 1 upto i:
+                draw r_cube shifted p(2n, j, i);
+            endfor
+        endfor
+    endfor
+);
+P1 = image(
+for n=1 upto N:
+    for i = n downto 1:
+        for j = 1 upto i:
+            draw r_cube shifted p(n, j, i);
+        endfor
+    endfor
+endfor
+);
+P8 = image(
+    draw P1;
+    arrow_label(p(N + 1/2, 1, N + 1), p(N + 1/2, N + 1, N + 1), "$n$", 0);
+);
+
+path a; a = (left--right) scaled 18;
+drawarrow a;
+label.lft(P7, point 0 of a shifted 16 left);
+label.rt(P8, point 1 of a);
+
+P2 = image(
+for x=1 upto N:
+    for z = x downto 1:
+        for y = z upto x:
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+
+P3 = image(
+for x=1 upto N:
+    for y = x upto N:
+        for z = x downto 1:
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+
+P4 = image(
+for x=1 upto N:
+    for z = N downto x:
+        for y = 1 upto N - z + 1:
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+
+P5 = image(
+for x=1 upto N:
+    for z = N downto x:
+        for y = N - z + 1 upto N - x + 1:
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+P6 = image(
+for x=1 upto N:
+    for z = N downto x:
+        for y = N - x + 1 upto N: 
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+
+
+P9 = image(
+    draw P4 shifted p(-9, 2, 4);
+    draw P5 shifted p(-4, 4, 4);
+    draw P6 shifted p(3, 6, 4);
+    draw P1 shifted p(4, 0, 4); 
+    draw P2 shifted p(0, 0, -4);
+    draw P3 shifted p(-4, 0, -4);
+);
+
+P10 = image(
+for x = 1 upto N + 2:
+    for z = N + 1 downto 1:
+        for y = 1 upto N:
+            draw r_cube shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+drawoptions(withpen pencircle scaled 3/2);
+cutdraw p(1,1,1) -- p(1,N+1,1) -- p(1,N+1,N+2);
+cutdraw p(0,N+1,2) -- p(2,N+1,2) -- p(2,N+1,3)
+                -- p(3,N+1,3) -- p(3,N+1,4)
+                -- p(4,N+1,4) -- p(4,N+1,5)
+                -- p(5,N+1,5) -- p(5,N+1,6)
+                -- p(7,N+1,6) 
+                -- p(7,N,6) -- p(7,N,5)
+                -- p(7,N-1,5) -- p(7,N-1,4)
+                -- p(7,N-2,4) -- p(7,N-2,3)
+                -- p(7,N-3,3) -- p(7,N-3,2)
+                -- p(7,N-4,2) ;
+cutdraw p(2,1,1) -- p(2,2,1)
+     -- p(3,2,1) -- p(3,3,1)
+     -- p(4,3,1) -- p(4,4,1)
+     -- p(5,4,1) -- p(5,5,1)
+     -- p(6,5,1) -- p(6,6,1) -- p(6,6,7);
+    ;
+drawoptions();
+arrow_label(p(0, 3/4, 0), p(7, 3/4, 0), "$\scriptstyle n+2$", 0);
+arrow_label(p(8, 1, 1), p(8, 1, 7), "$\scriptstyle n+1$", 0);
+arrow_label(p(8, 1, 7), p(8, 6, 7), "$\scriptstyle n$", 0);
+);
+
+label.bot(P9, point 1/2 of bbox currentpicture shifted 21 down);
+label.bot(P10, point 1/2 of bbox currentpicture shifted 21 down);
+
+label.top("$T_n = 1 + 2 + \cdots + n$ \quad implies\quad $\displaystyle T_1 + T_2 + \cdots + T_n = \frac{n(n+1)(n+2)}6$",
+point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
 
 
 \chapter{Miscellaneous}
