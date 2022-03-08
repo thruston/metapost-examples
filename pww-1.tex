@@ -5484,6 +5484,59 @@ $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
 
+%----------------
+\section{Sums of triangular numbers III}
+
+\vfill
+$$
+\begin{mplibcode}
+path t; t = for i=1 upto 3: 85up rotated 120i -- endfor cycle;
+string s[];
+s0 = "$\scriptstyle n$";
+s1 = "$\scriptstyle n-1$";
+s2 = "$\cdot$";
+s3 = "$\cdot$";
+s4 = "3";
+s5 = "2";
+s6 = "1";
+s7 = "$\scriptstyle n-2$";
+numeric N; N = 6;
+for p=0 upto 2:
+    t := t rotated 120;
+    picture P;
+    P = image(
+        label(s0, point 0 of t);
+        for n = 1 upto N:
+            for i = 0 upto n:
+                label(s[n], (i/n)[point -n/N of t, point n/N of t]);
+            endfor
+        endfor
+    );
+    draw P shifted (180p, 0);
+endfor
+label("$+$", (90, 30));
+label("$+$", (270, 30));
+label("$=$", (90, -150));
+picture P;
+P = image(
+    label(s7, point 0 of t);
+    for n = 1 upto N:
+        for i = 0 upto n:
+            label(s7, (i/n)[point -n/N of t, point n/N of t]);
+        endfor
+    endfor
+);
+draw P shifted (180, -180);
+
+label.top("$T_n = 1 + 2 + \cdots + n$ \quad implies\quad $T_1 + T_2 + \cdots + T_n = \frac16 n(n+1)(n+2)$",
+point 5/2 of bbox currentpicture shifted 34 up);
+
+label.bot("$3\left(T_1 + T_2 + \cdots + T_n\right) = T_n \cdot (n+2)$",
+point 1/2 of bbox currentpicture shifted 34 down);
+
+\end{mplibcode}
+$$
+\vfill
 
 \chapter{Miscellaneous}
 
