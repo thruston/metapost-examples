@@ -1320,7 +1320,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-input isometric-projection
+input isometric_projection
 set_projection(22, -34);
 
 path base, hlid, mlid;
@@ -1447,7 +1447,7 @@ $$
 $$
 \begin{mplibcode}
 input arrow_label
-input isometric-projection
+input isometric_projection
 set_projection(18, -32);
 
 numeric r, h, s, tau;
@@ -4318,7 +4318,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-input isometric-projection
+input isometric_projection
 set_projection(22, -34);
 picture P[], b_cube, b_semicube, r_semicube;
 b_cube = cube(Blues 8 4, Blues 8 2, background);
@@ -4747,7 +4747,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-input isometric-projection
+input isometric_projection
 picture P[], b_cube, o_cube, r_cube;
 set_projection(100/3, -45);
 b_cube = cube(Blues 8 4, Blues 8 2, Blues 8 1);
@@ -4858,7 +4858,7 @@ $$
 $$
 \begin{mplibcode}
 input colorbrewer-rgb
-input isometric-projection
+input isometric_projection
 set_projection(80/3, -30);
 ipscale := 16;
 picture P[], Cube[];
@@ -5350,7 +5350,7 @@ $$
 \begin{mplibcode}
 numeric t, N; t = 0; N = 5;
 input arrow_label
-input isometric-projection
+input isometric_projection
 ipscale := 14;
 set_projection(25, -30);
 picture P[], r_cube;
@@ -5538,6 +5538,74 @@ point 1/2 of bbox currentpicture shifted 34 down);
 $$
 \vfill
 
+%-------------------
+\section{Sums of oblong numbers I}
+\vfill
+$$
+\begin{mplibcode}
+input isometric_projection
+ipscale := 24;
+set_projection(25, -30);
+picture P[];
+picture cb[];
+cb1 = cuboid(-1, 2, 1, Blues 8 4, Blues 8 2, background);
+cb2 = cuboid(-1, 4, 3, Blues 8 4, Blues 8 2, background);
+cb3 = cuboid(-2, 4, 3, Blues 8 4, Blues 8 2, background);
+P1 = image(
+    draw cb1;
+    for i = -1 upto 1:
+        draw cb1 shifted p(i, 0, 0) shifted 144 right;
+    endfor
+    drawoptions(withcolor Blues 8 7);
+    label.bot("$\scriptstyle 1$", p(-1/2, 0, 0));
+    label.lrt("$\scriptstyle 1$", p(0, 0, 1/2));
+    label.rt("$\scriptstyle 2$", p(0, 1, 1));
+    for i = -1 upto 1:
+        label.bot("$\scriptstyle 1$", p(i-1/2, 0, 0) shifted 144 right);
+    endfor
+    label.lrt("$\scriptstyle 1$", p(1, 0, 1/2) shifted 144 right);
+    label.rt ("$\scriptstyle 2$", p(1, 1,   1) shifted 144 right);
+    drawoptions();
+    label("$= \qquad \frac13$", (64, 21));
+);
+P2 = image(
+    draw cb3 shifted 20 left;
+
+    draw cb2 shifted 80 right;
+    draw cb3 shifted p(-1, 0, 0) shifted 240 right;
+    for i = 0 upto 2:
+        draw cb2 shifted p(i, 0, 0) shifted 240 right;
+    endfor
+    label("$= \quad \frac13$", (150, 64));
+    label("$\frac13$", (-78, 64));
+    label("$+$", (38, 64));
+    drawoptions(withcolor Blues 8 7);
+    label.llft("$\scriptstyle n-1$", p(-3/4, 0, 0)) shifted 20 left;
+    label.lrt("$\scriptstyle n$", p(0, 0, 3/2)) shifted 20 left;
+    label.rt ("$\scriptstyle n+1$", p(0, 5/2, 3)) shifted 20 left;
+
+    label.bot("$\scriptstyle 1$", p(-1/2, 0, 0)) shifted 80 right;
+    label.lrt("$\scriptstyle n$", p(0, 0, 3/2)) shifted 80 right;
+    label.rt ("$\scriptstyle n+1$", p(0, 5/2, 3)) shifted 80 right;
+    
+    label.llft("$\scriptstyle n-1$", p(-7/4, 0, 0)) shifted 240 right;
+    label.lrt("$\scriptstyle n$", p(2, 0, 3/2)) shifted 240 right;
+    label.rt ("$\scriptstyle n+1$", p(2, 2, 3)) shifted 240 right;
+    label.urt("$\scriptstyle n+2$", p(-1/2, 4, 3)) shifted 240 right;
+    label.bot("$\scriptstyle 1$", p(-1/2, 0, 0)) shifted 240 right;
+    label.bot("$\scriptstyle 1$", p(1/2, 0, 0)) shifted 240 right;
+    label.bot("$\scriptstyle 1$", p(3/2, 0, 0)) shifted 240 right;
+    drawoptions();
+);
+draw P1;
+draw P2 shifted 240 down;
+label.top("$(1\times2)+(2\times3)+(3\times4) + \cdots + (n-1)n = \frac13 (n-1) n (n+1)$",
+    point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{T.\@ C.\@ Wu}
+
 \chapter{Miscellaneous}
 
 \minitoc
@@ -5547,7 +5615,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-input isometric-projection
+input isometric_projection
 set_projection(100/3, -45);
 picture P[], b_cube, white_cube;
 b_cube = cube(Blues 8 4, Blues 8 2, background);
