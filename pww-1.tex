@@ -5605,6 +5605,105 @@ label.top("$(1\times2)+(2\times3)+(3\times4) + \cdots + (n-1)n = \frac13 (n-1) n
 $$
 \vfill
 \contrib{T.\@ C.\@ Wu}
+%-------------------
+\section{Sums of oblong numbers II}
+\vfill
+$$
+\begin{mplibcode}
+input isometric_projection
+ipscale := 24;
+set_projection(28, -28);
+picture P[];
+picture c[];
+numeric i; i = 0;
+forsuffixes s = Reds, Greens, Oranges, Blues:
+    c[incr i] = cube(s 8 4, s 8 3, s 8 2);
+endfor
+
+P1 = image(
+for x = 1 upto 2:
+    for y = 0 upto 0:
+        for z = 2 downto 0:
+            draw c1 shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+P11 = image(
+    draw P1; 
+    label.lft("$1$", p(0, 1/2, 0));
+    label.bot("$2$", p(1, 0, 0));
+    label.lrt("$3$", p(2, 0, 3/2));
+);
+P2 = image(
+for x = 1 upto 2:
+    for y = 0 upto 2:
+        for z = 2 downto 0:
+            draw c2 shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+P22 = image(
+    draw P2; 
+    label.lft("$3$", p(0, 3/2, 0));
+    label.bot("$2$", p(1, 0, 0));
+    label.lrt("$3$", p(2, 0, 3/2));
+);
+P3 = image(
+for x = 1 upto 3:
+    for y = 0 upto 3:
+        for z = 2 downto 0:
+            draw c3 shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+P33 = image(
+    draw P3; 
+    label.lft("$4$", p(0, 2, 0));
+    label.bot("$3$", p(3/2, 0, 0));
+    label.lrt("$3$", p(3, 0, 3/2));
+);
+P4 = image(
+for x = 1 upto 5:
+    for y = 0 upto 3:
+        for z = 2 downto 0:
+            draw c4 shifted p(x, y, z);
+        endfor
+    endfor
+endfor
+);
+P44 = image(
+    draw P4; 
+    label.lft("$n$", p(0, 2, 0));
+    label.bot("$n+1$", p(5/2, -1/8, 0));
+    label.lrt("$3$", p(5, 0, 3/2));
+);
+P5 = image(
+    draw P4 shifted p(0, 0, 3);
+    draw P2; draw P1 shifted p(0, 3, 0);
+    draw P3 shifted p(2,0,0);
+);
+
+numeric s; s = 80;
+label( P11, (-2s, 5/2s)); 
+label("$+$", (-s, 5/2s));
+label( P22, (  0, 5/2s)); 
+label("$+$", (+s, 5/2s));
+label( P33,  (2s, 5/2s)); 
+
+label("$+$", (-2.8s, 0));
+label(P44,   (-3/2s, 0)); 
+label("$=$",     (0, 0));
+label(P5,     (3/2s, 0));
+
+label.top("$3 \bigl(1\times2 + 2\times3 + 3\times4  + \cdots + n(n+1) \bigr) = n (n+1) (n+2)$",
+    point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sidney H.\@ Kung}
 
 \chapter{Miscellaneous}
 
