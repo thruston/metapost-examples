@@ -5705,6 +5705,80 @@ $$
 \vfill
 \contrib{Sidney H.\@ Kung}
 
+%---------------------------
+\section{Sums of pentagonal numbers}
+
+\vfill$$
+\begin{mplibcode}
+input isometric_projection
+ipscale := 16;
+set_projection(24, -28);
+picture P[];
+picture c[];
+numeric i; i = 0;
+forsuffixes s = Reds, Greens, Oranges, Blues:
+    c[incr i] = cube(s 8 4, s 8 3, s 8 2);
+endfor
+P1 = image(
+for i=1 upto 4:
+    numeric z; z = 3i * sqrt(i);
+    for j = i downto 1:
+        for k = 1 upto i:
+            draw c[i] shifted p(-j, k, z);
+        endfor
+    endfor
+    for k=1 upto i-1:
+        for j=i-k downto 1:
+            draw c[i] shifted p(-j - 1/2 k, i + k, z);
+        endfor
+    endfor
+endfor);
+P2 = image(
+for i=1 upto 4:
+    numeric z; z = 3i * sqrt(i);
+    for j = i downto 1:
+        for k = 1 upto i:
+            draw c[i] shifted p(-j, k, z);
+        endfor
+    endfor
+    for k=1 upto i-1:
+        for j=i-k downto 1:
+            draw c[i] shifted p(-j, i, z -k);
+        endfor
+    endfor
+endfor);
+P3 = image(
+    path base, lid;
+    base = p(-1,1,1) -- p(-6, 1, 1) -- p(-6, 1, 5) -- p(-1, 1, 5) -- cycle;
+    lid = base shifted p(0,4,0);
+    drawoptions(dashed withdots scaled 1/2);
+    draw base; for i=0 upto 3: draw point i of base -- point i of lid; endfor 
+    drawoptions();
+    for z = 4 downto 1:
+        for x = z downto 1:
+            for y = 1 upto 4:
+                draw c[max(y,z)] shifted p(-x, y, z);
+            endfor
+        endfor
+    endfor
+    drawoptions(dashed withdots scaled 1/2);
+    draw lid;
+    drawoptions();
+    label.lrt("$n$", point -1/2 of base);
+    label.rt ("$n$", 1/2[point -1 of base, point -1 of lid]);
+    label.urt("$n+1$", point 5/2 of lid);
+);
+
+draw P1;
+draw P2 shifted (120, -50);
+draw P3 shifted (380, -50);
+
+label.top("$\displaystyle \frac{1\cdot2}2 + \frac{2\cdot5}2 + \frac{3\cdot8}2 + \cdots + \frac{n(3n-1)}2 = \frac{n^2(n+1)}2$",
+point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$\vfill
+\contrib{William A.\@ Miller}
+
 \chapter{Miscellaneous}
 
 \minitoc
