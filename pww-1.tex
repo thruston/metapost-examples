@@ -5921,6 +5921,73 @@ label.rt("$\displaystyle \sum_{k=1}^n k + n^2 = \sum_{k=n+1}^{2n} k$", (160, -6)
 $$\vfill
 \contrib{Warren Page}
 
+\section{Identities for triangular numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+vardef trig(expr n, shade, edge) = image(
+    for y = 1 upto n:
+        for x = 1 upto n + 1 - y:
+            path c; c = fullcircle shifted (2x-1, 2y-1) scaled 8;
+            fill c withcolor shade;
+            draw subpath (1/2, 3/2) of c shifted - center c scaled 3/4 shifted center c withcolor 3/4[shade, white];
+            draw c;
+        endfor
+    endfor
+    if edge:
+        draw origin -- (16n, 0) 
+            for i = 1 upto n: 
+                -- 16(n + 1 - i, i) -- 16(n - i, i) 
+            endfor -- cycle;
+    fi
+)
+enddef;
+
+picture t; t = trig(5, Oranges 8 3, true);
+picture P[];
+P1 = image(draw t; draw t shifted 80 up; draw t shifted 80 right;
+draw trig(4, Blues 8 3, true) rotated 180 shifted (80, 80);
+label.bot("$3T_n + T_{n-1} = T_{2n}$", point 1/2 of bbox currentpicture shifted 8 down);
+);
+P2 = image(
+    draw t rotated 180;
+    draw t rotated 180 shifted 96 left;
+    draw t rotated 180 shifted 96 down;
+    draw trig(6, Greens 8 4, true) shifted -(96, 96);
+label.bot("$3T_n + T_{n+1} = T_{2n+1}$", point 1/2 of bbox currentpicture shifted 8 down);
+);
+P3 = image(draw t; draw t shifted 80 up; draw t shifted 80 right;
+    draw trig(4, Blues 8 3, true) rotated 180 shifted (80, 80);
+    draw t rotated 180 shifted (176, 176);
+    draw t rotated 180 shifted ( 80, 176);
+    draw t rotated 180 shifted (176, 80);
+    draw trig(6, Greens 8 4, true) shifted (80, 80);
+    label.bot("$T_{n-1} + 6T_n + T_{n+1} = (2n+1)^2$", point 1/2 of bbox currentpicture shifted 8 down);
+);
+
+label.ulft(P1, origin);
+label.urt (P2, origin);
+label.bot (P3, 21 down);
+
+    label.top("$T_n = 1 + 2 + \cdots + n$ \Longrightarrow", point 5/2 of bbox
+    currentpicture shifted 13 up);
+\end{mplibcode}
+$$
+\vfill
+
+\section{A triangular identity}
+
+\vfill
+$$
+\begin{mplibcode}
+    
+\end{mplibcode}
+$$
+\vfill
+
+\contrib{Roger B.\@ Nelsen}
+
 %======================
 \chapter{Miscellaneous}
 
