@@ -5981,6 +5981,55 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+picture t, u;
+numeric n, s; n = 5; s = 7;
+path edge; edge = (origin for i=0 upto n-1: -- (-i, n-i) -- (-i-1, n-i) endfor -- (-n, 0) -- cycle) scaled s;
+t = image(
+    fill edge withcolor Reds 8 2;
+    for i=1 upto n:
+        draw unitsquare xscaled (i-n-1) yscaled i scaled s withpen pencircle scaled 1/4;
+    endfor
+    draw edge;
+);
+u = image(
+    fill edge rotated 180 withcolor Purples 8 2;
+    for i=1 upto n:
+        draw unitsquare xscaled (n+1-i) yscaled -i scaled s withpen pencircle scaled 1/4;
+    endfor
+    draw edge rotated 180;
+);
+picture P[];
+for k=1 step 2 until 7:
+    P[k] = image(
+        for i = 1 upto k:
+            for j = 1 upto i:
+                pair z; z = (1-j, 1-i) scaled n
+                       shifted (-floor(j/2), 0)
+                       if odd j: shifted (0, - floor (i/2)) 
+                       else: shifted (if odd i: 0 else: 1 fi, -floor((i-1)/2))
+                       fi
+                       scaled s;
+                draw t shifted z;
+                if odd j: 
+                    if j > 1:
+                        draw u shifted z shifted (0, n*s + s) 
+                    fi
+                else: draw u shifted z shifted (0, n*s) 
+                fi;
+            endfor
+        endfor
+        label.bot(if k=1: "$T_n$" else:
+            "$" & decimal (k*k) & "T_n + " & decimal floor(k*k/8) & "=T_{" & decimal k & "n+" & decimal floor(k/2) & "}$" fi,
+        point 1/2 of bbox currentpicture);
+    );
+endfor
+
+draw P1;
+draw P3 shifted (70, 0);
+draw P5 shifted (175, -40);
+draw P7 shifted (300, -140);
+
+label.bot("$\left(2k+1\right)^2T_n + T_k = T_{(2k+1)n+k}$", point 1/2 of bbox currentpicture shifted 21 down);
     
 \end{mplibcode}
 $$
