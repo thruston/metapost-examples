@@ -6274,6 +6274,118 @@ $$
 
 \contrib{J.\@ H.\@ Webb}
 
+\section{Geometric series II}
+\vfill
+$$
+\begin{mplibcode}
+numeric r, u; 
+u = 180; r = 0.561; 
+pair P, Q, R, S, T;
+S = origin; P = u * up; R = (u, u * r); Q = (u, u);
+T = whatever[P, R]; ypart T = 0;
+path pg; pg = origin -- (u, 0) -- (u, u*r) -- (0, u) -- cycle;
+draw R -- Q -- P dashed evenly scaled 1/2;
+for i=0 upto 12:
+    draw pg;
+    if i=0:
+        label.rt("$1$", point -1/2 of pg);
+        label.bot("\strut $1$", point 1/2 of pg );
+    elseif i=1:
+        label.rt("$r$", point -1/2 of pg);
+        label.bot("\strut $r$", point 1/2 of pg);
+    elseif i < 4:
+        label.rt("$r^"&decimal i &"$", point -1/2 of pg);
+        label.bot("\strut $r^"&decimal i &"$", point 1/2 of pg);
+    elseif i = 4:
+        label.bot("\strut $\cdots$", point 1/2 of pg);
+    fi
+    pg := pg shifted - point 0 of pg scaled r shifted point 1 of pg;
+endfor
+
+dotlabel.ulft("$P$", P);
+dotlabel.urt ("$Q$", Q);
+dotlabel.urt ("$R$", R);
+dotlabel.llft("$S$", S);
+dotlabel.lrt ("$T$", T);
+label.top("$1$", 1/2[P, Q]);
+label.rt ("$1-r$", 1/2[R, Q]);
+
+label.bot(btex \vbox{\openup 13pt\halign{\hss $\displaystyle #$ \hss\cr
+\triangle PQR \sim \triangle TSP\cr
+\therefore\quad 1 + r + r^2 + r^3 + \cdots = {1\over 1-r}\cr}} etex,
+point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
+\vfill
+
+\contrib{Benjamin G.\@ Klein and Irl C.\@ Bivens}
+
+%---------------
+\section{Geometric series III}
+\vfill
+$$
+\begin{mplibcode}
+picture P[];
+numeric u; u = 120;
+P1 = image(
+    for i=1 upto 9:
+        path s; s = unitsquare scaled u shifted -2(u, u) scaled (1/2 ** i); 
+        fill s withcolor Oranges 8 3;
+        draw s;
+        draw s shifted (point 1 of s - point 0 of s);
+        draw s shifted (point 3 of s - point 0 of s);
+        if i < 4:
+            picture t; t = TEX("$1/" & decimal (2 ** i) & "$") scaled (1/i);
+            label.top(t, point 1/2 of s - (0, 1/2i));
+            label.top(t, point 1/2 of s + (1/2 ** i * u, - 1/2 i));
+        fi
+    endfor
+    label.bot("$\displaystyle \frac14 + \frac1{16} + \frac1{64} + \frac1{256} + \cdots = \frac13$",
+        point 1/2 of bbox currentpicture shifted 13 down);
+);
+P2 = image(
+numeric u; u = 160;
+    numeric r; r = .6;
+    for i = 0 upto 9:
+        path s, t;
+        s = unitsquare scaled (u * (1-r)) shifted -(u, u) scaled (r ** i);
+        t = point 1 of s -- (0, ypart point 1 of s) 
+                         -- (0, ypart point 2 of s) -- point 2 of s -- cycle;
+        fill s withcolor Greens 8 3;
+        draw s; draw t;
+        draw t rotatedabout(center s, 90);
+        if i < 3:
+            picture q, p;
+            if i=0:
+                q = TEX("$1-r$"); p = TEX("$r$");
+            elseif i=1:
+                q = TEX("$r(1-r)$") scaled 0.8;
+                p = TEX("$r^2$") scaled 0.8;
+            else:
+                q = TEX("$r^2(1-r)$") scaled 0.45;
+                p = TEX("$r^3$") scaled 0.45;
+            fi
+            label.top(q, point 1/2 of s - (0, 1/2i));
+            label.top(p, point 1/2 of t - (0, 1/2i));
+        fi
+    endfor
+    label.bot(btex \vbox{\openup 13pt\halign{\hss $\displaystyle # + \cdots$&$\displaystyle {}=#$\hss\cr
+    (1-r)^2 + r^2(1-r)^2 + r^4(1-r)^2 & {(1-r)^2\over (1-r)^2 + 2\times r(1-r)}\cr
+    1 + r^2 + r^4 & {1 \over (1 - r)^2 + 2r(1-r)} = {1\over 1-r^2} \cr
+    a + ar + ar^2 & {a \over 1-r} \cr
+    }} etex, point 1/2 of bbox currentpicture shifted 13 down);
+);
+label.top(P1, 7 up);
+label.bot(P2, 7 down);
+
+
+
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Sunday A.\@ Ajose}
+
 %======================
 \chapter{Miscellaneous}
 
