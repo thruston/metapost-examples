@@ -6037,6 +6037,106 @@ $$
 
 \contrib{Roger B.\@ Nelsen}
 
+\newpage
+\section{Every hexagonal number is a triangular number}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 12;
+picture ball[];
+for i=1 upto 4:
+    ball[i] = image(
+        fill fullcircle scaled u withcolor Spectral[4][i];
+        draw fullcircle scaled u;
+    );
+endfor
+picture P[]; interim bboxmargin := 10;
+P1 = image(
+    path H; 
+    H = (for i=0 upto 5: up rotated -60i -- endfor cycle) shifted down;
+    draw ball1 shifted point 0 of H;
+    for i=2 upto 5:
+        path h; h = H scaled ((i-1) * 1.44 u);
+        draw ball1 shifted point 1 of h;
+        for j = 1 upto 4:
+            for k = 1 upto i - 1:
+                draw ball[j] shifted point j + k / (i-1) of h;
+            endfor
+        endfor
+    endfor
+    label.bot("$H_5$", point 1/2 of bbox currentpicture);
+);
+P2 = image(
+    for i = 1 upto 9:
+        for j = 1 upto i:
+            draw ball
+                [if i < 5: 4
+                elseif (i > 5) and (j < i-4): 3
+                elseif (i > 5) and (j > 5): 2
+                else: 1 fi]
+                shifted ((j - 1/2 i, -0.866025 i) * 1.44u);
+        endfor
+    endfor
+    label.bot("$T_9$", point 1/2 of bbox currentpicture);
+);
+P3 = image(
+    for i=1 upto 9:
+        for j=1 upto 5:
+            draw ball[
+                if i < 6:
+                    if i + j < 7: 1 else: 2 fi
+                else:
+                    if i + j < 11: 3 else: 4 fi
+                fi
+            ] shifted ((i, j) * 1.44u);
+        endfor
+    endfor
+    label.bot("$5\times 9$", point 1/2 of bbox currentpicture);
+);
+interim labeloffset := 32;
+label.ulft(P1, origin);
+label.urt (P2, origin);
+label.bot (P3, origin);
+label.top(btex
+$\left.\vcenter{\openup 6pt\halign{$#$\hss&${}=#$\hss\cr
+H_n&1+5+\cdots+(4n-3)\cr
+T_n&1+2+\cdots+n\cr}}\right\} \Longrightarrow 
+H_n = 3T_{n-1} + T_n = T_{2n-1} = n(2n-1)$
+etex, point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\newpage
+%----------------------
+\section{One domino = two squares : concentric squares}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 16;
+path dom; dom = unitsquare xscaled 2 scaled 2u;
+numeric c; c = 0;
+for n=1 upto 4:
+    for k = 0 upto 3:
+        for x = 0 upto n - 1:
+            path d; d = dom shifted ((4x - 2n + 1, 2n-1) * u) rotated 90k;
+            fill d withcolor if odd incr c: Blues else: Oranges fi [9][if odd n: 1 else: 2 fi];
+            draw d;
+        endfor
+    endfor
+endfor
+
+
+label.top(btex
+\vbox{\openup 12pt\halign{\hss$\displaystyle #$\hss\cr
+1 + 4\times 2 + 8 \times 2 + 12 \times 2 + 16 \times 2 = 9^2\cr
+1 + 2 \sum_{k=1}^n \, 4k = \left(2n+1\right)^2\cr}} 
+etex, point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Shirley A.\@ Wakin}
 %======================
 \chapter{Sequences and series}
 
@@ -6047,11 +6147,11 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-vardef f(expr x) = 1/256 mlog(1 + x) enddef;
+vardef f(expr x) = (x, 1/256 mlog(1 + x)) enddef;
 vardef fp(expr x) = if x=-1: up else: (1, 1/(1 + x)) fi enddef;
 
 path ff;
-ff = ((-1/2, f(-1/2)){fp(-1/2)} for x=0 step 1/2 until 3: .. (x, f(x)){fp(x)} endfor) scaled 120;
+ff = (f(-1/2){fp(-1/2)} for x=0 step 1/2 until 3: .. f(x){fp(x)} endfor) scaled 120;
 
 interim bboxmargin := 0;
 path xx, yy;
