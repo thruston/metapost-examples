@@ -6107,7 +6107,6 @@ etex, point 5/2 of bbox currentpicture shifted 34 up);
 \end{mplibcode}
 $$
 \vfill
-\newpage
 %----------------------
 \section{One domino = two squares : concentric squares}
 
@@ -6137,6 +6136,74 @@ etex, point 5/2 of bbox currentpicture shifted 34 up);
 $$
 \vfill
 \contrib{Shirley A.\@ Wakin}
+%----------------------
+\section{Sums of consecutive powers of 9 are sums of consecutive integers}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 6;
+def marked(expr i, N) = 
+    if (i = N) or (i mod 9 = 0): withpen pencircle scaled 3/4
+    elseif i mod 3 = 0: withpen pencircle scaled 1/2
+    else: withpen pencircle scaled 1/4 withcolor 1/2
+    fi 
+enddef;
+vardef frame(expr N, Closed) = image(
+    for i = 0 upto N-1:
+        for j = 0 upto N-1:
+            path s; 
+            s = unitsquare shifted (i, j) scaled u;
+            if j > i + floor(N / 2): 
+                if not Closed:
+                    s := s rotatedabout((N/2, N) scaled u, 180);
+                fi
+                fill s withcolor Blues 9 3; 
+            fi
+        endfor
+    endfor
+
+    for i = 0 upto N:
+        numeric minx, maxy;
+        minx = if Closed or (i < floor(N / 2) + 1): 0 else: i - floor(N / 2) fi;
+        maxy = if Closed: N else: i + floor (N / 2) if i < N: + 1 fi fi;
+        draw ((minx, 0) -- (N, 0)) shifted (0, i) scaled u marked(i, N);
+        draw ((0, 0) -- (0, maxy)) shifted (i, 0) scaled u marked(i, N);
+    endfor
+    if not Closed:
+        numeric m; m = floor (N / 2) + 1;
+        draw ((0, m) -- (1, m)
+            for i = 1 upto N - 1:
+                -- (i, m+i) -- (i+1, m+i)
+                hide(if (m + i) > N: 
+                    draw ((i+1, m+i) -- (N, m+i)) scaled u marked(m+i, N);
+                fi)
+            endfor
+            ) scaled u withpen pencircle scaled 3/4;
+    fi
+)
+enddef;
+numeric N, x, y; N = 3; x = 0; y = -45u;
+for n=0 upto N:
+    picture f; 
+    f = frame(3**n, false);
+    draw f shifted (x, y);
+    x := x + 28 + xpart lrcorner f;
+endfor
+numeric x, y; x = 0; y = 0;
+for n=0 upto N:
+    picture f; 
+    f = frame(3**n, true);
+    draw f shifted (x, y);
+    x := x + 28 + xpart lrcorner f;
+endfor
+label.bot("$1+9+\cdots+9^n = 1 + 2 + 3 + \cdots + (1+3+\cdots+3^n)$", 
+point 1/2 of bbox currentpicture shifted 13 down);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
+
 %======================
 \chapter{Sequences and series}
 
