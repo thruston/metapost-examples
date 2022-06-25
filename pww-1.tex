@@ -6619,7 +6619,7 @@ $$
 \vfill
 \contrib{Sunday A.\@ Ajose}
 
-\section{Reciprocals of successive integer products}
+\section{Sum of reciprocals of successive integer products}
 
 \vfill$$
 \begin{mplibcode}
@@ -6668,6 +6668,65 @@ label.bot("$\displaystyle \frac1{1\cdot2} + \frac1{2\cdot3} + \cdots + \frac1{n(
 \end{mplibcode}
 $$\vfill
 \contrib{Roman W.\@ Wong}
+%-------------
+\section{Sum of reciprocals of triangular numbers}
+
+\vfill
+$$
+\begin{mplibcode}
+path xx, yy, ff; 
+numeric u, v, s, minx, maxx; s = 1/8; minx = 1; maxx = 7; u = 42; v = 102;
+ff = ((minx - s, 2/(minx - s)) for x = minx step s until maxx + 2s: .. (x, 2/x) endfor) xscaled u yscaled v;
+xx = origin -- (maxx + 4s, 0) scaled u;
+yy = origin -- (0, 2+s) scaled v;
+
+for x = minx upto maxx - 1:
+    path a, b, c; a = unitsquare xscaled u yscaled (-2v / (x * (x + 1)));
+    b = a shifted (x * u , 2v /x);
+    c = a shifted (-2u, 2v/x);
+
+    forsuffixes @=b, c:
+        fill @ withcolor 1/2[Oranges[8][x], white]; draw @;
+    endfor
+    draw point 0 of b -- (x * u, 0) dashed evenly scaled 1/2;
+    draw (up--down) scaled 3/2 shifted (x * u, 0);
+    if x = maxx - 1:
+        label.top("\vbox{\openup4pt\halign{\hss $#$ \hss\cr1\cdot\left(\frac2n-\frac2{n+1}\right)\cr=\frac2{n(n+1)}\cr}}", point 1/2 of b shifted 8 up);
+        label.bot("\strut $n$", (x * u, -3));
+        label.bot("\strut $n+1$", (x * u + u, -3));
+        draw (up--down) scaled 3/2 shifted (x * u + u, 0);
+        draw point 1 of b -- (x * u + u, 0) dashed evenly scaled 1/2;
+    elseif x = maxx - 2:
+        label.top("$\cdots$", point 1/2 of b);
+        label.bot("\strut $\cdots$", (x * u, -3));
+    else:
+        label.top("$\frac1{" & decimal (1/2 x * (x + 1)) & "}$", point 1/2 of b);
+        label.bot("\strut $" & decimal x & "$", (x * u, -3));
+    fi
+endfor
+z0 = (xpart point 0 of c, 0);
+z1 = (xpart point 1 of c, 0);
+draw point 0 of c -- z0 dashed evenly scaled 1/2;
+draw point 1 of c -- z1 dashed evenly scaled 1/2;
+draw 1.1[z0, z1] -- 1.1[z1, z0];
+
+for y=0 upto 2:
+    draw (left--right) scaled 3/2 shifted (0, y * v);
+    label.lft("$" & decimal y & "$", (0, y * v));
+endfor
+
+
+draw ff withcolor Reds 8 7; label.top("$y=\frac2x$", point 0 of ff) withcolor Reds 8 8;
+drawarrow xx; label.rt("$x$", point 1 of xx);
+drawarrow yy; label.top("$y$", point 1 of yy);
+
+
+label.top("$\frac11 + \frac13 + \frac16 + \frac1{10} + \cdots + \frac2{n(n+1)} + \cdots = 2$", 
+    point 5/2 of bbox currentpicture shifted 34 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Roger B.\@ Nelsen}
 %======================
 \chapter{Miscellaneous}
 
