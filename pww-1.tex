@@ -6727,6 +6727,95 @@ label.top("$\frac11 + \frac13 + \frac16 + \frac1{10} + \cdots + \frac2{n(n+1)} +
 $$
 \vfill
 \contrib{Roger B.\@ Nelsen}
+%--------
+\section{Alternating harmonic series}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric u; u = 300;
+path xx, yy, ff;
+
+ff = (15/16, 16/15) for x = 1 step 1/8 until 9/4: .. (x, 1/x) endfor;
+ff := ff scaled u;
+
+xx = (xpart point 0 of ff, 0) -- (xpart point infinity of ff, 0);
+yy = (point 0 of xx -- point 0 of ff) shifted 21 left;
+
+draw ((1, 0) -- (1, 1)) scaled u;
+draw ((2, 0) -- (2, 1/2)) scaled u;
+
+vardef gcd(expr a, b) = if b = 0: a else: gcd(b, a mod b) fi enddef;
+vardef reduced_fraction(expr N, D) = 
+    save n, d, g; numeric n, d, g;
+    g = gcd(N, D);
+    n = N / g;
+    d = D / g;
+    if d = 1:
+        "$" & decimal n & "$"
+    else:
+        "$\frac{" & decimal n & "}{" & decimal d & "}$"
+    fi
+enddef;
+vardef fh(expr a) = 
+    save s, t;
+    for n = 1 upto 8:
+        numeric t; t = 1/n - 1/(n+1);
+        string s; s = "$" if n>1: & "\frac1" fi & decimal n & "-" & "\frac1" & decimal (n+1) & "$";
+        exitif abs(a-t) < eps;
+    endfor
+    s
+enddef;
+
+vardef partition(expr a, b, c, level) =
+    if level > 0:
+        save box; path box;
+        save w, h; numeric w, h; w = abs(a-b); h = 1/b - c;
+        if h > 0:
+            box = unitsquare xscaled w yscaled h shifted (a, c) scaled u;
+            fill box withcolor 1/4[Oranges[9][level], white]; draw box;
+            if w >= 1/4: label(fh(w*h) , center box); fi
+        fi
+        partition(a, a + 1/2 w, c + h, level - 1);
+        partition(a + 1/2 w, b, c + h, level - 1);
+    fi
+enddef;
+partition(1, 2, 0, 6);
+
+for x = 1 step 1/4 until 2:
+    pair a, b; a = (x,0) scaled u; b = (xpart point 0 of yy, u / x);
+    draw (up--down) scaled 3 shifted a;
+    draw (left--right) scaled 3 shifted b;
+    label.bot("\strut" & reduced_fraction(4x, 4), a shifted 4 down);
+    label.lft("\strut" & reduced_fraction(4, 4x), b shifted 4 left);
+endfor
+    
+draw (left--right) scaled 3 shifted point 0 of yy;
+label.lft("$0$", point 0 of yy shifted 4 left);
+
+draw ff withcolor Reds 8 7;
+label.ulft("$y=\frac1x$", point infinity of ff shifted 8 up) withcolor Reds 8 8 ;
+drawarrow xx; label.rt("$x$", point 1 of xx);
+drawarrow yy; label.top("$y$", point 1 of yy);
+
+label.bot("$\ln2=1-\frac12+\frac13-\frac14+\frac15-\frac16+\cdots$", point 5/2 of bbox currentpicture);
+label.bot(btex
+$\frac12\times\left(\frac23-\frac12\right)=\frac13-\frac14$;\qquad
+$\frac14\times\left(\frac45-\frac23\right)=\frac15-\frac16$;\qquad
+$\frac14\times\left(\frac47-\frac12\right)=\frac17-\frac18$;\qquad$\cdots$
+etex, point 1/2 of bbox currentpicture shifted 13 down);
+label.bot(btex $
+\ln 2 = \int_1^2 \frac1x\,dx 
+      = \left(1-\frac12\right) + \left(\frac13-\frac14\right) + \cdots
+      = 1-\frac12 + \frac13-\frac14 + \cdots$
+etex, point 1/2 of bbox currentpicture shifted 13 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Mark Finklestein}
+
+
 %======================
 \chapter{Miscellaneous}
 
