@@ -6821,6 +6821,89 @@ $$
 
 \minitoc
 
+
+\section{A $2\times2$ determinant is the area of a parallelogram}
+
+\vfill
+$$
+\begin{mplibcode}
+numeric a, b, c, d;
+a = 233; b = 52; c = 85; d = 164;
+z0 = origin;
+z1 = (a, 0);
+z2 = (a, d);
+z3 = (0, d);
+z4 = z2 + (c, 0);
+z6 = z2 + (c, b);
+z8 = z2 + (0, b);
+z5 = (a, b);
+z7 = (c, d);
+
+z9 = whatever[z5, z6]; y9 = y2;
+z11 = whatever[z5, z6]; y11 = y0;
+z10 = whatever[z6, z7]; x10 = x2;
+z12 = whatever[z6, z7]; x12 = x0;
+
+path t[];
+t1 = z0 -- z11 -- z5 -- cycle;
+t2 = z7 --  z9 -- z6 -- cycle;
+t3 = z0 -- z12 -- z7 -- cycle;
+t4 = z5 -- z10 -- z6 -- cycle;
+
+t5 = z11 -- z1 -- z5 -- cycle;
+t6 = z9 -- z4 -- z6 -- cycle;
+t7 = z12 -- z7 -- z3 -- cycle;
+t8 = z10 -- z6 -- z8 -- cycle;
+
+t0 = z2 -- z9 -- z6 -- z10 -- cycle;
+
+fill t1 withcolor Oranges 8 3;
+fill t2 withcolor Oranges 8 2;
+fill t3 withcolor Blues 8 3;
+fill t4 withcolor Blues 8 2;
+fill t7 withcolor Reds 8 3;
+fill t8 withcolor Reds 8 3;
+fill t5 withcolor Greens 8 3;
+fill t6 withcolor Greens 8 3;
+draw t1;
+draw t2;
+draw t3;
+draw t4;
+draw t5;
+draw t6;
+draw t7;
+draw t8;
+
+fill t0 withcolor 1/2[Oranges 8 2, Blues 8 2]; draw t0;
+
+dotlabel.llft("$(0, 0)$", z0);
+dotlabel.lrt ("$(a, 0)$", z1);
+dotlabel.llft("$(a, d)$", z2);
+dotlabel.ulft("$(0, d)$", z3);
+dotlabel.lrt("$(a+c, d)$", z4);
+dotlabel.top("$(a+c, b+d)$", z6);
+dotlabel.top("$(a, b+d)$", z8);
+
+numeric s; s = 1/8;
+
+picture ad, bc, pg, t;
+ad = image(draw (z0--z1--z2--z3--cycle) scaled s);
+bc = image(draw (z2--z4--z6--z8--cycle) scaled s);
+pg = image(draw (z0--z5--z6--z7--cycle) scaled s);
+t = TEX("$\left|\,\vcenter{\halign{\hss$#$\hss&\quad\hss$#$\hss\cr a&b\cr c&d\cr}}\,\right|=ad-bc={}$");
+t := image(draw t; label.rt(ad,        point 3/2 of bbox t)); 
+t := image(draw t; label.rt("${}-{}$", point 3/2 of bbox t));
+t := image(draw t; label.rt(bc,        point 3/2 of bbox t));
+t := image(draw t; label.rt("${}={}$", point 3/2 of bbox t));
+t := image(draw t; label.rt(pg,        point 3/2 of bbox t));
+label.bot(t, point 1/2 of bbox currentpicture shifted 55 down);
+
+\end{mplibcode}
+$$
+\vfill
+\contrib{Solomon W.\@ Golomb}
+
+%-------
 \section{The problem of the calissons}
 
 \vfill
