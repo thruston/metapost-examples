@@ -19,7 +19,7 @@ endfig;}
 \def\slope{\mathop{\mathrm m}\nolimits}
 %--------------------
 \title{Proofs without words I\\[6pt]{\Large Exercises in \MP}}
-\date{March 2021 —\\[4in]
+\date{March 2021 — September 2022\\[4in]
 \centerline{\begin{mplibcode}
     path t[], h;
     numeric r; r = -30;
@@ -6815,6 +6815,83 @@ $$
 \vfill
 \contrib{Mark Finklestein}
 
+\section{Sum of sines}
+
+\vfill\[\begin{mplibcode}
+path xx, yy, arc; numeric r, n, theta;
+r = 300;
+xx = 30 left -- (20+r) * right;
+yy = xx rotated 90;
+arc = quartercircle scaled 2r;
+
+n = 4;
+theta = 8;
+for i = 0 upto n:
+    z[i] = point (2i+1) * theta / 45 of arc;
+endfor
+
+vardef pin(expr p, o, z) = 
+    draw z + o .. z withpen pencircle scaled 1/4;
+    label.urt(p, o + z);
+enddef;
+
+
+for i = 0 upto n:
+    draw origin -- z[i];
+    draw (0, y[i]) -- z[i] dashed evenly;
+    path t;
+    if i > 0:
+        t = z[i] -- (x[i], y[i-1]) -- z[i-1] -- cycle;
+        if i <> n - 1:
+            pin("$2\sin\theta$", 
+            8 unitvector(direction 5/2 of t rotated -90), 
+            point 5/2 of t);
+            picture p;
+            p = thelabel.lft("$2\sin\theta\cos" 
+            & if i = n: "2n" else: decimal 2i fi
+            & "\theta$", point 1/2 of t);
+            unfill bbox p; draw p;
+        else:
+            label.lft("$\dots$", point 1/2 of t);
+        fi
+    else:
+        t = z0 -- (x0, 0);
+        pin("$\sin\theta$", 8 dir 10, point 1/2 of t);
+    fi
+    draw t;
+endfor
+
+draw arc withcolor Reds 8 7;
+drawarrow xx;
+drawarrow yy;
+
+label("$\theta$", 1/4 r * dir 1/2 theta) withcolor Blues 8 7;
+for i=1 upto n:
+    picture t; 
+    t = thelabel(if i+1=n: "$\dots$" else: "$2\theta$" fi, 1/4 r * dir (2i * theta)); 
+    unfill bbox t; draw t withcolor Blues 8 7;
+
+endfor
+
+label("$2\theta$", 48 dir (270+theta) shifted point 3/45 theta of arc) withcolor Blues 8 7;
+label("$4\theta$", 32 dir (270+2theta) shifted point 5/45 theta of arc) withcolor Blues 8 7;
+label("$\dots$",   22 dir (270+3theta) shifted point 7/45 theta of arc) withcolor Blues 8 7;
+label("$2n\theta$", 22 dir (270+4theta) shifted point 9/45 theta of arc) withcolor Blues 8 7;
+
+
+
+
+labeloffset := 8;
+dotlabel.llft("$0$", origin);
+dotlabel.bot("$1$", (r, 0));
+dotlabel.lft("$\sin\,(2n+1)\theta$", (0, r * sind((2n+1)*theta)));
+
+label.top("$\displaystyle\sin\,(2n+1)\theta = \sint + 2\sint \sum_{k=1}^{n} \cos 2k\theta$",
+            point 5/2 of bbox currentpicture shifted 21 up);
+
+
+\end{mplibcode}\]\vfill
+\contrib{J.\@ Chris Fisher \& E.\@ L.\@ Koh}
 
 %======================
 \chapter{Miscellaneous}
