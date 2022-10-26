@@ -1,0 +1,87 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage{unicode-math}
+\usepackage{luamplib}
+% turn on automatic TeX labels
+\mplibtextextlabel{enable}
+% add at the start/end of each fig
+\everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}
+\everyendmplib{endfig;}
+%
+%\usepackage{shortvrb}\MakeShortVerb{"}
+\usepackage{mflogo}
+\title{Excursions in \MP}
+\author{Toby Thurston}
+\date{October 2022 —}
+\begin{document}
+\maketitle
+
+\noindent
+This example document includes geometric illustrations inspired by
+\textsl{Excursions in Geometry}, C.\@ Stanley Ogilvy, OUP 1968.
+The illustrations are presented roughly in the same order as the book, with notes
+about how you can use \MP\ to produce similar.  The section heading also
+approximately follow the book.  You might like to read the PDF of
+this document side by side with the source code, so that you can see how each
+illustration is done.  Each illustration is included as in-line \MP\ code, there are
+no external graphics files used.
+
+\section{A bit of background}
+
+Ogilvie starts with a review of some circle theorems.  In fact most of the book is
+about circles in one way or another.
+
+In this first diagram, you are given the width $AB$ of the screen and the ideal viewing angle $\theta$.
+The \MP\ code works out the rest from that, including a useful routine for a circle through three points.
+$$
+\begin{mplibcode}
+numeric theta;
+pair A, B, V, U;
+path c;
+
+% given: width of the screen and ideal viewing angle
+A = -B = 60 left;
+theta = 42;  
+
+% use sine rule to find V
+V = sind(90 - 1/2 theta) / sind(theta) * abs (A-B) * dir (1/2 theta - 90) shifted A;
+
+vardef circle_through(expr a, b, c) = 
+   save m; pair m; m = whatever * (a-b) rotated 90 shifted 1/2[a,b]
+                     = whatever * (a-c) rotated 90 shifted 1/2[a,c];
+   fullcircle scaled 2 abs (a-m) shifted m
+enddef;
+
+c = circle_through(A, B, V);
+
+U = point 4.8 of c;
+
+draw A -- V -- B -- U -- A;
+draw A--B withpen pencircle scaled 1;
+
+clip currentpicture to c; % clip the thick pen
+draw c withcolor Blues 8 4;
+
+label.top("\small Screen", 1/2[A, B]);
+forsuffixes $ = U, V:
+    label("$\theta$", $ + 13 * dir (1/2 theta + angle (B - $))) withcolor Reds 8 7;
+endfor
+forsuffixes $ = A, B, U, V:
+    label(str $, $ shifted - center c scaled 1.08 shifted center c); 
+endfor
+\end{mplibcode}
+$$
+Here $\theta$ is half the angle measured by the intercepted arc, which gives us the useful corollary that 
+any angle inscribed in a semicircle is a right angle, and conversely that if you can show that some angle $ACB$
+    is a right angle, then the semicircle drawn with $AB$ as a diameter must pass through $C$.
+$$
+\begin{mplibcode}
+pair A, B, C; C = origin; B = 150 dir -50; A = 80 dir -140;
+draw halfcircle scaled abs (B-A) rotated angle (B-A) shifted 1/2[B, A] withcolor Blues 8 4;
+draw A -- B -- C -- cycle;
+forsuffixes $ = A, B, C:
+    label(str $, $ shifted - 1/2[A,B] scaled 1.08 shifted 1/2[A,B]); 
+endfor
+\end{mplibcode}
+$$
+
+\end{document}

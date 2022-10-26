@@ -1,11 +1,18 @@
 # metapost-examples
 
-Some example documents and drawings, showing off what you can do with Metapost and `luamplib`.
+Some example documents and drawings, showing off what you can do with Metapost and
+`luamplib`.  My TeX / Metapost source files are covered by the GNU Public License V3.
+This means you can use them for any non-commercial purpose.
 
 ## PWW-1 and PWW-2
 
 These two documents are attempts to re-draw some of the drawings from Roger Nelsen's "Proofs
-without words" books.  The intent is to provide a tutorial to drawing with plain
+without words" books. 
+
+- `pww-1.tex`
+- `pww-2.tex`
+
+The intent is to provide a tutorial to drawing with plain
 Metapost, as well as to show what can be done with `mplib` and `lualatex`.  The
 source of each PDF files is a single tex file with each drawing as a separate
 `mplib` environment.  The files use a few external Metapost files, that include:
@@ -17,15 +24,20 @@ source of each PDF files is a single tex file with each drawing as a separate
 - `paintball.mp` -- draws slightly-solid balls
 - `thatch.mp` -- a simple hatching routine
 
-You will also need the `metapost-colorbrewer` package installed, and the TeX
-Gyre Pagella and TeX Gyre Pagella Math fonts installed and available to
-`fontspec`.
+You will also need the `metapost-colorbrewer` package installed (this is part of any
+full TeX distribution), and the TeX Gyre Pagella and TeX Gyre Pagella Math fonts
+installed and available to `fontspec`.
 
 The documents are strictly for educational and tutorial purposes only.  All the
 original books and therefore all the pictures are copyrighted by the
-Mathematical Association of America. My Metapost source files are covered by
-the GNU Public License V3.  This means you can use them for any non-commercial
-purpose.
+Mathematical Association of America.
+
+# Excursions
+
+This document has drawings and notes (about the drawings) inspired by Stanley
+Ogilvie's "Excursions in Geometry".
+
+- `excursions.tex`
 
 ## Tutorial Examples
 
