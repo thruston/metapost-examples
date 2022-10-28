@@ -76,7 +76,10 @@ any angle inscribed in a semicircle is a right angle, and conversely that if you
 $$
 \begin{mplibcode}
 pair A, B, C; C = origin; B = 150 dir -50; A = 80 dir -140;
-draw halfcircle scaled abs (B-A) rotated angle (B-A) shifted 1/2[B, A] withcolor Blues 8 4;
+% you can do a "semicircle drawn with AB as a diameter" like this
+draw halfcircle scaled abs (B-A) 
+                rotated angle (B-A) 
+                shifted 1/2[B, A] withcolor Blues 8 4;
 draw A -- B -- C -- cycle;
 forsuffixes $ = A, B, C:
     label(str $, $ shifted - 1/2[A,B] scaled 1.08 shifted 1/2[A,B]); 
@@ -84,4 +87,113 @@ endfor
 \end{mplibcode}
 $$
 
+\smallskip\noindent
+A basic theorem: If two chords intersect, the product of the lengths of the segments of 
+the one equals the product of the lengths of the segments of the other. In all three cases
+below you have $PA/PD = PC/PB$ by similar triangles, hence $PA\cdot PB=PC\cdot PD$.
+$$
+\begin{mplibcode}
+path base; base = fullcircle scaled 120;
+picture P[];
+P1 = image(
+    numeric d; d = 0.2;
+    pair A, B, C, D, P;
+    A = point 5 of base;
+    B = point 2.5 of base;
+    C = point 4 + d of base;
+    D = point 8 - d of base;
+
+    P = whatever[A, B] = whatever[C, D];
+
+    draw C -- A -- D -- B dashed evenly scaled 1/2 
+        withpen pencircle scaled 1/4
+        withcolor 3/4;
+    draw C -- D;
+    draw A -- B;
+
+    forsuffixes $ = A, B, C, D:
+        label("$" & str $ & "$", $ scaled 1.1); 
+    endfor
+    label.lrt("$P$", P);
+
+    drawoptions(withcolor Reds 7 6);
+    label("$\scriptscriptstyle\alpha$", B shifted 4 (unitvector(A-B) + unitvector (D-B)));
+    label("$\scriptscriptstyle\alpha$", C shifted 4 (unitvector(A-C) + unitvector (D-C)));
+    label("$\scriptscriptstyle\beta$",  P shifted 4 (unitvector(A-P) + unitvector (C-P)));
+    label("$\scriptscriptstyle\beta$",  P shifted 4 (unitvector(B-P) + unitvector (D-P)));
+    drawoptions();
+    draw base withcolor Blues 8 4;
+    label.urt("I.", lrcorner currentpicture) withcolor Purples 7 7;
+);
+P2 = image(
+    numeric d; d = 0.9;
+    pair A, B, C, D, P;
+    A = point 3.8 of base;
+    B = point 2 of base;
+    C = point 4 + d of base;
+    D = point 8 - d of base;
+
+    P = whatever[A, B] = whatever[C, D];
+
+    draw B -- (1 + 12 / abs(B-P))[B, P];
+    draw D -- (1 + 12 / abs(D-P))[D, P];
+
+    label.ulft("$A$", A);
+    label.top ("$B$", B);
+    label.llft("$C$", C);
+    label.lrt ("$D$", D);
+    label.ulft("$P$", P);
+
+    draw base withcolor Blues 8 4;
+    label.urt("II.", lrcorner currentpicture) withcolor Purples 7 7;
+);
+P3 = image(
+    numeric d, t; d = 0.7; t = 2.6;
+    pair A, B, C, D, P;
+    A = B = point t of base;
+    C = point 4 + d of base;
+    D = point 8 - d of base;
+
+    P = whatever[B, B shifted direction t of base] = whatever[C, D];
+
+    draw B -- (1 + 14 / abs(B-P))[B, P];
+    draw D -- (1 + 14 / abs(D-P))[D, P];
+
+    label.ulft("$A,B$", A);
+    label.llft("$C$", C);
+    label.lrt ("$D$", D);
+    label.ulft("$P$", P);
+    draw base withcolor Blues 8 4;
+    label.urt("III.", lrcorner currentpicture) withcolor Purples 7 7;
+);
+
+interim labeloffset := 34;
+label.ulft(P1, origin);
+label.urt (P2, origin);
+label.bot (P3, origin);
+\end{mplibcode}
+$$
+\centerline{This example also shows how to arrange sub-figures into one.}
+\clearpage
+\section{Harmonic division and Apollonian circles}
+
+Can we find $C$ and $D$ on the line $AB$ so that $AC/CB = AD/BD$? 
+
+\medskip\noindent
+Yes:
+$$
+\begin{mplibcode}
+pair A, B, C, D;
+A = origin;
+B = 120 right;
+C = 3/4[A, B];
+D = 3/2[A, B];
+
+draw A--D;
+forsuffixes $ = A, B, C, D:
+    draw (up--down) scaled 2 shifted $;
+    label.bot("$" & str $ & "$", $);
+endfor
+\end{mplibcode}
+$$
 \end{document}
