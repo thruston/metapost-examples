@@ -185,15 +185,49 @@ $$
 \begin{mplibcode}
 pair A, B, C, D;
 A = origin;
-B = 120 right;
-C = 3/4[A, B];
-D = 3/2[A, B];
+numeric a, b, c;
+a = 150; b = 50; c * a / b = a + b + c;
+B = (a+b, 0);
+C = (a, 0);
+D = (a+b+c, 0);
 
 draw A--D;
 forsuffixes $ = A, B, C, D:
     draw (up--down) scaled 2 shifted $;
     label.bot("$" & str $ & "$", $);
 endfor
+\end{mplibcode}
+$$
+
+$$ % Fig 8 in the book
+\begin{mplibcode}
+pair A, B, C, D, M, P;
+A = origin;
+numeric a, b, c;
+a = 180; b = 57; c * a / b = a + b + c;
+B = (a+b, 0);
+C = (a, 0);
+D = (a+b+c, 0);
+M = 1/2[C, D];
+P = point 2.178 of halfcircle scaled abs (C - D) shifted M;
+
+draw C -- P -- D dashed evenly scaled 1/2 
+                 withpen pencircle scaled 1/4
+                 withcolor 3/4;
+draw A -- (1+26/abs(A-P))[A, P];
+draw B -- P;
+draw A--D;
+forsuffixes $ = A, B, C, D:
+    label.bot("$" & str $ & "$", $);
+endfor
+label.ulft("$P$", P);
+drawoptions(withcolor Reds 7 6);
+label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(A-P) + unitvector (C-P)));
+label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(C-P) + unitvector (B-P)));
+label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(B-P) + unitvector (D-P)));
+label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(P-A) + unitvector (D-P)));
+drawoptions();
+    
 \end{mplibcode}
 $$
 \end{document}
