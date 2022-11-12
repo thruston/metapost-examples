@@ -199,17 +199,24 @@ endfor
 \end{mplibcode}
 $$
 
+\bigskip
+\textit{Theorem}. The bisector of any angle of a triangle divides
+the opposite side into parts proportional to the adjacent sides.
+So given $P$, with $AP=k$ and $BP=1$:
 $$ % Fig 8 in the book
 \begin{mplibcode}
-pair A, B, C, D, M, P;
+pair A, B, C, D, P;
 A = origin;
-numeric a, b, c;
-a = 180; b = 57; c * a / b = a + b + c;
+numeric a, b, c, k;
+a = 180; b = 50; c * a / b = a + b + c;
 B = (a+b, 0);
 C = (a, 0);
 D = (a+b+c, 0);
-M = 1/2[C, D];
-P = point 2.178 of halfcircle scaled abs (C - D) shifted M;
+k = a / b;
+path aa, bb; 
+aa = fullcircle scaled 144k shifted A;
+bb = fullcircle scaled 144  shifted B;
+P = aa intersectionpoint bb;
 
 draw C -- P -- D dashed evenly scaled 1/2 
                  withpen pencircle scaled 1/4
@@ -218,16 +225,68 @@ draw A -- (1+26/abs(A-P))[A, P];
 draw B -- P;
 draw A--D;
 forsuffixes $ = A, B, C, D:
-    label.bot("$" & str $ & "$", $);
+    dotlabel.bot("$" & str $ & "$", $);
 endfor
-label.ulft("$P$", P);
+dotlabel.ulft("$P$", P);
+label.ulft("$k$", 1/2[A, P]);
+label.rt("$1$", 1/2[B, P]);
 drawoptions(withcolor Reds 7 6);
 label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(A-P) + unitvector (C-P)));
 label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(C-P) + unitvector (B-P)));
 label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(B-P) + unitvector (D-P)));
 label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(P-A) + unitvector (D-P)));
 drawoptions();
-    
+\end{mplibcode}
+$$
+We have $AC/CB = AP/BP = k$ from the interior angles and $AD/BD = AP/BP = k$ from the exterior pair.
+The proof looks like this:
+$$
+\begin{mplibcode}
+pair A, B, C, D, P, E, F, G, H;
+A = origin;
+numeric a, b, c, k;
+a = 180; b = 50; c * a / b = a + b + c;
+B = (a+b, 0);
+C = (a, 0);
+D = (a+b+c, 0);
+k = a / b;
+path aa, bb; 
+aa = fullcircle scaled 144k shifted A;
+bb = fullcircle scaled 144  shifted B;
+P = aa intersectionpoint bb;
+
+E = whatever[A, P]; E - B = whatever * (P - C);
+F = whatever[B, E] = whatever[P, D];
+G = whatever[A, P]; G - B = whatever * (P - D);
+H = whatever[B, G] = whatever[P, C];
+
+draw unitsquare scaled 5 rotated angle (E-F) shifted F 
+                 withpen pencircle scaled 1/4
+                 withcolor 3/4;
+draw unitsquare scaled 5 rotated angle (P-H) shifted H 
+                 withpen pencircle scaled 1/4
+                 withcolor 3/4;
+draw C -- P -- D dashed evenly scaled 1/2 
+                 withpen pencircle scaled 1/4
+                 withcolor 1/2;
+draw G -- B -- E dashed evenly scaled 1/2 
+                 withpen pencircle scaled 1/4
+                 withcolor 1/2;
+draw A -- (1+20/abs(A-E))[A, E];
+draw B -- P;
+draw A--D;
+forsuffixes $ = A, B, C, D:
+    dotlabel.bot("$" & str $ & "$", $);
+endfor
+forsuffixes $ = E, G, P:
+    dotlabel.ulft("$" & str $ & "$", $);
+endfor
+drawoptions(withcolor Reds 7 6);
+label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(A-P) + unitvector (C-P)));
+label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(C-P) + unitvector (B-P)));
+label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(B-P) + unitvector (D-P)));
+label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(P-A) + unitvector (D-P)));
+drawoptions();
 \end{mplibcode}
 $$
 \end{document}
