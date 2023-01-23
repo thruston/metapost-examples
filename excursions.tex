@@ -1,6 +1,7 @@
 \documentclass[a4paper]{scrartcl}
 \usepackage{unicode-math}
 \usepackage{luamplib}
+\usepackage{dwmpcode}
 % turn on automatic TeX labels
 \mplibtextextlabel{enable}
 % add at the start/end of each fig
@@ -199,9 +200,11 @@ endfor
 \end{mplibcode}
 $$
 
-\bigskip
+\bigskip\noindent
 \textit{Theorem}. The bisector of any angle of a triangle divides
 the opposite side into parts proportional to the adjacent sides.
+
+\smallskip\noindent
 So given $P$, with $AP=k$ and $BP=1$:
 $$ % Fig 8 in the book
 \begin{mplibcode}
@@ -281,6 +284,7 @@ endfor
 forsuffixes $ = E, G, P:
     dotlabel.ulft("$" & str $ & "$", $);
 endfor
+label.rt("\ $F$",F);
 drawoptions(withcolor Reds 7 6);
 label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(A-P) + unitvector (C-P)));
 label("$\scriptscriptstyle\alpha$", P shifted 8 (unitvector(C-P) + unitvector (B-P)));
@@ -289,4 +293,83 @@ label("$\scriptscriptstyle\beta$",  P shifted 6 (unitvector(P-A) + unitvector (D
 drawoptions();
 \end{mplibcode}
 $$
+Since the lines $PC$ and $PD$ are bisectors, then we have $2\alpha + 2\beta = 180°$,
+hence $\alpha+\beta$ is a right angle, so if we draw $BE$ parallel to $PC$ it will
+be perpendicular to $PD$, and hence the two triangles $PFE$ and $PFB$ are congruent,
+so that $PE=PB$.  But the parallel lines cut off proportional segments, so that 
+$$
+\frac{AC}{CB} = \frac{AP}{PE} = \frac{AP}{BP}
+$$
+as required.  And using the exterior angle
+$$
+\frac{AD}{BD} = \frac{AP}{GP} = \frac{AP}{BP}
+$$
+
+\clearpage
+\subsection{Applied Apollonian example}
+
+Given $A$, $B$, $k$, and course of the target, find intersection point $Q$.
+$$
+\begin{mplibcode}
+pair A, B, C, D, P, Q;
+A = origin; B = 180 right; k = 2;
+C = (k/(k+1))[A, B];
+D = (k/(k-1))[A, B];
+path app; 
+app = fullcircle scaled length (C-D) shifted 1/2[C,D];
+P = point 2.236 of app;
+Q = app intersectionpoint (B -- B + 1024 dir -60);
+%Q = point 6 of app;
+draw app withcolor 3/4[blue, white];
+draw A -- D -- P -- cycle;
+draw B -- P -- C;
+numeric r; r = 3/8;
+draw r[B, Q] -- Q -- r[A, Q] withpen pencircle scaled 1/4 dashed evenly;
+drawarrow B -- r[B, Q];
+drawarrow A -- r[A, Q];
+% label.ulft("$" & decimal (length (P-A) / length (P-B)) & "$", 1/2[A, P]);
+% numeric alpha; alpha = angle (Q-A);
+% label(decimal alpha, A + 30 dir 1/2 alpha);
+label.lft ("$A$", A);
+label.ulft("$B$", B);
+label.ulft("$C$", C);
+label.rt  ("$D$", D);
+label.top ("$P$", P);
+label.lrt ("$Q$", Q);
+    drawoptions(withcolor 3/4 red);
+       label.top("$a$", 1/2[A,C]); 
+       label.top("$b$", 1/2[B,C]); 
+       label.top("$c$", 1/2[B,D]); 
+    drawoptions();
+\end{mplibcode}
+$$
+But how can you find $C$ and $D$ in \MP\ given $A$, $B$, and $k$?  Using
+\textcolor{textred}{$a$}, 
+\textcolor{textred}{$b$}, and 
+\textcolor{textred}{$c$} 
+for the lengths as shown above, then using the mediation syntax,
+point $C$ is \mpl{(a/(a+b))[A, B]} and $D$ is \mpl{((a+b+c)/(a+b))[A, B]}, so what
+are these fractions in terms of $k$?
+We know that $AC/CB=AD/BD=k$ so we have 
+$a/b = (a+b+c)/c = k$ which we can develop as follows.
+
+Starting with $a/b=k$, add 1 to each side, $a/b + b/b = k + 1$, hence $(a+b)/b = k +
+1$.  We can then divide the first equation by the last to get $a/(a+b) = k/(k+1)$.
+
+Similarly, starting with $(a+b+c)/c = k$, take 1 away from each side to get
+$(a+b+c)/c - c/c = k - 1$, hence $(a+b)/c = k-1$.  And again dividing the first by
+the last gives $(a+b+c)/(a+b) = k / (k-1)$. 
+
+\smallskip\noindent
+So our \MP\ expressions for points $C$ and $D$ can be written like this:
+\begin{code}
+    C = (k/(k+1))[A, B]; D = (k/(k-1))[A, B];
+\end{code}
+If $k=1$ you will get a “Division by zero” error from the second expression.
+This corresponds to $D$ at infinity and $C$ half way from $A$ to $B$.  The circle
+through these two points can be thought of as the perpendicular bisector of $A$ and
+$B$. If you have $0 < k < 1$ then the circle will be round $A$ not $B$.  If $k<0$
+the positions of $C$ and $D$ will be swapped, and there is another error when
+$k=-1$.
+
 \end{document}
