@@ -320,7 +320,7 @@ app = fullcircle scaled length (C-D) shifted 1/2[C,D];
 P = point 2.236 of app;
 Q = app intersectionpoint (B -- B + 1024 dir -60);
 %Q = point 6 of app;
-draw app withcolor 3/4[blue, white];
+draw app withcolor Blues 7 4;
 draw A -- D -- P -- cycle;
 draw B -- P -- C;
 numeric r; r = 3/8;
@@ -336,7 +336,7 @@ label.ulft("$C$", C);
 label.rt  ("$D$", D);
 label.top ("$P$", P);
 label.lrt ("$Q$", Q);
-    drawoptions(withcolor 3/4 red);
+    drawoptions(withcolor Reds 8 7);
        label.top("$a$", 1/2[A,C]); 
        label.top("$b$", 1/2[B,C]); 
        label.top("$c$", 1/2[B,D]); 
@@ -372,4 +372,34 @@ $B$. If you have $0 < k < 1$ then the circle will be round $A$ not $B$.  If $k<0
 the positions of $C$ and $D$ will be swapped, and there is another error when
 $k=-1$.
 
+\newpage
+Armed with these expressions, you can draw a family of non-intersection coaxial
+Apollonian circles.
+$$
+\begin{mplibcode}
+pair A, B; A = -B = 42 left;
+draw (left -- right) scaled 400;
+dotlabel.bot("$A$", A); 
+dotlabel.bot("$B$", B); 
+drawoptions(withcolor Blues 7 4);
+for i = -4 upto 4:
+    if i = 0:
+        draw (up--down) scaled 400;
+    else:
+        numeric k; pair C, D; path ac;
+        k = 2**(i/2);
+        C = (k/(k+1))[A, B]; D = (k/(k-1))[A, B];
+        ac = fullcircle scaled abs(C-D) shifted 1/2[C,D];
+        draw ac; 
+    fi
+    pair E; E = (0, 32i); draw fullcircle scaled 2 abs(E-A) shifted E;
+endfor
+drawoptions();
+numeric wd; wd = \mpdim\textwidth;
+clip currentpicture to unitsquare shifted -(1/2, 1/2) scaled wd yscaled 5/8; 
+\end{mplibcode}
+$$
+The circles on the left are drawn with $0<k<1$ and those on the right with $k>1$.
+The circles drawn with a given $k$ is the mirror image of one drawn with $1/k$; so the smallest
+circle around $A$ is drawn with $k=1/4$ and the corresponding smallest circle around $B$ has $k=4$.
 \end{document}
