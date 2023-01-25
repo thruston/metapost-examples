@@ -392,7 +392,6 @@ for i = -4 upto 4:
         ac = fullcircle scaled abs(C-D) shifted 1/2[C,D];
         draw ac; 
     fi
-    pair E; E = (0, 32i); draw fullcircle scaled 2 abs(E-A) shifted E;
 endfor
 drawoptions();
 numeric wd; wd = \mpdim\textwidth;
@@ -402,4 +401,30 @@ $$
 The circles on the left are drawn with $0<k<1$ and those on the right with $k>1$.
 The circles drawn with a given $k$ is the mirror image of one drawn with $1/k$; so the smallest
 circle around $A$ is drawn with $k=1/4$ and the corresponding smallest circle around $B$ has $k=4$.
+
+Next consider orthogonal circles, where the tangents at the intersections are at
+right angles to each other.  
+$$
+\begin{mplibcode}
+path c[]; numeric r[]; pair o[]; t = 7/8;
+r1 = 64; r2 = 50; o1 = origin;
+c1 = fullcircle scaled 2r1 shifted o1;
+o2 = -r2 * unitvector (direction t of c1) shifted point t of c1;
+c2 = fullcircle scaled 2r2 shifted o2;
+draw o1 -- o2 -- point t of c1 -- cycle withpen pencircle scaled 1/4;
+draw c1 withcolor Oranges 8 7;
+draw c2 withcolor Blues 8 7;
+dotlabel.bot("$O_1$", o1);
+dotlabel.lrt("$O_2$", o2);
+label.ulft("$r_1$", 1/2[o1, point t of c1]);
+label.urt("$r_2$", 1/2[o2, point t of c1]);
+\end{mplibcode}
+$$
+Given $O_1$, $r_1$, and $r_2$, you can find $O_2$ in \MP\ with:
+\begin{code}
+c1 = fullcircle scaled 2 r1 shifted o1;
+o2 = unitvector (direction t of c1) scaled r2 shifted point t of c1;
+\end{code}
+where $t$ is the desired time on $C_1$ for a point of intersection.
+
 \end{document}
