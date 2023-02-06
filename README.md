@@ -35,7 +35,10 @@ Mathematical Association of America.
 # Excursions
 
 This document has drawings and notes (about the drawings) inspired by Stanley
-Ogilvie's "Excursions in Geometry".
+Ogilvie's "Excursions in Geometry".  The drawings are mainly about the geometry of
+the circle, and techniques of inversion.  This file is a self-contained lualatex
+source file, with each drawing included in-line.  You might like to read the source
+in parallel to the output. 
 
 - `excursions.tex`
 

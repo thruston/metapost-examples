@@ -360,7 +360,7 @@ Similarly, starting with $(a+b+c)/c = k$, take 1 away from each side to get
 $(a+b+c)/c - c/c = k - 1$, hence $(a+b)/c = k-1$.  And again dividing the first by
 the last gives $(a+b+c)/(a+b) = k / (k-1)$. 
 
-\smallskip\noindent
+\vfill\noindent
 So our \MP\ expressions for points $C$ and $D$ can be written like this:
 \begin{code}
     C = (k/(k+1))[A, B]; D = (k/(k-1))[A, B];
@@ -372,11 +372,10 @@ $B$. If you have $0 < k < 1$ then the circle will be round $A$ not $B$.  If $k<0
 the positions of $C$ and $D$ will be swapped, and there is another error when
 $k=-1$.
 
-\newpage
-Armed with these expressions, you can draw a family of non-intersection coaxial
-Apollonian circles.
+\subsection{Coaxial families}
 $$
 \begin{mplibcode}
+
 pair A, B; A = -B = 42 left;
 draw (left -- right) scaled 400;
 dotlabel.bot("$A$", A); 
@@ -402,7 +401,8 @@ The circles on the left are drawn with $0<k<1$ and those on the right with $k>1$
 The circles drawn with a given $k$ is the mirror image of one drawn with $1/k$; so the smallest
 circle around $A$ is drawn with $k=1/4$ and the corresponding smallest circle around $B$ has $k=4$.
 
-Next consider orthogonal circles, where the tangents at the intersections are at
+\vfill\noindent
+The tangents at the intersections of orthogonal circles are at
 right angles to each other.  
 $$
 \begin{mplibcode}
@@ -412,8 +412,8 @@ c1 = fullcircle scaled 2r1 shifted o1;
 o2 = -r2 * unitvector (direction t of c1) shifted point t of c1;
 c2 = fullcircle scaled 2r2 shifted o2;
 draw o1 -- o2 -- point t of c1 -- cycle withpen pencircle scaled 1/4;
-draw c1 withcolor Oranges 8 7;
-draw c2 withcolor Blues 8 7;
+draw c1 withcolor Blues 8 6;
+draw c2 withcolor Oranges 8 6;
 dotlabel.bot("$O_1$", o1);
 dotlabel.lrt("$O_2$", o2);
 label.ulft("$r_1$", 1/2[o1, point t of c1]);
@@ -427,4 +427,191 @@ o2 = unitvector (direction t of c1) scaled r2 shifted point t of c1;
 \end{code}
 where $t$ is the desired time on $C_1$ for a point of intersection.
 
+\newpage
+If you consider a circle with radius $r$ and diameter $AB$, where $AB$ is divided
+harmonically then you have (with red braces for the labels): 
+$$
+\begin{mplibcode}
+numeric r, k; k = 3.1415; r = 84;
+pair A, B, C, D; 
+-A = B = (r, 0);
+C = (k/(k+1))[A, B]; 
+D = (k/(k-1))[A, B];
+draw subpath (-1/2, 1/2) of fullcircle scaled 2r withcolor Blues 8 3;
+draw subpath (4-1/2, 4+1/2) of fullcircle scaled 2r withcolor Blues 8 3;
+draw A--D;
+dotlabel.bot("$A$", A); 
+dotlabel.bot("$B$", B); 
+dotlabel.bot("$C$", C); 
+dotlabel.bot("$D$", D); 
+dotlabel.bot("$O$", origin); 
+
+vardef on_brace(expr a,b,m,r,s) =
+    save d, e, n, bb; numeric d, n; pair e; path bb;
+    n = 1/2 m; d = angle (b-a);
+    e = up scaled m rotated d shifted r[a,b];
+    bb = (
+          (origin {up} .. {right} (abs n,n)) rotated d shifted a 
+          --
+          ((-abs n,-n){right} .. {up} origin {down} .. {right}(abs n,-n)) rotated d shifted e 
+          --
+          ((-abs n,n){right} .. {down} origin) rotated d shifted b
+         ) shifted (up scaled n rotated d);
+    draw bb withpen pencircle yscaled .6 xscaled .1666 rotated d withcolor s;
+    point 3 of bb
+enddef;
+
+label.top("$r$", on_brace(A + up, up shifted 1/4 left, 4, 1/2, Reds 7 6));
+label.top("$r$", on_brace(up shifted 1/4 right, up + B, 4, 1/2, Reds 7 6));
+
+\end{mplibcode}
+$$
+and so you can write
+$
+\frac{AC}{CB}=\frac{AD}{BD}$ as $\frac{r+OC}{r-OC} = \frac{OD+r}{OD-r}$
+and hence
+$r^2 = OC\cdot OD$.  And this expression is therefore \textit{equivalent} to the
+statement that the division is harmonic, and if a circle is drawn with $AB$ as a
+diameter, \textit{any} circle drawn through $C$ and $D$ will be orthogonal.
+$$
+\begin{mplibcode}
+vardef through@#(expr a, b) = save d; numeric d; 
+    d = abs(b-a); (1+@#/d)[b,a] -- (1+@#/d)[a,b]
+enddef;
+vardef circle_through(expr a, b, c) = save o; pair o;
+    o = whatever * (b-a) rotated 90 shifted 1/2[a,b] 
+      = whatever * (c-b) rotated 90 shifted 1/2[b,c];
+    fullcircle scaled 2 abs(a-o) shifted o
+enddef;
+numeric r, k, q; k = 3.1415; r = 84;
+pair A, B, C, D, T, U, X, Y; 
+-A = B = (r, 0);
+C = (k/(k+1))[A, B]; 
+D = (k/(k-1))[A, B]; 
+path alpha, beta;
+alpha = fullcircle scaled 2r rotated 54; 
+T = point 0 of alpha;
+beta = circle_through(T, C, D);
+U = alpha intersectionpoint beta;
+
+
+draw origin -- alpha withcolor Blues 8 6;
+draw beta withcolor Oranges 8 6;
+draw through10(A,D);
+dotlabel.ulft("$A$", A); 
+dotlabel.urt ("$B$", B); 
+dotlabel.urt ("$C$", C); 
+dotlabel.ulft("$D$", D); 
+dotlabel.top("\strut $T$", T); 
+dotlabel.bot("\strut\ $U$", U); 
+dotlabel.bot("$O$", origin); 
+
+label.ulft("$r$", 1/2 T);
+label.ulft("$\alpha$", point 1.5 of alpha);
+label.urt("$\beta$", point 1 of beta);
+
+
+\end{mplibcode}
+$$
+Two useful routines are used in this drawing.
+\begin{itemize}
+    \item Return the path of a line through two points, with a small overlap at each end.
+\begin{code}
+vardef through(expr a, b, o) = save d; numeric d; 
+    d = abs(b-a); (1+o/d)[b,a] -- (1+o/d)[a,b]
+enddef;
+\end{code}
+\item Return the path of the (unique) circle through three points.
+\begin{code}
+vardef circle_through(expr a, b, c) = save o; pair o;
+    o = whatever * (b-a) rotated 90 shifted 1/2[a,b] 
+      = whatever * (c-b) rotated 90 shifted 1/2[b,c];
+    fullcircle scaled 2 abs(a-o) shifted o
+enddef;
+\end{code}
+\end{itemize}
+\newpage
+\noindent
+Intersecting orthogonal circles.
+$$
+\begin{mplibcode}
+pair C, D; C = -D = 42 left; 
+for i=-5 upto 5:
+    if i <> 0:
+        pair A, B; numeric k; k = 2**(i/2);
+        A = (k/(k+1))[C, D]; 
+        B = (k/(k-1))[C, D]; 
+        draw fullcircle scaled abs(A-B) shifted 1/2[A,B] withcolor Blues 8 6;
+        pair O; O = 1/2[C,D] shifted (0, 8 i * 1.6 sqrt(abs(i)));
+        draw fullcircle scaled 2 abs(C-O) shifted O withcolor Oranges 8 6;
+    fi
+endfor
+draw (left--right) scaled 300 withcolor Oranges 8 7;
+draw (down--up)    scaled 200 withcolor Blues 8 7;
+draw C withpen pencircle scaled dotlabeldiam;
+
+numeric wd; wd = \mpdim\textwidth;
+clip currentpicture to unitsquare shifted -(1/2, 1/2) scaled .8 wd yscaled 3/4;
+\end{mplibcode}
+$$
+
+\vfill
+\noindent Radical axis of non-intersecting circles
+$$
+\begin{mplibcode}
+
+    pair A, B, C, P, R, S, T, U;
+    path a, b, c;
+
+    z0 = origin;
+    z1 = -4/3(21, 10);
+    z2 = 110 dir -89;
+    a = fullcircle scaled 233 shifted z0;
+    b = fullcircle scaled  99 shifted z1;
+    c = fullcircle scaled 164 shifted z2;
+
+    T = a intersectionpoint c; U = reverse a intersectionpoint c;
+    R = b intersectionpoint c; S = reverse b intersectionpoint c;
+    P = whatever[T, U] = whatever[R, S];
+
+    A = a intersectionpoint halfcircle rotated angle (z0-P) scaled abs(z0-P) shifted 1/2[z0, P];
+    B = b intersectionpoint halfcircle rotated angle (z1-P) scaled abs(z1-P) shifted 1/2[z1, P];
+    C = c intersectionpoint halfcircle rotated angle (z2-P) scaled abs(z2-P) shifted 1/2[z2, P];
+
+    vardef through(expr a, b) = save d; numeric d; d = abs(a-b); (1+16/d)[b,a] -- (1+16/d)[a,b] enddef;
+
+    drawoptions(withcolor Blues 8 4);
+    draw quartercircle rotated -17 scaled 2 abs(A-P) shifted P;
+    draw through(P, A);
+    draw through(P, B);
+    draw through(P, C);
+
+    drawoptions(withcolor Oranges 8 3);
+    draw c; label.urt("$c$", point 1 of c);
+    draw through(P, U);
+    draw through(P, S);
+
+    drawoptions();
+    draw a; label.urt("$a$", point 1 of a);
+    draw b; label.urt("$b$", point 1 of b);
+    draw (left--right) scaled 100 rotated (90 + angle (z1-z0)) shifted P;
+
+    drawoptions(withcolor Oranges 8 5);
+    dotlabel.llft("$T$", T);
+    dotlabel.lrt ("\;$U$", U);
+    dotlabel.bot ("\strut$R$", R);
+    dotlabel.urt ("\vrule width 0pt depth 2pt height 0pt\,$S$", S);
+
+    drawoptions(withcolor Blues 8 7);
+    dotlabel.urt("\ $A$", A);
+    dotlabel.top("\strut $B$", B);
+    dotlabel.urt("\strut $C$", C);
+
+    drawoptions();
+    dotlabel.bot ("\qquad $P$", P);
+
+    currentpicture := currentpicture scaled 0.9; 
+   
+\end{mplibcode}
+$$
 \end{document}
