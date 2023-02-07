@@ -32,7 +32,7 @@ The documents are strictly for educational and tutorial purposes only.  All the
 original books and therefore all the pictures are copyrighted by the
 Mathematical Association of America.
 
-# Excursions
+## Excursions
 
 This document has drawings and notes (about the drawings) inspired by Stanley
 Ogilvie's "Excursions in Geometry".  The drawings are mainly about the geometry of
