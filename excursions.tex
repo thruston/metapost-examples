@@ -20,7 +20,7 @@
 This example document includes geometric illustrations inspired by
 \textsl{Excursions in Geometry}, C.\@ Stanley Ogilvy, OUP 1968.
 The illustrations are presented roughly in the same order as the book, with notes
-about how you can use \MP\ to produce similar.  The section heading also
+about how you can use \MP\ to produce similar.  The section headings also
 approximately follow the book.  You might like to read the PDF of
 this document side by side with the source code, so that you can see how each
 illustration is done.  Each illustration is included as in-line \MP\ code, there are
@@ -30,7 +30,6 @@ no external graphics files used.
 
 Ogilvie starts with a review of some circle theorems.  In fact most of the book is
 about circles in one way or another.
-
 In this first diagram, you are given the width $AB$ of the screen and the ideal viewing angle $\theta$.
 The \MP\ code works out the rest from that, including a useful routine for a circle through three points.
 $$
@@ -614,4 +613,135 @@ $$
    
 \end{mplibcode}
 $$
+
+%----------------------------
+\section{Inversive geometry}
+
+Given a circle of radius $r$, let each point $C$ inside the circle
+be transformed to a point $D$ outside the circle in such a way that the 
+distances comply with $OC\cdot OD=r^2$ and the line $OC$ passes through $D$.
+$$
+\begin{mplibcode}
+numeric r; pair C, D, E;
+r = 87;     
+C = (9/16 r, 0) rotated 42;
+numeric s; s = r / abs C;
+D = C * s * s;
+draw D -- origin -- fullcircle scaled 2r;
+label.bot("$r$", 1/2(r, 0));
+dotlabel.lft("$O$", origin);
+dotlabel.ulft("$C$", C);
+dotlabel.rt("$D$", D);
+\end{mplibcode}
+$$
+For \MP\ the direct way to find $D$ given $O$, $C$, and $r$ is to calculate
+\begin{code}
+D = O + unitvector(C-O) scaled r * r / abs (C-O);
+\end{code}
+although if you keep $O$ at the origin this can be simplified to 
+\begin{code}
+D = unitvector(C) scaled r * r / abs C;
+\end{code}
+but with the default number system this risks an overflow if $r > \sqrt{2^{15}} \approx 181$, so some  
+    safer approach is more helpful for larger circles.  Examining \mpl{plain.mp} shows that 
+\mpl{unitvector} is a macro defined like this:
+\begin{code}
+vardef unitvector primary z = z/abs z enddef;
+\end{code}
+which suggests this alternative (safer) approach for inverting $C$ to find $D$:
+\begin{code}
+numeric s; s = r / abs C; D = C * s * s; 
+\end{code}
+This works well provided that $|C| > \frac1{180} r$, which is usually the case.
+A more general macro to invert a point $p$ in the circle centred at $o$ with radius $r$
+might be:
+\begin{code}
+vardef invert(expr p, o, r) = 
+    save t; pair t; t = p - o; 
+    save s; numeric s; s = r / abs t;
+    o + t * s * s
+enddef;
+\end{code}
+You could also consider checking that $|t|>0$ and that
+$s$ was not too large.
+
+There are other ruler-and-compass constructions to find an inverse point, 
+but they do not always lead to more efficient methods in \MP.
+
+$$
+\begin{mplibcode}
+primarydef a past b = a -- (1+12/abs(a-b))[a,b] enddef;
+picture M[];
+M1 = image(
+path c; pair P, Q, A, B, P';    
+c = fullcircle scaled 120;
+P = 20 left rotated 3;
+A = point 1/45 angle P of c;
+B = point 1/45 angle (P-A) of c;
+Q = point 1.8 of c;
+P' = whatever[A, B] = whatever[Q, P reflectedabout(A, Q)];
+
+draw c withcolor Blues 8 6;
+draw A -- Q -- B;
+draw B past P';
+draw Q past P' dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+draw P -- Q;
+
+draw origin withpen pencircle scaled dotlabeldiam;
+undraw origin withpen pencircle scaled 1/2 dotlabeldiam;
+dotlabel.bot ("$P$", P);
+dotlabel.bot ("$P'$", P');
+dotlabel.llft("$A$", A);
+dotlabel.rt  ("$B$", B);
+dotlabel.urt ("$Q$", Q);
+
+drawoptions(withcolor Oranges 8 8);
+label("$\scriptscriptstyle 1$", Q shifted 21 dir 1/2(angle (P-Q) + angle (A-Q)));
+label("$\scriptscriptstyle 2$", Q shifted 21 dir 1/2(angle (P'-Q) + angle (A-Q)));
+drawoptions());
+M2 = image(
+path c; pair A, B, P, P', Q, R;
+c = fullcircle scaled 120 rotated 3;
+A = point 4 of c; B = point 0 of c; 
+numeric t; t = 1.5;
+Q = point t of c;
+R = point -t of c;
+P = whatever[A, B] = whatever [Q, R];
+P' = whatever[A, B] = whatever * direction t of c shifted point t of c;
+
+draw c withcolor Blues 8 6;
+draw A past P';
+draw Q past P';
+draw Q -- R;
+draw A -- Q -- B dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+draw origin withpen pencircle scaled dotlabeldiam;
+undraw origin withpen pencircle scaled 1/2 dotlabeldiam;
+dotlabel.urt("$P$", P);
+dotlabel.urt ("$P'$", P');
+dotlabel.llft("$A$", A);
+dotlabel.lrt ("$B$", B);
+dotlabel.urt ("$Q$", Q);
+dotlabel.lrt ("$R$", R);
+drawoptions(withcolor Oranges 8 8);
+label("$\scriptscriptstyle 1$", Q shifted 17 dir 1/2(angle (P-Q) + angle (B-Q)));
+label("$\scriptscriptstyle 2$", Q shifted 17 dir 1/2(angle (P'-Q) + angle (B-Q)));
+drawoptions());
+label.urt(M1, -(42, 12));
+label.llft(M2, (42, 12));
+\end{mplibcode}
+$$
+The first method here is to construct $\angle2$ at $Q$, such that $\angle 2 = \angle 1$, and
+the dotted line cuts $AB$ in $P'$.  In \MP\ this is 
+\begin{code}
+P' = whatever[A, B] = whatever[Q, P reflectedabout(A, Q)];
+\end{code}
+The second is to construct $QR$ perpendicular to the diameter through $P$, and then
+the tangent at $Q$ cuts $AB$ in $P'$ which, given the circle $c$ centred 
+at the origin, and the point $P$,
+translates into something like this:
+\begin{code}
+numeric t; (t, whatever) = c intersectiontimes 
+                          P -- 200 unitvector(P) rotated 90 shifted P;
+P' = whatever[A,B] = whatever * direction t of c shifted point t of c;
+\end{code}
 \end{document}
