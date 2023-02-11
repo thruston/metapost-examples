@@ -665,6 +665,7 @@ enddef;
 You could also consider checking that $|t|>0$ and that
 $s$ was not too large.
 
+\newpage
 There are other ruler-and-compass constructions to find an inverse point, 
 but they do not always lead to more efficient methods in \MP.
 
@@ -726,8 +727,8 @@ drawoptions(withcolor Oranges 8 8);
 label("$\scriptscriptstyle 1$", Q shifted 17 dir 1/2(angle (P-Q) + angle (B-Q)));
 label("$\scriptscriptstyle 2$", Q shifted 17 dir 1/2(angle (P'-Q) + angle (B-Q)));
 drawoptions());
-label.urt(M1, -(42, 12));
-label.llft(M2, (42, 12));
+label.urt(M1, -(42, 21));
+label.llft(M2, (42, 21));
 \end{mplibcode}
 $$
 The first method here is to construct $\angle2$ at $Q$, such that $\angle 2 = \angle 1$, and
@@ -744,4 +745,123 @@ numeric t; (t, whatever) = c intersectiontimes
                           P -- 200 unitvector(P) rotated 90 shifted P;
 P' = whatever[A,B] = whatever * direction t of c shifted point t of c;
 \end{code}
+\vfill\noindent
+Drawing a circle through $Q$, $P$, and $P'$ shows why this works.
+The tangent to one circle is the radius of the other, so $AB$ is divided 
+harmonically by $P$, and $P'$.
+$$\begin{mplibcode}
+primarydef a past b = a -- (1+12/abs(a-b))[a,b] enddef;
+path c; pair A, B, P, P', Q, R;
+c = fullcircle scaled 100 rotated 3;
+A = point 4 of c; B = point 0 of c; 
+numeric t; t = 1.4;
+Q = point t of c;
+R = point -t of c;
+P = whatever[A, B] = whatever [Q, R];
+P' = whatever[A, B] = whatever * direction t of c shifted point t of c;
+draw fullcircle scaled abs(Q-P') shifted 1/2[Q, P'] withcolor Oranges 8 6;
+draw c withcolor Blues 8 6;
+draw A past P';
+draw Q past P';
+draw Q -- P;
+draw origin withpen pencircle scaled dotlabeldiam;
+undraw origin withpen pencircle scaled 1/2 dotlabeldiam;
+draw   1/2[Q,P'] withpen pencircle scaled dotlabeldiam;
+undraw 1/2[Q,P'] withpen pencircle scaled 1/2 dotlabeldiam;
+dotlabel.urt("$P$", P);
+dotlabel.urt ("$P'$", P');
+dotlabel.llft("$A$", A);
+dotlabel.lrt ("$B$", B);
+dotlabel.urt ("$Q$", Q);
+\end{mplibcode}$$
+
+If the point is outside the circle, you need to construct the tangent
+first, then the circle $b$ cuts $OP$ at the inverse point $P'$:
+$$\begin{mplibcode}
+path a, b, c; pair O, P, P', Q, A;
+O = origin;
+c = fullcircle scaled 144 rotated 3;
+P = 1.732 point 0 of c;
+a = halfcircle zscaled (P-O) shifted 1/2[P,O];
+Q = a intersectionpoint c;
+b = fullcircle zscaled (Q-P) shifted 1/2[Q,P];
+%P' = whatever[origin, P]; Q-P' = whatever * (origin-P) rotated 90;
+P' = b intersectionpoint (center c -- point 0 of c);
+
+A = point 4 of c; numeric d; d = abs(P-A);
+draw (1+12/d)[P, A] -- (1+20/d)[A, P];
+draw origin -- Q -- P;
+draw c withcolor Blues 8 6; label.ulft("$c$", point 3 of c);
+draw b withcolor Oranges 8 6; label.urt("$b$", point 11/2 of b);
+draw a dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+
+dotlabel.bot("$O$", origin);
+dotlabel.lrt("$P$", P);
+dotlabel.llft("$P'$", P');
+dotlabel.top("\strut$Q\;$", Q);
+\end{mplibcode}$$
+There is a neat \MP\ idiom to draw the semi-circle between $O$ and $P$
+\begin{code}
+path a; a = halfcircle zscaled (P-O) shifted 1/2[P,O];
+\end{code}
+and if $O$ is really the origin, you can abbreviate that to
+\begin{code}
+path a; a = halfcircle zscaled P shifted 1/2 P;
+\end{code}
+Then, assuming path $c$ is the blue circle above, point $Q$ is
+\begin{code}
+pair Q; Q = a intersectionpoint c;
+\end{code}
+and point $P'$ is:
+\begin{code}
+path b; b = fullcircle scaled abs(Q-P) shifted 1/2[Q, P];
+pair P'; P' = b intersectionpoint (O--P);
+\end{code}
+although you could do without the circle $b$ by using the normal 
+idiom to find the closest point to $Q$ on $OP$:
+\begin{code}
+pair P'; P' = whatever[O, P]; Q-P' = whatever * (P-O) rotated 90;
+\end{code}
+This is all interesting geometry, but if you just want to find the inverse point
+then the \mpl{invert} macro on the previous page also works well for points
+    outside the circle.
+
+\vfill\noindent
+\hbox to \textwidth{
+    $\vcenter{\begin{mplibcode}
+path c; c = fullcircle scaled 120 rotated 3;
+pair P; P = 1.32 point 0 of c;
+
+path a; a = fullcircle zscaled 2P shifted P;
+numeric t, u;
+(t, u) = a intersectiontimes c;
+pair S; S = point u of c;
+path b; b = reverse fullcircle zscaled 2S shifted S;
+numeric v, w;
+(v, w) = b intersectiontimes (origin -- P);
+pair P'; P' = point v of b;
+
+pair A; A = point 4 of c; numeric d; d = abs(P-A);
+draw (1+12/d)[P, A] -- (1+20/d)[A, P];
+draw subpath(t-1/4, 4+1/4) of a withcolor Oranges 8 4;
+draw subpath(v-1/4, 4+1/4) of b withcolor Oranges 8 4;
+draw P -- S -- P' withcolor Oranges 8 3;
+draw S -- origin withcolor Oranges 8 3;
+draw c withcolor Blues 8 6;
+dotlabel.bot("$P$", P);
+dotlabel.bot("$P'$", P');
+dotlabel.llft("$O$", origin);
+dotlabel.top("$S$", S);
+label.rt("$r$", 1/2 S);
+
+\end{mplibcode}}$ \hss
+$\vcenter{\vbox{\hsize 3in\noindent
+Similarly, if you are working with ruler-and-compasses, you can
+    find the inverse of an external point $P$ by drawing two arcs as shown, \llap{$\leftarrow$\ }on the left.
+But this is less convenient in \MP, primarily because you need to make sure 
+that you find the correct intersections of the two arcs, so the approach is less
+“robust” than doing the calculations. The construction works because we have 
+$OP/r = r/OP'$, hence $OP\cdot OP' = r^2$ as before.
+}}$}
+
 \end{document}
