@@ -868,11 +868,11 @@ $OP/r = r/OP'$, hence $OP\cdot OP' = r^2$ as before.
 
 \subsection{Invariants}
 
-Inversion of a straight line not through the centre of the circle of inversion.
+\textbf{Inversion of a straight line outside the circle of inversion}.
 $$\begin{mplibcode}
 input invert
 path c; pair P, Q, P', Q'; numeric r; 
-r = 72;
+r = 68;
 c = fullcircle scaled 2r;
 P = 1.414 point 0 of c;
 xpart Q = xpart P;  Q-P = .9r * up;
@@ -896,8 +896,47 @@ dotlabel.rt  ("$P$", P);
 dotlabel.rt  ("$Q$", Q);
 dotlabel.lrt ("$P'$", P');
 dotlabel.top ("$Q'$", Q');
+\end{mplibcode}$$
+Here we have $OP\cdot OP' = r^2$ and $OQ\cdot OQ' = r^2$ so $OP/OQ = OP'/OQ'$, hence
+the triangles $OPQ$ and $OQ'P'$ are similar and $\angle OQ'P'$ must always be a
+right angle, since $OP$ is perpendicular to the line, but $Q$ is any point on the
+line, so the line must invert to a circle through $O$.  
+
+\smallskip\noindent
+\textbf{Inversion of a line that cuts the circle of inversion}.
+$$\begin{mplibcode}
+input invert
+path c; pair P, P', A, B; numeric r; 
+r = 68;
+c = fullcircle scaled 2r rotated 4;
+P = 0.8 point 0 of c;
+P' = invert(P, origin, r);
+path line; line = (down--up) rotated angle P scaled 1.2 r shifted P;
+draw c withcolor Blues 8 6;
+draw fullcircle zscaled P' shifted 1/2 P' withcolor Oranges 8 5;
+draw line withcolor Oranges 8 5;
+
+dotlabel.llft("$O$", origin);
+dotlabel.llft("$P$", P);
+dotlabel.lrt ("$P'$", P');
+numeric t, u;
+(t, whatever) = c intersectiontimes subpath(1/2, 1) of line; dotlabel.urt("$A$", point t of c);
+(u, whatever) = c intersectiontimes subpath(0, 1/2) of line; dotlabel.lrt("$B$", point u of c);
 
 \end{mplibcode}$$
+Note that the points $A$ and $B$ are invariant.  Using the \mpl{invert} macro
+already described, you can find $P'$ directly and draw the inverted line as
+a circle with $OP'$ as a diameter.  But it is also possible to find the points $A$ and $B$
+as the points where the line through $P$ that is perpendicular to $OP$ cuts the circle
+of inversion, and then draw a circle through $O$, $A$, and $B$ using a routine like this:
+\begin{code}
+vardef circle_through(expr A, B, C) = save o; pair o;
+    o = whatever * (A-B) rotated 90 shifted 1/2 [A,B]
+      = whatever * (B-C) rotated 90 shifted 1/2 [B,C];
+    fullcircle scaled 2 abs (A-o) shifted o
+enddef;
+\end{code}
+then $P'$ is the intersection of this circle with the line through $OP$.
 
 
 
