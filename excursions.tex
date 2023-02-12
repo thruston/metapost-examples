@@ -617,13 +617,15 @@ $$
 %----------------------------
 \section{Inversive geometry}
 
+\subsection{Transformations}
+
 Given a circle of radius $r$, let each point $C$ inside the circle
 be transformed to a point $D$ outside the circle in such a way that the 
 distances comply with $OC\cdot OD=r^2$ and the line $OC$ passes through $D$.
 $$
 \begin{mplibcode}
 numeric r; pair C, D, E;
-r = 87;     
+r = 78;     
 C = (9/16 r, 0) rotated 42;
 numeric s; s = r / abs C;
 D = C * s * s;
@@ -823,7 +825,7 @@ idiom to find the closest point to $Q$ on $OP$:
 pair P'; P' = whatever[O, P]; Q-P' = whatever * (P-O) rotated 90;
 \end{code}
 This is all interesting geometry, but if you just want to find the inverse point
-then the \mpl{invert} macro on the previous page also works well for points
+then the \mpl{invert} macro given earlier in this section also works well for points
     outside the circle.
 
 \vfill\noindent
@@ -863,5 +865,41 @@ that you find the correct intersections of the two arcs, so the approach is less
 “robust” than doing the calculations. The construction works because we have 
 $OP/r = r/OP'$, hence $OP\cdot OP' = r^2$ as before.
 }}$}
+
+\subsection{Invariants}
+
+Inversion of a straight line not through the centre of the circle of inversion.
+$$\begin{mplibcode}
+input invert
+path c; pair P, Q, P', Q'; numeric r; 
+r = 72;
+c = fullcircle scaled 2r;
+P = 1.414 point 0 of c;
+xpart Q = xpart P;  Q-P = .9r * up;
+P' = invert(P, origin, r);
+Q' = invert(Q, origin, r);
+
+draw unitsquare scaled 5 rotated angle (Q-P) shifted P withcolor 3/4;
+draw unitsquare scaled 5 rotated (angle (P'-Q')-90) shifted Q' withcolor 3/4;
+
+draw origin -- P;
+draw origin -- Q;
+draw P' -- Q';
+draw 1.8[Q,P] -- 1.2[P, Q] withcolor Oranges 8 5;
+
+draw origin -- point 2.8 of c dashed evenly scaled 1/2; label.urt("$r$", 1/2 point 2.8 of c);
+draw c withcolor Blues 8 6;
+draw fullcircle zscaled P' shifted 1/2 P' withcolor Oranges 8 5;
+
+dotlabel.llft("$O$", origin);
+dotlabel.rt  ("$P$", P);
+dotlabel.rt  ("$Q$", Q);
+dotlabel.lrt ("$P'$", P');
+dotlabel.top ("$Q'$", Q');
+
+\end{mplibcode}$$
+
+
+
 
 \end{document}
