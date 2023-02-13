@@ -5,7 +5,7 @@
 % turn on automatic TeX labels
 \mplibtextextlabel{enable}
 % add at the start/end of each fig
-\everymplib{input colorbrewer-rgb;interim ahangle := 30;beginfig(0);}
+\everymplib{input colorbrewer-rgb;input invert;interim ahangle := 30;beginfig(0);}
 \everyendmplib{endfig;}
 %
 %\usepackage{shortvrb}\MakeShortVerb{"}
@@ -905,7 +905,6 @@ line, so the line must invert to a circle through $O$.
 \smallskip\noindent
 \textbf{Inversion of a line that cuts the circle of inversion}.
 $$\begin{mplibcode}
-input invert
 path c; pair P, P', A, B; numeric r; 
 r = 68;
 c = fullcircle scaled 2r rotated 4;
@@ -922,7 +921,6 @@ dotlabel.lrt ("$P'$", P');
 numeric t, u;
 (t, whatever) = c intersectiontimes subpath(1/2, 1) of line; dotlabel.urt("$A$", point t of c);
 (u, whatever) = c intersectiontimes subpath(0, 1/2) of line; dotlabel.lrt("$B$", point u of c);
-
 \end{mplibcode}$$
 Note that the points $A$ and $B$ are invariant.  Using the \mpl{invert} macro
 already described, you can find $P'$ directly and draw the inverted line as
@@ -933,12 +931,65 @@ of inversion, and then draw a circle through $O$, $A$, and $B$ using a routine l
 vardef circle_through(expr A, B, C) = save o; pair o;
     o = whatever * (A-B) rotated 90 shifted 1/2 [A,B]
       = whatever * (B-C) rotated 90 shifted 1/2 [B,C];
-    fullcircle scaled 2 abs (A-o) shifted o
-enddef;
+    fullcircle scaled 2 abs (A-o) shifted o enddef;
 \end{code}
 then $P'$ is the intersection of this circle with the line through $OP$.
 
+\smallbreak\noindent
+\textbf{Inversion of a circle outside the circle of inversion}
+$$\begin{mplibcode}
+path c, d; 
+pair P, P', Q, Q', R, R'; 
+numeric r; 
+r = 100; z0 = origin; z1 = 1.9 r * dir 12;
+c = fullcircle scaled 2r;
+d = fullcircle scaled 1.414r rotated 12 shifted z1;
 
+numeric t, a; 
+(t, whatever) = d intersectiontimes (z0 -- 8[z0,z1]);
+(a, whatever) = d intersectiontimes halfcircle zscaled z1 shifted 1/2 z1;
 
+Q = point t of d;
+R = point a of d;
+P = point t + 4 of d;
+
+Q' = invert(Q, z0, r);
+R' = invert(R, z0, r);
+P' = invert(P, z0, r);
+
+draw c withcolor Blues 8 6;
+draw d withcolor Oranges 8 5;
+draw fullcircle zscaled (P' - Q') shifted 1/2[P', Q'] withcolor Oranges 8 5;
+
+draw P -- R -- Q withpen pencircle scaled 1/4;
+draw P' -- R' -- Q' withpen pencircle scaled 1/4;
+draw R -- z0 -- Q;
+
+for i=0 step 1 until 7.5:
+    draw point i of d withpen pencircle scaled 1;
+    draw invert(point i of d, z0, r) withpen pencircle scaled 1;
+endfor
+
+forsuffixes $ = Q', P: dotlabel.llft("\strut$" & str $ & "$", $); endfor
+forsuffixes $ = R, R': dotlabel.ulft("$" & str $ & "$", $); endfor
+dotlabel.rt("$Q$", Q);
+dotlabel.lft("$O$", z0);
+dotlabel.lrt("$P'$", P'); 
+\end{mplibcode}$$
+Similar triangles again show that $\angle P'R'Q'$ is a right angle, which
+proves that the inversion of the circle is also a circle.  It is sufficient
+therefore to find $P$ and $Q$ as the diameter of the circle-to-be-inverted that
+passes through $O$ (the centre of the circle of inversion), and then the image is the 
+circle drawn with the inverted points $P'$ and $Q'$ as a diameter.
+However you sould beware that the points of the source circle are not mapped
+equally to the image. The small dots try to show this in the picture above.
+Given a source circle $s$, and a circle of inversion at $z_0$ with radius $r$, 
+you can invert the circle like this:
+\begin{code}
+path s'; 
+s' = for i=0 upto 7: invert(point i of s, z0, r) .. endfor cycle;
+\end{code}
+The resulting path should look circular but will run in the opposite direction
+to the source path (as you might expect since inversion is a form of reflection).
 
 \end{document}
