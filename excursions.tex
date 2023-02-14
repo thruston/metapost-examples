@@ -729,8 +729,8 @@ drawoptions(withcolor Oranges 8 8);
 label("$\scriptscriptstyle 1$", Q shifted 17 dir 1/2(angle (P-Q) + angle (B-Q)));
 label("$\scriptscriptstyle 2$", Q shifted 17 dir 1/2(angle (P'-Q) + angle (B-Q)));
 drawoptions());
-label.urt(M1, -(42, 21));
-label.llft(M2, (42, 21));
+label.urt(M1, -(46, 21));
+label.llft(M2, (46, 21));
 \end{mplibcode}
 $$
 The first method here is to construct $\angle2$ at $Q$, such that $\angle 2 = \angle 1$, and
@@ -983,13 +983,53 @@ passes through $O$ (the centre of the circle of inversion), and then the image i
 circle drawn with the inverted points $P'$ and $Q'$ as a diameter.
 However you sould beware that the points of the source circle are not mapped
 equally to the image. The small dots try to show this in the picture above.
-Given a source circle $s$, and a circle of inversion at $z_0$ with radius $r$, 
-you can invert the circle like this:
+With source circle $s$, and a circle of inversion at $z_0$ with radius $r$, 
+you can invert $s$ to path $s'$ like this:
 \begin{code}
-path s'; 
 s' = for i=0 upto 7: invert(point i of s, z0, r) .. endfor cycle;
 \end{code}
 The resulting path should look circular but will run in the opposite direction
 to the source path (as you might expect since inversion is a form of reflection).
+Note also that the triangle $PQR$ does \textit{not} invert to the triangle $P'Q'R'$, 
+and the midpoint of $P$ and $Q$ is not the midpoint of $P'$ and $Q'$.
+$$\begin{mplibcode}
+path c, d; 
+pair P, P', Q, Q', R, R'; 
+numeric r; 
+r = 100; z0 = origin; z1 = 1.9 r * dir 12;
+c = fullcircle scaled 2r;
+d = fullcircle scaled 1.414r rotated 12 shifted z1;
+
+numeric t, a; 
+(t, whatever) = d intersectiontimes (z0 -- z1);
+(a, whatever) = d intersectiontimes halfcircle zscaled z1 shifted 1/2 z1;
+
+P = point t of d;      P' = invert(P, z0, r);
+Q = point t + 4 of d;  Q' = invert(Q, z0, r);
+R = point a of d;      R' = invert(R, z0, r);
+
+draw subpath (7, 10) of c withcolor Blues 8 6;
+draw d withcolor Oranges 8 5;
+draw fullcircle zscaled (P' - Q') shifted 1/2[P', Q'] withcolor Oranges 8 5;
+
+path t[]; 
+t1 = P -- z1 -- R -- cycle; 
+t2 = z1 -- Q -- R -- cycle;
+t3 = invert_path(t1, z0, r, 1/16);
+t4 = invert_path(t2, z0, r, 1/16);
+
+forsuffixes $=t1, t3: fill $ withcolor Greens 8 2; endfor
+forsuffixes $=t2, t4: fill $ withcolor Reds 8 2; endfor
+forsuffixes $=t1, t2, t3, t4: draw $ withpen pencircle scaled 1/4; endfor
+
+forsuffixes $ = Q', P: dotlabel.llft("\strut$" & str $ & "$", $); endfor
+forsuffixes $ = R, R': dotlabel.ulft("$" & str $ & "$", $); endfor
+dotlabel.rt("$Q$", Q);
+dotlabel.lft("$O$", z0);
+dotlabel.lrt("$P'$", P'); 
+\end{mplibcode}$$
+
+
+
 
 \end{document}
