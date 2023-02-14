@@ -1029,7 +1029,35 @@ dotlabel.lft("$O$", z0);
 dotlabel.lrt("$P'$", P'); 
 \end{mplibcode}$$
 
+\newpage
+\noindent\textbf{Angle between two curves}
 
+$$\begin{mplibcode}
+path a, b;
+a = (origin {dir 30} .. (160, -20) {dir 34}) shifted 80 left rotated -21;
+b = (origin {dir 50} .. 170 right {dir 24}) shifted 60 left rotated  34;
+numeric t, u;
+(t, u) = a intersectiontimes b;
 
+draw (-direction t of a -- direction t of a) shifted point t of a withcolor Blues 8 4;
+draw (-direction u of b -- direction u of b) shifted point u of b withcolor Blues 8 4;
+
+draw a; 
+draw b;
+
+label("$\alpha$", point t of a - 8 (unitvector(direction t of a) + unitvector(direction u of b)))
+withcolor Blues 8 6;
+\end{mplibcode}$$
+The \MP\ interest here is drawing the tangents at the point of intersection.  \mpl{(t, u) = a intersectiontimes b} conveniently 
+gives you the “time” along each path, then the tangent is 
+\begin{code}
+(- direction t of a -- direction t of a) shifted point t of a
+\end{code}
+except that the length of the direction vectors depends on the exact placement of the control points, 
+so you if you prefer precision over brevity you could try:
+\begin{code}
+(unitvector(-direction t of a) -- unitvector(direction t of a)) 
+    scaled 64 shifted point t of a
+\end{code}
 
 \end{document}
