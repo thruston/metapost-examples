@@ -32,6 +32,10 @@ The documents are strictly for educational and tutorial purposes only.  All the
 original books and therefore all the pictures are copyrighted by the
 Mathematical Association of America.
 
+Update: May 2023 -- currently I am working on a Python routine that will create 
+a "parallel text" version of these documents, showing the MP source on the left and 
+the picture on the right in a single PDF.  This is a Work In Progress.
+
 ## Excursions
 
 This document has drawings and notes (about the drawings) inspired by Stanley
@@ -46,6 +50,14 @@ in parallel to the output.
 
 For this one, I have chosen examples from various sources, that may be familiar from
 elsewhere in the world of \TeX.
+
+## Cosmopolitan Tiling
+
+Geometric tilings -- Moorish, Islamic, Roman -- are a minor obsession of mine.
+Metapost is a great tool for exploring patterns.  This file present examples
+with minimal notes on techniques.
+
+- `cosmos.tex`
 
 ## Contact / questions
 
