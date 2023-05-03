@@ -34,7 +34,10 @@ Mathematical Association of America.
 
 Update: May 2023 -- currently I am working on a Python routine that will create 
 a "parallel text" version of these documents, showing the MP source on the left and 
-the picture on the right in a single PDF.  This is a Work In Progress.
+the picture on the right in a single PDF.  This is a Work In Progress.  The first draft
+is available to review as 
+
+- `pww-1-parallel.pdf`
 
 ## Excursions
 
