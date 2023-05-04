@@ -6730,6 +6730,78 @@ $$
 \contrib{Yihnan David Gau}
 
 %-------
+\section{Gaussian quadrature as the area of either trapezoid}
+\vfill
+$$
+\begin{mplibcode}
+  numeric u; u = 144;
+  vardef f(expr x) = 7/8 (x*x*x - x) enddef; numeric minx, maxx, s; -minx = maxx = 5/4; s = 1/8;
+  path ff; ff = ((minx,f(minx)) for x = minx+s step s until maxx: .. (x, f(x)) endfor) scaled u;
+  % move it to a convenient location, so axes can go through origin
+  ff := ff shifted - 1.14 point 0 of bbox ff shifted 20 up;
+  path xx; xx = 8 left -- right scaled 1.1 xpart (urcorner ff - llcorner ff);
+  path yy; yy = xx rotated 90 cutafter (left--right) shifted (0, 1.1 ypart urcorner ff);
+
+  numeric a, b, a', b'; a = 1.4; a' = 3.7; b = length ff - 1/4 - a; b' = length ff - 1/4 - a';
+  z0 = point a  of ff; z1 = point b  of ff; z2 = point a' of ff; z3 = point b' of ff;
+
+  z4 = whatever[z2, z3]; z5 = whatever[z2, z3];
+  x4 = xpart point 0 of ff; x5 = xpart point infinity of ff;
+
+  x0 = x6 = x8; y6 = y2; x1 = x7 = x9; y7 = y3;
+  z8 = whatever[z4, z5]; z9 = whatever[z4, z5];
+  z10 = whatever[z4, z5] = whatever[z6, z7];
+  
+  % dotlabels.top(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10); % <--- in case of need
+
+  fill z2--z6--z8--cycle withcolor Oranges 8 2;
+  fill z3--z7--z9--cycle withcolor Blues 8 2;
+
+  fill z10 -- z2 -- z6 -- cycle withcolor Oranges 8 3;
+  fill z10 -- z3 -- z7 -- cycle withcolor Blues 8 3;
+
+  label.bot("\strut $a$",  (x8, 0)); draw (x8, 0) -- z8; 
+  label.bot("\strut $b$",  (x7, 0)); draw (x7, 0) -- z7; 
+  label.bot("\strut $a'$", (x2, 0)); draw (x2, 0) -- z2 dashed evenly; 
+  label.bot("\strut $b'$", (x3, 0)); draw (x3, 0) -- z3 dashed evenly; 
+
+  draw z2 -- z6 -- z7 -- z3;
+  drawoptions(withcolor Blues 8 7);
+  draw z4--z5; label.rt("$y=h(x)$", z5);
+  drawoptions(withcolor Oranges 8 7);
+  draw ff; label.top("$y=f(x)$", point infinity of ff);
+  drawoptions();
+  drawarrow xx; label.rt("$x$", point 1 of xx);
+  drawarrow yy; label.top("$y$", point 1 of yy);
+
+  picture mark; mark = image(forsuffixes $=left, right:
+      draw (up--down) scaled 2 rotated -20 shifted 1/2 $;
+  endfor);
+  draw mark shifted (1/2(x0+x2), ypart point 0 of xx);
+  draw mark shifted (1/2(x1+x3), ypart point 0 of xx);
+
+  vardef pindotlabel@#(expr t, z, o) = 
+      draw z -- z+o cutbefore fullcircle scaled 2 dotlabeldiam shifted z
+          withpen pencircle scaled 1/4;
+      label@#(t, z+o); draw z withpen pencircle scaled dotlabeldiam;
+  enddef; interim dotlabeldiam := 2; interim labeloffset := 2;
+  pindotlabel.top ("$(a, h\kern-0.4pt(a))$",     z8, 12 dir 106);
+  pindotlabel.lft ("$(a, f\kern-0.4pt(a'))$",    z6,  9 dir 186);
+  pindotlabel.top ("$(a'\!, f\kern-0.4pt(a'))$", z2, 20 dir 76);
+  pindotlabel.top ("$(b, f\kern-0.4pt(b'))$",    z7, 14 dir 50);
+  pindotlabel.rt  ("$(b, h\kern-0.4pt(b))$",     z9, 12 dir 20);
+  pindotlabel.llft("$(b'\!, f\kern-0.4pt(b'))$", z3, 18 dir 240);
+
+  label.top(btex $\displaystyle
+  \frac12 \left(b-a\right)\left(f(a') + f(b')\right) = 
+  \frac12 \left(b-a\right)\left(h(a) + h(b)\right)
+  $ etex, point 5/2 of bbox currentpicture shifted 42 up);
+\end{mplibcode}
+$$
+\vfill
+\contrib{Mike Akerman}
+
+%-------
 \section{The problem of the calissons}
 
 \vfill
