@@ -2,7 +2,8 @@ newinternal thatch_angle;
 newinternal thatch_space;
 thatch_angle := 45;
 thatch_space := 4;
-def ruled expr p = _apth := p; _thatch enddef;
+%def drawarrow expr p = _apth:=p; _finarr enddef;
+def rule expr p = _apth:=p; _thatch enddef;
 def _thatch text t =
     d_ := 2 abs (urcorner _apth - llcorner _apth);
     draw begingroup; save T; picture T; T = image(
