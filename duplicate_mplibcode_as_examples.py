@@ -13,11 +13,6 @@ buffer = []
 chapter_counter = 0
 for line in fileinput.input(files=args.tex_source):
     line = line.rstrip()
-    if not line:
-        continue
-
-    # if line.startswith('%'):
-        # continue
 
     if line == r'\usepackage{luamplib}':
         line = '\\usepackage{luamplib}\n\\usepackage{dwmpcode}'
@@ -52,6 +47,7 @@ def get_mplibcode(lines):
     '''find the contents of the mplibcode environment'''
     mp = []
     capture = False
+    squash = False
     for line in lines:
         if line.startswith(r'\begin{mplibcode}'):
             capture = True
@@ -61,10 +57,13 @@ def get_mplibcode(lines):
             k = eval(f"dict({line.strip()[7:]})")
             if "capture" in k:
                 capture = k["capture"]
+            if "squash" in k:
+                squash = k["squash"]
             if "replace" in k:
                 mp.append(k["replace"])
         elif capture:
-            mp.append(line)
+            if line or not squash:
+                mp.append(line)
     return '\n'.join(mp)
 
 for i, c in enumerate(chunks):
