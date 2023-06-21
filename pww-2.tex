@@ -2600,6 +2600,8 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+% DUMP capture=False, replace="% very similar to previous page ..."
+vardef angled_label@#(expr t, p, r) = draw thelabel@#(t, origin) rotated r shifted p; enddef;
 picture F[]; path t, t', t'', s; numeric alpha; alpha = angle(1, 2) - angle (2, 1);
 t = (origin -- (180, 0) -- (180, 90) -- cycle) rotated alpha;
 t' = t reflectedabout(point 0 of t, point 2 of t);
@@ -2624,37 +2626,39 @@ F1 = image(
    drawoptions(withcolor Reds 6 5);
    label.bot("$1$", point 1/2 of s);
    label.top("$\tan\alpha\tan\beta$", 1/2[point 2 of t, point 2 of s]);
-   draw thelabel.top("$\sec\alpha$", origin) rotated alpha shifted point 1/2 of t;
-   draw thelabel.bot("$\sec\alpha\tan\beta$", origin) rotated (alpha-90) shifted point 3/2 of t;
-   draw thelabel.top("$\tan\beta$", origin) rotated -90 shifted 1/2[point 1 of t, point 2 of s];
-   draw thelabel.top("$\tan\alpha$", origin) rotated -90 shifted 1/2[point 1 of t, point 1 of s];
+   angled_label.top("$\sec\alpha$", point 1/2 of t, alpha);
+   angled_label.bot("$\sec\alpha\tan\beta$", point 3/2 of t, alpha-90);
+   angled_label.top("$\tan\beta$", 1/2[point 1 of t, point 2 of s], -90);
+   angled_label.top("$\tan\alpha$", 1/2[point 1 of t, point 1 of s], -90);
    drawoptions();
    label.lft("$\displaystyle\tan(\alpha+\beta) = {\tan\alpha+\tan\beta\over1 + \tan\alpha\tan\beta}$", (-10, 24));
 );
+% DUMP capture=True
 F2 = image(
-   fill t' withcolor Oranges 8 3;
-   path a[];
-   a1 = quartercircle scaled 58 cutbefore subpath (0,1) of t;
-   a2 = quartercircle scaled 68 cutbefore subpath (0,1) of t cutafter subpath (2,3) of t;
-   a3 = quartercircle scaled 32 rotated 180 shifted point 1 of t cutbefore subpath (0, 1) of t;
-   a4 = quartercircle scaled 32 rotated 270 shifted point 2 of t cutbefore subpath (1, 2) of t;
-   forsuffixes $=1,2,3, 4: draw a$ withpen pencircle scaled 1/4; endfor
-   draw F0; 
-   undraw subpath (-35/256, -11/128) of t;
-   drawoptions(withcolor 2/3 blue);
-   label.bot("$\alpha$", point arctime 1/2 arclength a1 of a1 of a1 shifted 2.4 left);
-   label.urt("$\beta$", point arctime 1/2 arclength a2 of a2 of a2) ;
-   label.llft("$\alpha$", point arctime 5/8 arclength a3 of a3 of a3);
-   label.lrt("$\alpha$", point arctime 5/8 arclength a4 of a4 of a4);
-   drawoptions(withcolor Reds 6 5);
-   label.bot("$\tan\alpha$", point 1/2 of s);
-   label.top("$\tan\beta$", 1/2[point 2 of t, point 2 of s]);
-   draw thelabel.top("$\sec\alpha$", origin) rotated alpha shifted point 1/2 of t;
-   draw thelabel.bot("$\sec\alpha\tan\beta$", origin) rotated (alpha-90) shifted point 3/2 of t;
-   draw thelabel.top("$\tan\alpha\tan\beta$", origin) rotated -90 shifted 1/2[point 1 of t, point 2 of s];
-   draw thelabel.rt("$1$", 1/2[point 1 of t, point 1 of s]);
-   drawoptions();
-   label.lft("$\displaystyle\tan(\alpha-\beta) = {\tan\alpha-\tan\beta\over1 + \tan\alpha\tan\beta}$", (-10, 24));
+  fill t' withcolor Oranges 8 3;
+  path a[];
+  a1 = quartercircle scaled 58 cutbefore subpath (0,1) of t;
+  a2 = quartercircle scaled 68 cutbefore subpath (0,1) of t cutafter subpath (2,3) of t;
+  a3 = quartercircle scaled 32 rotated 180 shifted point 1 of t cutbefore subpath (0, 1) of t;
+  a4 = quartercircle scaled 32 rotated 270 shifted point 2 of t cutbefore subpath (1, 2) of t;
+  forsuffixes $=1,2,3, 4: draw a$ withpen pencircle scaled 1/4; endfor
+  draw F0; 
+  undraw subpath (-35/256, -11/128) of t;
+  drawoptions(withcolor 2/3 blue);
+  label.bot("$\alpha$", point arctime 1/2 arclength a1 of a1 of a1 shifted 2.4 left);
+  label.urt("$\beta$", point arctime 1/2 arclength a2 of a2 of a2) ;
+  label.llft("$\alpha$", point arctime 5/8 arclength a3 of a3 of a3);
+  label.lrt("$\alpha$", point arctime 5/8 arclength a4 of a4 of a4);
+  drawoptions(withcolor Reds 6 5);
+  label.bot("$\tan\alpha$", point 1/2 of s);
+  label.top("$\tan\beta$", 1/2[point 2 of t, point 2 of s]);
+  angled_label.top("$\sec\alpha$", point 1/2 of t, alpha);
+  angled_label.bot("$\sec\alpha\tan\beta$", point 3/2 of t, (alpha-90));
+  angled_label.top("$\tan\alpha\tan\beta$", 1/2[point 1 of t, point 2 of s], -90);
+  label.rt("$1$", 1/2[point 1 of t, point 1 of s]);
+  drawoptions();
+  label.lft(btex $\displaystyle\tan(\alpha-\beta) = 
+     {\tan\alpha-\tan\beta\over1 + \tan\alpha\tan\beta}$ etex, (-10, 24));
 );
 
 draw F1;
@@ -2669,108 +2673,83 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric theta; path S;
-S = unitsquare shifted 1/2 left xscaled 144 yscaled 89;  
-for i=0 upto 3: z[i] = point i of S; endfor
-z4 = whatever[z0, z2] = whatever [z1, z3];
+vardef mark_angle(expr a, o, b, r, rr, t) =
+  draw fullcircle scaled 2r rotated angle (a-o) shifted o cutafter (o--b)
+      withpen pencircle scaled 1/4;
+  label(t, o shifted (rr * unitvector(unitvector(a-o)+unitvector(b-o))));
+enddef;
+vardef rotated_label@#(expr t, p, r) =
+  draw thelabel@#(t, origin) rotated r shifted p 
+enddef;
 
-theta = angle (z2 - z0); 
-picture P[]; P1 = image(
-    fill subpath (-1, 1) of S -- cycle withcolor Blues 8 3;
-    draw z1 -- z3;
-    draw quartercircle scaled 32 rotated (180 - theta) shifted z1 cutafter subpath(0,1) of S withpen pencircle scaled 1/4;
-    draw S; 
-    label.urt("$2$", center S);
-    label.lft("$2\sin\theta$", point -1/2 of S);
-    label.bot("$2\cos\theta$", point  1/2 of S);
-    label("$\theta$", 24 left rotated -1/2 theta shifted z1);
-);
-P2 = image(
-    pair p; p = whatever[z1, z3]; 
-    p - z2 = whatever * (z1 - z3) rotated 90;
-    fill subpath (3, 1) of S -- cycle withcolor Blues 8 3;
-    draw p -- z2 -- z0;
-    draw z1 -- z3;
-    draw quartercircle scaled 32 rotated (180 - theta) shifted z1 cutafter subpath(0,1) of S withpen pencircle scaled 1/4;
-    draw quartercircle scaled 32 rotated - theta shifted z4 cutafter (z0--z2) withpen pencircle scaled 1/4;
-    draw quartercircle scaled 32 shifted z0 cutafter (z0--z2) withpen pencircle scaled 1/4;
-    draw S;
-    label("$\theta$", 24 right rotated 1/2 theta shifted z0);
-    label("$\theta$", 24 left rotated -1/2 theta shifted z1);
-    label("$2\theta$", 24 right shifted z4);
-    label.ulft("$1$", 1/4[z0, z2]);
-    label.ulft("$1$", 3/4[z0, z2]);
-    draw thelabel.bot("$\sin2\theta$", origin) rotated (90-theta) shifted 1/2[p, z2];
-);
-draw P1 shifted 89 left;
-draw P2 shifted 89 right;
-
-label("$2\sin\theta\cos\theta = \sin 2\theta$", 36 down);
-\end{mplibcode}
-$$
-\bigskip
-$$
-\begin{mplibcode}
-numeric theta, unit;
-theta = 34;
-unit = 72 / cosd(theta);
-
-picture P[];
+path R; R = unitsquare xscaled 144 yscaled 89;  
+z0 = center R;
+picture P[]; 
 P1 = image(
-    path r; r = unitsquare shifted 1/2 left xscaled 2 yscaled -1 scaled cosd(theta) scaled unit;
-    pair a; a = (0, sind(theta) * unit);
-    draw quartercircle scaled 32 shifted point 0 of r cutafter (point 0 of r -- a) withpen pencircle scaled 1/4;
-    draw quartercircle scaled 32 rotated (180-theta) shifted point 1 of r cutafter subpath(0,1) of r withpen pencircle scaled 1/4;
-    fill r withcolor Greens 8 3;
-    draw point 1 of r -- a -- r;
-    draw a -- (xpart a, 0) dashed evenly scaled 1/2;
-
-    label("$\theta$", 24 right rotated 1/2 theta shifted point 0 of r);
-    label("$\theta$", 24 left rotated -1/2 theta shifted point 1 of r);
-    label.urt("$1$", 1/2[a, point 1 of r]);
-    label.ulft("$1$", 1/2[a, point 0 of r]);
-
-    label.bot("$\cos\theta$", point 1/4 of r);
-    label.bot("$\cos\theta$", point 3/4 of r);
-    label.bot("$2\cos\theta$", point 5/2 of r);
-
-    draw thelabel.top("$\cos\theta$", origin) rotated 90 shifted point -1/2 of r;
-
+  fill subpath (-1, 1) of R -- cycle withcolor Blues 8 3;
+  mark_angle(point 3 of R, point 1 of R, point 0 of R, 18, 24, "$\theta$");
+  draw subpath (-1, 3) of R -- point 1 of R;
+  label.urt("$2$", z0);
+  rotated_label.top("$2\sin\theta$", point -1/2 of R, 90);
+  label.bot("$2\cos\theta$", point  1/2 of R);
 );
 P2 = image(
-    path r, s; 
-    r = unitsquare shifted 1/2 left xscaled 2 yscaled -1 scaled cosd(theta) scaled unit;
-    s = subpath (0, 1) of r -- subpath(2, 3) of r shifted (sind(theta) * unit, 0) -- cycle;
-    z0 = (0, sind(theta) * unit);
-    z1 = whatever[point 0 of s, z0] = whatever[point 1 of s, point 2 of s];
-    z2 = z1 rotatedaround(1/2[point 0 of s, point 2 of s], 180);
-    drawoptions(withpen pencircle scaled 1/4);
-    draw quartercircle scaled 32 rotated 0           shifted point 0 of r cutafter (point 0 of r -- z0);
-    draw quartercircle scaled 32 rotated (180-theta) shifted point 1 of r cutafter subpath(0,1) of r;
-    draw quartercircle scaled 32 rotated 270         shifted point 0 of r cutafter subpath(3,0) of s;
-    draw quartercircle scaled 24 rotated -theta      shifted z0           cutafter (z0--z1);
-
-    fill s withcolor Greens 8 3;
-    draw s; draw point 0 of s -- z1 -- point 1 of s -- z0; draw point 2 of s -- z2;
-    draw z0 -- (x0, 0) dashed evenly scaled 1/2;
-    draw point 0 of s -- point 3 of r -- point 3 of s -- z2 dashed evenly scaled 1/2;
-
-    label("$\theta$", point 0 of s shifted 22 dir 1/2 theta);
-    label("$\theta$", point 0 of s shifted 22 dir (270 + 1/2 theta));
-    label("$\theta$", point 1 of s shifted 22 dir (180 - 1/2 theta));
-    label("$2\theta$", z0 shifted 20 right);
-
-    label.ulft("$1$", 1/2[point 0 of s, z0]);
-    label.ulft("$\cos2\theta$", 1/2[z1, z0]);
-    label.urt("$1$", 1/2[point 1 of s, z0]);
-    label.llft("$1$", point -1/2 of s);
-    label.urt("$1$", point 3/2 of s);
-    label.lrt("$1+\cos2\theta$", 1/2[z2, point 2 of s]);
+  pair p; p = whatever[point 1 of R, point 3 of R]; 
+  p - point 2 of R = whatever * (point 1 of R - point 3 of R) rotated 90;
+  fill subpath (3, 1) of R -- cycle withcolor Blues 8 3;
+  mark_angle(point 3 of R, point 1 of R, point 0 of R, 18, 24, "$\theta$");
+  mark_angle(point 1 of R, point 0 of R, point 2 of R, 18, 24, "$\theta$");
+  mark_angle(point 1 of R, z0, point 2 of R, 16, 24, "$2\theta$");
+  draw subpath (-1, 3) of R -- point 1 of R;
+  draw p -- point 2 of R -- point 0 of R;
+  label.ulft("$1$", 1/4[point 0 of R, point 2 of R]);
+  label.ulft("$1$", 3/4[point 0 of R, point 2 of R]);
+  rotated_label.bot("$\sin2\theta$", 1/2[p, point 2 of R], angle (point 2 of R - p));
 );
-
-draw P1 shifted 89 left;
-draw P2 shifted 89 right;
-label("$2\cos^2\theta = 1 + \cos 2\theta$", 108 down);
+P3 = image(draw P1 shifted 89 left; draw P2 shifted 89 right;
+  label.bot("$2\sin\theta\cos\theta = \sin 2\theta$", 
+  point 1/2 of bbox currentpicture shifted 21 down)
+);
+% DUMP capture=False, replace="% P4, P5, and P6 are similar to P1, P2, and P3"
+path S; S = unitsquare yscaled -1/2 scaled abs(point 1 of R - point 0 of R);
+P4 = image(
+  mark_angle(point 1 of S, point 0 of S, z0, 18, 24, "$\theta$");
+  mark_angle(z0, point 1 of S, point 0 of S, 18, 24, "$\theta$");
+  fill S withcolor Greens 8 3;
+  draw point 1 of S -- z0 -- S;
+  draw z0 -- (x0, 0) dashed evenly scaled 1/2;
+  label.urt("$1$", 1/2[z0, point 1 of S]);
+  label.ulft("$1$", 1/2[z0, point 0 of S]);
+  label.bot("$\cos\theta$", point 1/4 of S);
+  label.bot("$\cos\theta$", point 3/4 of S);
+  label.bot("$2\cos\theta$", point 5/2 of S);
+  rotated_label.top("$\cos\theta$", point -1/2 of S, 90);
+);
+path T; T = subpath (0, 1) of S -- subpath(2, 3) of S shifted (y0, 0) -- cycle;
+z1 = whatever[point 0 of T, z0] = whatever[point 1 of T, point 2 of T];
+z2 = z1 rotatedaround(1/2[point 0 of T, point 2 of T], 180);
+P5 = image(
+  fill T withcolor Greens 8 3;
+  mark_angle(point 1 of S, point 0 of S, z0, 18, 24, "$\theta$");
+  mark_angle(z0, point 1 of S, point 0 of S, 18, 24, "$\theta$");
+  mark_angle(point 3 of S, point 0 of T, point 3 of T, 18, 24, "$\theta$");
+  mark_angle(point 1 of S, z0, z1, 14, 21, "$2\theta$");
+  draw point 0 of S -- z1 -- point 1 of S -- z0;
+  draw z0 -- (x0, 0) dashed evenly scaled 1/2;
+  draw subpath (4, 3) of S -- point 3 of T -- z2 dashed evenly scaled 1/2;
+  draw point 2 of T -- z2; draw T;
+  label.urt("$1$", 1/2[z0, point 1 of S]);
+  label.ulft("$1$", 1/2[z0, point 0 of S]);
+  label.llft("$1$", point -1/2 of T);
+  label.urt("$1$", point 3/2 of T);
+  rotated_label.top("$\cos2\theta$", 1/2[z0, z1], angle z0);
+  rotated_label.top("$1+\cos2\theta$", 1/2[z2, point 2 of T], angle z0);
+% DUMP capture=True
+);
+P6 = image(draw P4 shifted 89 left; draw P5 shifted 89 right;
+          label("$2\cos^2\theta = 1 + \cos 2\theta$", 
+          point 1/2 of bbox currentpicture shifted 21 down));
+label.top(P3, 10 up); label.bot(P6, 10 down);
 \end{mplibcode}
 $$
 
@@ -2783,29 +2762,37 @@ $$
 \begin{mplibcode}
 path t; t = 216 left -- 84 down -- 84 up -- cycle;
 fill subpath (3/2, 3) of t -- cycle withcolor Oranges 8 3;
-draw unitsquare scaled 5 rotated 90 shifted point 3/2 of t withpen pencircle scaled 1/4;
-draw quartercircle scaled 24 rotated 90 shifted point 1 of t cutafter subpath(0,1) of t withpen pencircle scaled 1/4;
-draw t; draw point 0 of t -- point 3/2 of t dashed evenly scaled 1/2;
 
-numeric theta; theta = angle (point 2 of t - point 0 of t);
-label("$\theta$", point 0 of t shifted 36 dir 1/2 theta);
-label("$\theta$", point 0 of t shifted 36 dir -1/2 theta);
+draw unitsquare scaled 5 rotated 90 shifted point 3/2 of t
+                withpen pencircle scaled 1/4;
+
+draw fullcircle scaled 24 rotated 90 shifted point 1 of t 
+                cutafter subpath(0,1) of t 
+                withpen pencircle scaled 1/4;
+
+draw point 0 of t -- point 3/2 of t dashed evenly scaled 1/2;
+draw t; 
+
 label.ulft("$1$", point -1/2 of t);
 label.llft("$1$", point 1/2 of t);
 label.rt("$\sin\theta$", point 5/4 of t);
 label.rt("$\sin\theta$", point 7/4 of t);
-label(TEX("$\displaystyle {\pi\over2}-\theta$") scaled 3/4, point 1 of t shifted 24 dir (135 - 1/2 theta));
 
-\end{mplibcode}
-$$
-\bigskip
-$$\vbox{\openup6pt\halign{\hfil$\displaystyle # $\hfil\cr
+numeric theta; theta = angle (point 2 of t - point 0 of t);
+label("$\theta$", point 0 of t shifted 36 dir 1/2 theta);
+label("$\theta$", point 0 of t shifted 36 dir -1/2 theta);
+label(TEX("$\displaystyle {\pi\over2}-\theta$") scaled 3/4, 
+    point 1 of t shifted 24 dir (90 + 1/2 (90 - theta)));
+
+label.bot(btex \vbox{\openup6pt\halign{\hfil$\displaystyle # $\hfil\cr
 {\sin2\theta\over2\sin\theta} = {\sin(\pi/2 - \theta) \over 1} = \cos\theta\cr
 \sin2\theta = 2\sin\theta\cos\theta\cr
 \noalign{\vskip36pt}
 \left(2\sin\theta\right)^2 = 1^2 + 1^2 - 2 \cdot 1 \cdot 1 \cdot \cos2\theta\cr
 \cos2\theta = 1 - 2\sin^2\theta \cr
-}}$$
+}} etex, point 1/2 of bbox currentpicture shifted 21 down);
+\end{mplibcode}
+$$
 \vfill
 \contrib{Sidney H.\@ Kung}
 %--------------
@@ -2827,17 +2814,16 @@ z1 = point 0 of hh rotated beta;
 z2 = whatever[z0, z1] = whatever * point 0 of hh rotated gamma;
 
 drawoptions(withpen pencircle scaled 1/4);
-path a[];
-draw fullcircle scaled 72 cutafter (origin -- z0); label("$\alpha$", 42 dir 1/2 alpha);
-draw fullcircle scaled 84 cutafter (origin -- z1); label("$\beta$", 48 dir 1/2 beta);
-draw fullcircle scaled 24 cutafter (origin -- z2); label("$\gamma$", 18 dir (beta + 1/2 (gamma-beta))); 
-draw fullcircle scaled 36 cutbefore (origin -- z2) cutafter (origin -- z0); label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
-
+draw fullcircle scaled 72 cutafter (origin--z0); label("$\alpha$", 42 dir 1/2 alpha);
+draw fullcircle scaled 84 cutafter (origin--z1); label("$\beta$", 48 dir 1/2 beta);
+draw fullcircle scaled 24 cutafter (origin--z2); label("$\gamma$", 18 dir (beta+1/2(gamma-beta))); 
+draw fullcircle scaled 36 cutafter (origin--z0) 
+                          cutbefore (origin--z2); 
+label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
 draw unitsquare scaled 5 rotated 90 shifted (x0, 0);
 draw unitsquare scaled 5 rotated 90 shifted (x1, 0);
 draw unitsquare scaled 5 rotated 90 shifted (x2, 0);
 draw unitsquare scaled 5 rotated angle (z0-z1) shifted z2;
-
 drawoptions();
 
 draw (x0,0) -- z0 -- z1 -- (x1,0);
@@ -2853,14 +2839,16 @@ dotlabel.ulft("$(\cos\alpha, \sin\alpha)$", z0);
 dotlabel.llft("$0$", origin);
 dotlabel.bot("$1$", point 0 of hh);
 dotlabel.bot("$-1$", point 4 of hh);
+label.bot(btex \vbox{\openup 12pt\halign{\hfil #\hfil\cr
+    $\displaystyle \theta = {\alpha-\beta\over2}$, \quad 
+    $\displaystyle \gamma = {\alpha + \beta \over 2}$\cr
+    $\displaystyle {\sin\alpha+\sin\beta\over2}=s
+      =\cos{\alpha-\beta\over2}\sin{\alpha+\beta\over2}$\cr
+    $\displaystyle {\cos\alpha+\cos\beta\over2}=t
+      =\cos{\alpha-\beta\over2}\cos{\alpha+\beta\over2}$\cr}} etex,
+    point 1/2 of bbox currentpicture shifted 34 down);
 \end{mplibcode}
 $$
-\bigskip
-$$\vbox{\openup 8pt\halign{\hfil #\hfil\cr
-$\displaystyle \theta = {\alpha-\beta\over2}$, \quad $\displaystyle \gamma = {\alpha + \beta \over 2}$\cr
-$\displaystyle {\sin\alpha+\sin\beta\over2}=s=\cos{\alpha-\beta\over2}\sin{\alpha+\beta\over2}$\cr
-$\displaystyle {\cos\alpha+\cos\beta\over2}=t=\cos{\alpha-\beta\over2}\cos{\alpha+\beta\over2}$\cr
-}}$$
 \vfill
 \contrib{Sidney H.\@ Kung}
 \section{The difference-to-product identities I}
