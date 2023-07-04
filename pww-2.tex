@@ -2814,16 +2814,14 @@ z1 = point 0 of hh rotated beta;
 z2 = whatever[z0, z1] = whatever * point 0 of hh rotated gamma;
 
 drawoptions(withpen pencircle scaled 1/4);
-draw fullcircle scaled 72 cutafter (origin--z0); label("$\alpha$", 42 dir 1/2 alpha);
-draw fullcircle scaled 84 cutafter (origin--z1); label("$\beta$", 48 dir 1/2 beta);
-draw fullcircle scaled 24 cutafter (origin--z2); label("$\gamma$", 18 dir (beta+1/2(gamma-beta))); 
-draw fullcircle scaled 36 cutafter (origin--z0) 
-                          cutbefore (origin--z2); 
-label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
-draw unitsquare scaled 5 rotated 90 shifted (x0, 0);
-draw unitsquare scaled 5 rotated 90 shifted (x1, 0);
-draw unitsquare scaled 5 rotated 90 shifted (x2, 0);
-draw unitsquare scaled 5 rotated angle (z0-z1) shifted z2;
+  draw fullcircle scaled 72 cutafter (origin--z0); 
+  draw fullcircle scaled 84 cutafter (origin--z1); 
+  draw fullcircle scaled 24 cutafter (origin--z2); 
+  draw fullcircle scaled 36 cutafter (origin--z0) cutbefore (origin--z2); 
+  draw unitsquare scaled 5 rotated 90 shifted (x0, 0);
+  draw unitsquare scaled 5 rotated 90 shifted (x1, 0);
+  draw unitsquare scaled 5 rotated 90 shifted (x2, 0);
+  draw unitsquare scaled 5 rotated angle (z0-z1) shifted z2;
 drawoptions();
 
 draw (x0,0) -- z0 -- z1 -- (x1,0);
@@ -2839,6 +2837,10 @@ dotlabel.ulft("$(\cos\alpha, \sin\alpha)$", z0);
 dotlabel.llft("$0$", origin);
 dotlabel.bot("$1$", point 0 of hh);
 dotlabel.bot("$-1$", point 4 of hh);
+label("$\alpha$", 42 dir 1/2 alpha);
+label("$\beta$", 48 dir 1/2 beta);
+label("$\gamma$", 18 dir (beta+1/2(gamma-beta))); 
+label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
 label.bot(btex \vbox{\openup 12pt\halign{\hfil #\hfil\cr
     $\displaystyle \theta = {\alpha-\beta\over2}$, \quad 
     $\displaystyle \gamma = {\alpha + \beta \over 2}$\cr
@@ -2858,36 +2860,25 @@ $$
 numeric alpha, beta, gamma, theta, u;
 theta = 1/2 (alpha - beta); gamma = 1/2 (alpha + beta); alpha = 117; beta = 42;
 u = \mpdim{\hsize} / 2.236;
-
-path xx, yy, hh;
-xx = (1.1 left -- 1.1 right) scaled u;
-yy = (0.1 down -- 1.1 up) scaled u;
-hh = halfcircle scaled 2u;
-
+path xx; xx = (1.1 left -- 1.1 right) scaled u;
+path yy; yy = (0.1 down -- 1.1 up) scaled u;
+path hh; hh = halfcircle scaled 2u;
 z0 = point 0 of hh rotated alpha;
 z1 = point 0 of hh rotated beta;
 z2 = whatever[z0, z1] = whatever * point 0 of hh rotated gamma;
-
 drawoptions(withpen pencircle scaled 1/4);
-path a[];
-draw fullcircle scaled 72 cutafter (origin -- z0); label("$\alpha$", 42 dir 1/2 alpha);
-draw fullcircle scaled 84 cutafter (origin -- z1); label("$\beta$", 48 dir 1/2 beta);
-draw fullcircle scaled 24 cutafter (origin -- z2); label("$\gamma$", 18 dir (beta + 1/2 (gamma-beta))); 
-draw fullcircle scaled 36 cutbefore (origin -- z2) cutafter (origin -- z0); label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
-draw quartercircle scaled 24 rotated -90 shifted z0 cutafter (z0--z1); label("$\gamma$", z0 + 18 dir (1/2 gamma - 86)); 
-
-draw unitsquare scaled 5 shifted (x0, y1);
-draw unitsquare scaled 5 rotated 90 shifted (x0, 0);
-draw unitsquare scaled 5 rotated 90 shifted (x1, 0);
-draw unitsquare scaled 5 rotated angle (z0-z1) shifted z2;
-
+  draw fullcircle scaled 72 cutafter (origin--z0); 
+  draw fullcircle scaled 84 cutafter (origin--z1); 
+  draw fullcircle scaled 24 cutafter (origin--z2); 
+  draw fullcircle scaled 36 cutafter (origin--z0) cutbefore (origin -- z2);
+  draw quartercircle scaled 24 rotated -90 shifted z0 cutafter (z0--z1); 
+  draw unitsquare scaled 5 shifted (x0, y1);
+  draw unitsquare scaled 5 rotated 90 shifted (x0, 0);
+  draw unitsquare scaled 5 rotated 90 shifted (x1, 0);
+  draw unitsquare scaled 5 rotated angle (z0-z1) shifted z2;
 drawoptions();
-
 draw (x0,0) -- z0 -- z1 -- (x1,0);
-draw origin -- z0;
-draw origin -- z1;
-draw origin -- z2;
-
+draw origin -- z0; draw origin -- z1; draw origin -- z2;
 draw hh withcolor 2/3 blue;
 drawarrow xx; drawarrow yy;
 draw (x0, y1) -- z1 -- z0 -- cycle withcolor 2/3 red;
@@ -2899,6 +2890,11 @@ label.urt("$2\sin{\alpha-\beta\over2}$", 1/2[z0, z1]) withcolor 1/3 red;
 dotlabel.llft("$0$", origin);
 dotlabel.bot("$1$", point 0 of hh);
 dotlabel.bot("$-1$", point 4 of hh);
+label("$\alpha$", 42 dir 1/2 alpha);
+label("$\beta$", 48 dir 1/2 beta);
+label("$\gamma$", 18 dir (beta+1/2(gamma-beta))); 
+label("$\theta$", 24 dir (gamma + 4 + 1/2 (alpha-gamma))); 
+label("$\gamma$", z0 + 18 dir (1/2 gamma-86)); 
 \end{mplibcode}
 $$
 \bigskip
@@ -2912,12 +2908,9 @@ $\displaystyle \cos\beta-\cos\alpha = u = 2\sin{\alpha-\beta\over2}\sin{\alpha+\
 %--------------------
 \section{The sum-to-product identities II}
 \vfill
-$$\begin{mplibcode}
-
-numeric alpha, beta;
-alpha = 68; beta = 42;
-
-numeric u; u = 220;
+$$
+\begin{mplibcode}
+numeric u, alpha, beta; u = 220; alpha = 68; beta = 42;
 z1 = right rotated alpha scaled u;
 z2 = right rotated beta scaled -u;
 z3 = whatever * z1; y3 = y2;
@@ -2947,24 +2940,17 @@ label("$\alpha$", 10 dir 1/2 alpha shifted z3);
 label("$\beta$", 18 dir 1/2 beta shifted z2); 
 label("$\alpha+\beta\over2$", 48 dir 1/4 (alpha + beta) shifted z2); 
 label.ulft("$2\cos{\alpha-\beta\over2}$", z4);
-
 label.bot("\strut$\cos\alpha$", (1/2 x1, y2));
 label.bot("\strut$\cos\beta$", (1/2 x2, y2));
-
 label.rt("$\sin\alpha$", (x1, 1/2 y1));
 label.rt("$\sin\beta$", (x1, 1/2 y2));
-
 label.ulft("$1$", 1/2 z1);
 label.ulft("$1$", 1/2 z2);
 
-draw quartercircle scaled 64 
-rotated (180 + 1/2 alpha + 1/2 beta) shifted z1
-cutafter (origin -- z1) 
-withpen pencircle scaled 1/4;
-draw quartercircle scaled 64 
-rotated beta shifted z2 
-cutafter (z1 -- z2)
-withpen pencircle scaled 1/4;
+draw quartercircle scaled 64 rotated (180 + 1/2 alpha + 1/2 beta) shifted z1
+     cutafter (origin -- z1) withpen pencircle scaled 1/4;
+draw quartercircle scaled 64 rotated beta shifted z2 
+     cutafter (z1 -- z2) withpen pencircle scaled 1/4;
 
 z8 = z1 shifted 36 left shifted 12 down;
 z9 = z2 shifted 36 up;
@@ -2974,7 +2960,7 @@ label.top("$\alpha-\beta\over2$", z9);
 
 drawarrow z8 {dir -42} .. 28 dir (180 + 1/4 beta + 3/4 alpha) shifted z1; 
 drawarrow z9 {dir -60} .. 28 dir (3/4 beta + 1/4 alpha) shifted z2; 
-drawoptions();
+
 \end{mplibcode}
 $$
 \vfill
@@ -2986,19 +2972,15 @@ $$
 %--------------------
 \section{The difference-to-product identities II}
 \vfill
-$$\begin{mplibcode}
-
-numeric alpha, beta;
-alpha = 56; beta = 22;
-
-numeric u; u = 377;
+$$
+\begin{mplibcode}
+numeric u, alpha, beta; u = 377; alpha = 56; beta = 22;
 z1 = right rotated alpha scaled u;
 z2 = right rotated beta scaled u;
 z3 = (x1, y2);
 z4 = (x1, 0);
 z5 = (x2, 0);
 z6 = 1/2[z1, z2];
-
 z7 = whatever[origin, z2] = whatever[z1, z4];
 
 fill origin -- z1 -- z4 -- cycle withcolor Blues 9 2;
@@ -3014,16 +2996,13 @@ a1 = quartercircle scaled 72 cutafter (origin -- z1); draw a1;
 a2 = quartercircle scaled 90 cutafter (origin -- z2); draw a2;
 a3 = quartercircle scaled 108 rotated angle z6 cutafter (origin -- z1); draw a3;
 a4 = quartercircle scaled 64 rotated -90 shifted z1 cutafter (z1 -- z2); draw a4;
-
 label.rt("$\alpha$", point arctime 5/8 arclength a1 of a1 of a1);
 label.rt("$\beta$", point arctime 1/2 arclength a2 of a2 of a2);
 
 z8 = point infinity of a3 shifted (-8, 8);  label.top("$\alpha-\beta\over2$", z8);
 z9 = z1                   shifted (20, -8); label.top("$\alpha+\beta\over2$", z9);
-
 drawarrow z8 {down} .. 49 dir (alpha - 3/8 beta);
 drawarrow z9 {down} .. 28 dir (1/4 alpha + 1/4 beta - 90) shifted z1;
-
 
 drawoptions(dashed evenly scaled 1/2 withcolor 1/2 white);
 draw z3 -- z4; draw origin -- z6;
@@ -3033,18 +3012,12 @@ drawoptions();
 draw origin -- z1 -- z2 -- z5 -- origin -- z2;
 
 label.urt("$2\sin{\alpha-\beta\over2}$", z6);
-
 label.top("\strut$\cos\alpha$", 5/8 z4);
 label.bot("\strut$\cos\beta$", 1/2 z5);
-
 draw thelabel.top("$\sin\alpha$", origin) rotated 90 shifted 3/8[z4, z1];
 draw thelabel.bot("$\sin\beta$", origin) rotated 90 shifted 1/2[z5, z2];
-
 label.ulft("$1$", 1/2 z1);
 label.ulft("$1$", 1/2 z2);
-
-
-drawoptions();
 \end{mplibcode}
 $$
 \vfill
@@ -3054,10 +3027,12 @@ $$
 \vfill
 \contrib{Yukio Kobayashi}
 
+
 \section{Adding like sines}
 
 \vfill
-$$\begin{mplibcode}
+$$
+\begin{mplibcode}
 numeric x, theta, phi, s;
 x = 36; theta = 24; phi = 49;
 s = 4 in;
@@ -3157,19 +3132,20 @@ label.bot("$c$", 1/2[z0, z1]);
 label.ulft("$be^{i\alpha}$", 1/2[z0, z2]);
 label.lrt("$ae^{-i\beta}$", 1/2[z1, z2]);
 
-label("$c=be^{i\alpha} + ae^{-i\beta} = (b\cos\alpha + a\cos\beta) + i(b\sin\alpha - a\sin\beta)$", 
-point 1/2 of bbox currentpicture shifted 36 down);
+label(btex $c=be^{i\alpha} + ae^{-i\beta}
+             =(b\cos\alpha + a\cos\beta) + i(b\sin\alpha - a\sin\beta)$ etex, 
+    point 1/2 of bbox currentpicture shifted 36 down);
 
-label("if $c$ is real, then $b\sin\alpha-a\sin\beta=0$, hence $\displaystyle {a\over\sin\alpha}={b\over\sin\beta}$",
-point 1/2 of bbox currentpicture shifted 36 down);
+label(btex if $c$ is real, then $b\sin\alpha-a\sin\beta=0$, 
+      hence $\displaystyle {a\over\sin\alpha}={b\over\sin\beta}$ etex,
+    point 1/2 of bbox currentpicture shifted 36 down);
 
 label(btex \vbox{\openup 6pt\halign{\hfil $#$&${}=#$\hfil\cr
 c^2 & \left|c^2\right| = \left(b\cos\alpha + a\cos\beta\right)^2 + 
                          \left(b\sin\alpha - a\sin\beta\right)^2\cr
     & a^2 + b^2 + 2ab\cos(\alpha + \beta)\cr
     & a^2 + b^2 - 2ab\cos\gamma\cr}} etex, 
-point 1/2 of bbox currentpicture shifted 42 down);
-
+    point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
@@ -3233,7 +3209,8 @@ $$
 \section{A familiar limit for $e$}
 
 \vfill
-$$\begin{mplibcode}
+$$
+\begin{mplibcode}
 numeric u; u = 90;
 
 path xx, yy, ff;
@@ -3270,12 +3247,14 @@ label.bot("$\strut 1 + {1\over n}$", (x2, 0));
 label.lft("$1$", (0, y2));
 label.lft("$n\over n+1$", (0, y1));
 
-label.top("$\displaystyle \lim_{n\to\infty} \left(1+{1\over n}\right)^n = e$", point 5/2 of bbox currentpicture shifted 12 up);
+label.top("$\displaystyle \lim_{n\to\infty} \left(1+{1\over n}\right)^n = e$", 
+    point 5/2 of bbox currentpicture shifted 12 up);
+
 label.bot(btex \vbox{\openup 12pt\halign{\hfil $\displaystyle #$ \hfil\cr
-{1\over n}\cdot{n\over n+1} \le \ln\left(1+{1\over n}\right) \le {1\over n}\cdot 1\cr
-{n\over n+1} \le n \cdot \ln\left(1+{1\over n}\right) \le 1\cr
-\therefore \quad \lim_{n\to\infty} \ln\left(\left(1+{1\over n}\right)^n\right) = 1\cr
-}} etex, point 1/2 of bbox currentpicture shifted 36 down);
+    {1\over n}\cdot{n\over n+1} \le \ln\left(1+{1\over n}\right) \le {1\over n}\cdot 1\cr
+    {n\over n+1} \le n \cdot \ln\left(1+{1\over n}\right) \le 1\cr
+    \therefore \quad \lim_{n\to\infty} \ln\left(\left(1+{1\over n}\right)^n\right) = 1\cr
+    }} etex, point 1/2 of bbox currentpicture shifted 36 down);
 
 \end{mplibcode}
 $$
@@ -3291,7 +3270,8 @@ yy = 5 down -- 160 up;
 
 % f=1/x f'= -1/x^2
 numeric u; u = 88;
-ff = ((5/8, 8/5){25, -64} .. (1, 1){1, -1} .. (9/4, 4/9){81, -16} .. (13/4, 4/13){169, -16}) scaled u;
+ff = ((5/8, 8/5){25, -64} .. (1, 1){1, -1} 
+   .. (9/4, 4/9){81, -16} .. (13/4, 4/13){169, -16}) scaled u;
 
 z1 = point 1 of ff;
 z2 = point 2 of ff;
@@ -3321,12 +3301,13 @@ drawarrow xx; label.rt("$x$", point 1 of xx);
 drawarrow yy; label.top("$y$", point 1 of yy);
 
 label("$\ln x$", 1/2[(x1,0), z2]);
-label("$\displaystyle \lim_{x\to\infty} {x\over e^x} = 0$", point 5/2 of bbox currentpicture shifted 72 up);
+label("$\displaystyle \lim_{x\to\infty} {x\over e^x} = 0$", 
+    point 5/2 of bbox currentpicture shifted 72 up);
 label(btex \vbox{\openup 8pt\halign{\hfil $\displaystyle # $ \hfil\cr
-\ln x < {1\over2}x \cr
-\therefore\: \lim_{x\to\infty} {x \over e^x} = 
-             \lim_{x\to\infty} {1 \over e^{x-\ln x}} = 0 \cr
-}} etex, point 1/2 of bbox currentpicture shifted 36 down);
+    \ln x < {1\over2}x \cr
+    \therefore\: \lim_{x\to\infty} {x \over e^x} = 
+                 \lim_{x\to\infty} {1 \over e^{x-\ln x}} = 0 \cr
+    }} etex, point 1/2 of bbox currentpicture shifted 36 down);
 \end{mplibcode}
 $$
 \vfill
@@ -3336,47 +3317,39 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u, v;
-u = 72; v = 3/2 u;
-path xx, yy, ff, ll;
-xx = 5 left -- 300 right;
-yy = 5 down -- 240 up;
-ff = (origin {up} for x=1 upto 5: .. (x,sqrt(x)){1, 1/(2sqrt(x))} endfor)
-xscaled u yscaled v;
-ll = ((2,0) -- (4.25,2.25)) xscaled u yscaled v;
+numeric u, v; u = 72; v = 3/2 u;
+path xx; xx = 5 left -- 300 right;
+path yy; yy = 5 down -- 240 up;
+path ff; ff = (origin {up} for x=1 upto 5: .. (x,sqrt(x)){1, 1/(2sqrt(x))} endfor)
+         xscaled u yscaled v;
+path ll; ll = ((2,0) -- (4.25,2.25)) xscaled u yscaled v;
 
 interim ahangle := 20;
-string xlabel, ylabel;
-numeric x, y;
-x = 2; y = 0;
-xlabel = "2";
-ylabel = "\sqrt{2}";
+
+numeric x, y; x = 2; y = 0;
+string xlabel, ylabel; xlabel = "2"; ylabel = "\sqrt{2}";
 draw ((x, y) 
-for i=1 upto 10:
-    hide(if odd i: 
+    for i=1 upto 10:
+      hide(if odd i: 
         if i < 6:
-            drawarrow (x*u, 7-8i) -- (x*u, -1) withpen pencircle scaled 1/2 withcolor 1/2 white;
-            label.bot("$" & xlabel & "$", (x*u, 7-8i));
-            xlabel := "2 + \sqrt{" & xlabel & "}";
-        fi
-        y := sqrt(x); 
-    else:
+          drawarrow (x*u, 7-8i) -- (x*u, -1) withpen pencircle scaled 1/2 withcolor 1/2;
+          label.bot("$" & xlabel & "$", (x*u, 7-8i));
+          xlabel := "2 + \sqrt{" & xlabel & "}";
+        fi y := sqrt(x); 
+      else:
         if i < 6:
-            label.lft("$" & ylabel & "$", (0, y*v));
-            ylabel := "\sqrt{2+" & ylabel & "}";
-        fi
-        x := 2 + y; 
-    fi)
-    -- (x,y)
-    hide(
-        if i < 6:
+          label.lft("$" & ylabel & "$", (0, y*v));
+          ylabel := "\sqrt{2+" & ylabel & "}";
+        fi x := 2 + y; 
+      fi) -- (x,y)
+      hide(if i < 6:
         draw ((x,y) -- if odd i: (0,y) else: (x,0) fi) 
         xscaled u yscaled v
         dashed evenly scaled 1/2
         withpen pencircle scaled 1/4
-        withcolor 1/2 white;fi)
-    endfor
-) xscaled u yscaled v withpen pencircle scaled 1/4;
+        withcolor 1/2 white;
+      fi)
+    endfor) xscaled u yscaled v withpen pencircle scaled 1/4;
 draw((0,2v)--(4u,2v)--(4u,0)) withpen pencircle scaled 1/4;
 label.lft("$2$", (0, 2v));
 label.bot("$4$", (4u, 0));
@@ -3384,12 +3357,15 @@ label.bot("$4$", (4u, 0));
 drawarrow xx; label.rt("$x$", point 1 of xx);
 drawarrow yy; label.top("$y$", point 1 of yy);
 drawoptions(withcolor 2/3 blue);
-draw ff; picture t; t = thelabel.top("$y=\sqrt x$", origin); draw t rotated angle direction 1 of ff shifted point 1 of ff;
-draw ll; picture t; t = thelabel.top("$y=x-2$", origin); draw t rotated angle direction 1/4 of ll shifted point 1/4 of ll;
+draw ff; picture t; t = thelabel.top("$y=\sqrt x$", origin); 
+    draw t rotated angle direction 1 of ff shifted point 1 of ff;
+draw ll; picture t; t = thelabel.top("$y=x-2$", origin); 
+    draw t rotated angle direction 1/4 of ll shifted point 1/4 of ll;
 drawoptions();
 fill fullcircle scaled dotlabeldiam shifted (4u, 2v);
 
-label("$\displaystyle \sqrt{2+\sqrt{2 + \sqrt{2 + \sqrt{\cdots}}}} = 2$", point 5/2 of bbox currentpicture shifted 42 up);
+label("$\displaystyle \sqrt{2+\sqrt{2 + \sqrt{2 + \sqrt{\cdots}}}} = 2$", 
+    point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
@@ -3435,123 +3411,102 @@ point 1/2 of bbox currentpicture shifted 36 down);
 $$
 \vfill
 \contrib{Craig Johnson}
+%-----------------------------
 \section{The logarithm of a product}
 \vfill
 $$
 \hbox to \textwidth{\hss
 \begin{mplibcode}
 interim ahangle := 25;
-path xx, yy, ff, ll;
-picture p[];
-
-xx = 8 left -- 200 right; 
-yy = 8 down -- 125 up; 
+path xx, yy; xx = 8 left -- 200 right; yy = 8 down -- 125 up; 
 % f=1/x f'=-1/x^2
-ff = ((1/4, 4){1, -16} .. (1/2, 2){1, -4} .. (1, 1){1, -1} .. (3/2, 2/3){9, -4} .. (2, 1/2){4, -1} .. (5/2, 2/5){25, -4} .. (3, 1/3){9, -1})
-xscaled 64 yscaled 30;  
-ll = origin -- (xpart point infinity of ff, ypart point 0 of ff);
-
-z1 = point 7/8 of ll;
-
-p0 = image(
-drawoptions(withpen pencircle scaled 1/4);
-draw (x1,0) -- z1 -- (0, y1);
-draw ff withpen pencircle scaled 5/8 withcolor 2/3 blue;
-draw ll withpen pencircle scaled 5/8 withcolor 2/3 red;
-drawarrow xx;
-drawarrow yy;
-drawdot origin withpen pencircle scaled 1/2 dotlabeldiam;
+path ff; ff = ((1/4, 4){1, -16} .. (1/2, 2){1, -4} .. (1, 1){1, -1} .. (3/2, 2/3){9, -4} 
+         .. (2, 1/2){4, -1} .. (5/2, 2/5){25, -4} .. (3, 1/3){9, -1}) xscaled 64 yscaled 30;  
+path ll; ll = origin--(xpart point infinity of ff, ypart point 0 of ff); z1=point 7/8 of ll;
+picture p[]; p0 = image(
+    draw (x1,0) -- z1 -- (0, y1) withpen pencircle scaled 1/4;
+    draw ff withpen pencircle scaled 5/8 withcolor 2/3 blue;
+    draw ll withpen pencircle scaled 5/8 withcolor 2/3 red;
+    drawarrow xx; drawarrow yy;
+    draw origin withpen pencircle scaled 1/2 dotlabeldiam;
 );
-
 input thatch
-
 p1 = image(
-z11 = point 9/16 of ll;
-z12 = ff intersectionpoint (xx shifted (0, y11));
-z13 = ff intersectionpoint (yy shifted (x11, 0));
-
-path a[];
-a1 = (0, y12) -- z12 -- (x12, y1) -- (0, y1) -- cycle;
-a2 = (x13, 0) -- (x1, 0) -- (x1, y13) -- z13 -- cycle;
-thatch_angle := 45;
-fill a1 withcolor Blues 8 3;
-rule a1 withcolor white;
-thatch_angle := -45;
-fill a2 withcolor Blues 8 3;
-rule a2 withcolor white;
-
-drawoptions(withpen pencircle scaled 1/4);
-draw (x11, 0) -- z11 -- (0, y11);
-draw (x12, 0) -- (x12, y1);
-draw (0, y13) -- (x1, y13);
-drawoptions();
-
-draw p0;
-label.ulft("$x=by$", point infinity of ll) withcolor 2/3 red;
-label.urt("$xy=1$", point 0 of ff) withcolor 2/3 blue;
-label.lft("$p$", (0, y1));
-label.lft("$q$", (0, y11));
-label.lft("$1/bq$", (0, y13));
-label.bot("$1/q$", (x12, 0));
-label.bot("$bq$", (x11, 0));
-label.bot("$bp$", (x1, 0));
+    z11 = point 9/16 of ll;
+    z12 = ff intersectionpoint (xx shifted (0, y11));
+    z13 = ff intersectionpoint (yy shifted (x11, 0));
+    path a; a = (0, y12) -- z12 -- (x12, y1) -- (0, y1) -- cycle;
+    path b; b = (x13, 0) -- (x1, 0) -- (x1, y13) -- z13 -- cycle;
+    fill a withcolor Blues 8 3; thatch_angle :=  45; rule a withcolor white;
+    fill b withcolor Blues 8 3; thatch_angle := -45; rule b withcolor white;
+    draw (x11, 0) -- z11 -- (0, y11) withpen pencircle scaled 1/4;
+    draw (x12, 0) -- (x12, y1) withpen pencircle scaled 1/4;
+    draw (0, y13) -- (x1, y13) withpen pencircle scaled 1/4;
+    draw p0;
+    label.ulft("$x=by$", point infinity of ll) withcolor 2/3 red;
+    label.urt("$xy=1$", point 0 of ff) withcolor 2/3 blue;
+    label.lft("$p$", (0, y1)); label.bot("$bp$", (x1, 0));
+    label.lft("$q$", (0, y11)); label.bot("$bq$", (x11, 0)); 
+    label.lft("$1/bq$", (0, y13)); label.bot("$1/q$", (x12, 0));
 );
+% DUMP capture=False, replace = "% ... similar for p2, p3, p4"
 p2 = image(
-for i=0 upto 4:
-    z[20 + i] = (1/2 + i/8)  * z1;
-    z[200 + i] = ff intersectionpoint (xx shifted (0, y[20 + i]));
-    z[210 + i] = ff intersectionpoint (yy shifted (x[20 + i], 0));
-endfor
-path a[], b[];
-for i=0 upto 3:
-    a[i] = (0, y[20 + i]) -- z[200 + i] -- (x[200 + i], y[21 + i]) -- (0, y[21 + i]) -- cycle;
-    thatch_angle := 45;
-    fill a[i] withcolor Blues 8 3; rule a[i] withcolor white; 
-    draw subpath (1,2) of a[i] withpen pencircle scaled 1/4;
-    
-    b[i] = (x[20 + i], 0) -- (x[21 + i], 0) -- (x[21 + i], y[210 + i]) -- z[210 + i] -- cycle;
-    thatch_angle := -45;
-    fill b[i] withcolor Blues 8 3; rule b[i] withcolor white; 
-    draw subpath (2,3) of b[i] withpen pencircle scaled 1/4;
+    for i=0 upto 4:
+        z[20 + i] = (1/2 + i/8)  * z1;
+        z[200 + i] = ff intersectionpoint (xx shifted (0, y[20 + i]));
+        z[210 + i] = ff intersectionpoint (yy shifted (x[20 + i], 0));
+    endfor
+    path a[], b[];
+    for i=0 upto 3:
+        a[i] = (0, y[20 + i]) -- z[200 + i] -- (x[200 + i], y[21 + i]) -- (0, y[21 + i]) -- cycle;
+        thatch_angle := 45;
+        fill a[i] withcolor Blues 8 3; rule a[i] withcolor white; 
+        draw subpath (1,2) of a[i] withpen pencircle scaled 1/4;
+        
+        b[i] = (x[20 + i], 0) -- (x[21 + i], 0) -- (x[21 + i], y[210 + i]) -- z[210 + i] -- cycle;
+        thatch_angle := -45;
+        fill b[i] withcolor Blues 8 3; rule b[i] withcolor white; 
+        draw subpath (2,3) of b[i] withpen pencircle scaled 1/4;
 
-    draw (0, y[20 + i]) -- z[20 + i] -- (x[20 + i], 0) withpen pencircle scaled 1/4;
-endfor
-draw p0;
-label.ulft("$x=by$", point infinity of ll) withcolor 2/3 red;
-label.urt("$xy=1$", point 0 of ff) withcolor 2/3 blue;
-label.lft("$a$", (0, y1));
-label.lft("$1$", (0, y20));
-label.bot("$b$", (x20, 0));
-label.bot("$ab$", (x1, 0));
+        draw (0, y[20 + i]) -- z[20 + i] -- (x[20 + i], 0) withpen pencircle scaled 1/4;
+    endfor
+    draw p0;
+    label.ulft("$x=by$", point infinity of ll) withcolor 2/3 red;
+    label.urt("$xy=1$", point 0 of ff) withcolor 2/3 blue;
+    label.lft("$a$", (0, y1));
+    label.lft("$1$", (0, y20));
+    label.bot("$b$", (x20, 0));
+    label.bot("$ab$", (x1, 0));
 );
 p3 = image(
-path a, b;
-a = buildcycle(yy, (0,y1) -- z1, ff, z20 -- (0, y20));
-thatch_angle := 45;
-fill a withcolor Blues 8 3; rule a withcolor white; 
+    path a, b;
+    a = buildcycle(yy, (0,y1) -- z1, ff, z20 -- (0, y20));
+    thatch_angle := 45;
+    fill a withcolor Blues 8 3; rule a withcolor white; 
 
-b = buildcycle(xx, (x1, 0) -- z1, ff, z20 -- (x20, 0));
-thatch_angle := -45;
-fill b withcolor Blues 8 3; rule b withcolor white; 
+    b = buildcycle(xx, (x1, 0) -- z1, ff, z20 -- (x20, 0));
+    thatch_angle := -45;
+    fill b withcolor Blues 8 3; rule b withcolor white; 
 
-draw (0, y20) -- z20 -- (x20, 0) withpen pencircle scaled 1/4;
-draw p0;
-label.lft("$a$", (0, y1));
-label.lft("$1$", (0, y20));
-label.bot("$b$", (x20, 0));
-label.bot("$ab$", (x1, 0));
+    draw (0, y20) -- z20 -- (x20, 0) withpen pencircle scaled 1/4;
+    draw p0;
+    label.lft("$a$", (0, y1));
+    label.lft("$1$", (0, y20));
+    label.bot("$b$", (x20, 0));
+    label.bot("$ab$", (x1, 0));
 );
 p4 = image(
-path c;
-c = buildcycle(xx, (x200, 0) -- z200, ff, z20 -- (x20, 0));
-draw (x200, 0) -- z200 withpen pencircle scaled 1/4;
-fill c withcolor Reds 7 2;
-draw p3;
-label.bot("$1$", (x200,0));
-label("$\ln a$", center a shifted (-4, -12));
-label("$\ln a$", center b shifted (-12, -4));
-label("$\ln b$", center b shifted (-66, -4));
+    path c;
+    c = buildcycle(xx, (x200, 0) -- z200, ff, z20 -- (x20, 0));
+    draw (x200, 0) -- z200 withpen pencircle scaled 1/4;
+    fill c withcolor Reds 7 2;
+    draw p3;
+    label.bot("$1$", (x200,0));
+    label("$\ln a$", center a shifted (-4, -12));
+    label("$\ln a$", center b shifted (-12, -4));
+    label("$\ln b$", center b shifted (-66, -4));
 );
+% DUMP capture=True
 draw p1 shifted (-125, +84) shifted - center bbox p0;
 draw p2 shifted (+125, +84) shifted - center bbox p0; 
 draw p3 shifted (-125, -84) shifted - center bbox p0; 
@@ -3570,19 +3525,23 @@ label("$\ln ab = \ln a + \ln b$", point 5/2 of bbox currentpicture shifted 42 up
 $$
 
 \vskip 36pt
-
+% This has to be done separately from the main figure, because
+% you can't include an mplibcode environment in a label within 
+% another mplibcode environment.
 $$
 \mathord{\hbox{Area}}\left(\vcenter{%
 \begin{mplibcode}
+% DUMP capture=False, replace="% See source for how the legend is done"
 input thatch; path s; s = unitsquare scaled 18; 
 fill s withcolor Blues 8 3; rule s withcolor white; draw s;
 \end{mplibcode}}\right)=
 \mathord{\hbox{Area}}\left(\vcenter{%
 \begin{mplibcode}
+% DUMP capture=False
 input thatch; path s; s = unitsquare scaled 18; interim thatch_angle := -45;
 fill s withcolor Blues 8 3; rule s withcolor white; draw s;
-\end{mplibcode}}\right)
-$$
+\end{mplibcode}
+}\right)$$
 
 
 \vfill
@@ -3624,65 +3583,54 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u; u = 3in;
-path tt, yy, ff, gg, aa;
-tt = 12 left -- (3/2u + 32) * right;
-yy = (u + 12) * down -- (1/2u + 32) * up;
-
-ff = ((0, 1/2){1,0} for t=1/4 step 1/4 until 3/2:
-    .. (t, 1/(2 * (1+t**2))){1, -t/(t**2 +1)/(t**2 +1)}
-endfor) scaled u;
-
-z0 = u * down;
-
-gg = origin for i=1 upto 6: 
-    .. right scaled u rotated angle (xpart point i of ff, u) shifted z0
-endfor;
-aa = quartercircle scaled 100 shifted z0 cutbefore (z0--point 5 of gg);
+numeric u; u = 3in; z.O = u * down;
+path tt; tt = 12 left -- (3/2u + 32) * right;
+path yy; yy = (u + 12) * down -- (1/2u + 32) * up;
+path ff; ff = ((0, 1/2){1,0} for t=1/4 step 1/4 until 3/2:
+    .. (t, 1/(2 * (1+t**2))){1, -t/(t**2 +1)/(t**2 +1)} endfor) scaled u;
+path gg; gg = origin for i=1 upto 6: 
+    .. u * dir angle (xpart point i of ff, u) shifted z.O endfor;
+path aa; aa = quartercircle scaled 100 shifted z.O cutbefore (z.O--point 5 of gg);
 
 fill origin -- (xpart point 5 of ff, 0) -- subpath (5, 0) of ff -- cycle withcolor Blues 8 2;
-fill z0 -- subpath (5, 0) of gg -- cycle withcolor Blues 8 2;
-
-z1 = whatever[z0, point 3 of gg]; y1 = ypart point 4 of gg;
-z2 = whatever[z0, point 4 of gg]; y2 = ypart point 3 of gg;
-fill z0 -- point 4 of gg -- z1 -- cycle withcolor 3/4[Blues 8 2, Oranges 7 2];
-fill subpath (3, 4) of gg -- z1 -- cycle withcolor 1/2[Blues 8 2, Greens 7 2];
-fill subpath (3, 4) of gg -- z2 -- cycle withcolor Greens 7 2;
-
-z3 = (xpart point 3 of ff, ypart point 4 of ff);
-z4 = (xpart point 4 of ff, ypart point 3 of ff);
+fill z.O -- subpath (5, 0) of gg -- cycle withcolor Blues 8 2;
+z.P = whatever[z.O, point 3 of gg]; y.P = ypart point 4 of gg;
+z.S = whatever[z.O, point 4 of gg]; y.S = ypart point 3 of gg;
+fill z.O -- point 4 of gg -- z.P -- cycle withcolor 3/4[Blues 8 2, Oranges 7 2];
+fill subpath (3, 4) of gg -- z.P -- cycle withcolor 1/2[Blues 8 2, Greens 7 2];
+fill subpath (3, 4) of gg -- z.S -- cycle withcolor Greens 7 2;
+z.C = (xpart point 3 of ff, ypart point 4 of ff);
+z.F = (xpart point 4 of ff, ypart point 3 of ff);
 fill (xpart point 3 of ff, 0) -- (xpart point 4 of ff, 0) -- 
-    point 4 of ff -- z3 -- cycle withcolor 3/4[Blues 8 2, Oranges 7 2];
-fill subpath (3, 4) of ff -- z3 -- cycle withcolor 1/2[Blues 8 2, Greens 7 2];
-fill subpath (3, 4) of ff -- z4 -- cycle withcolor Greens 7 2;
+    point 4 of ff -- z.C -- cycle withcolor 3/4[Blues 8 2, Oranges 7 2];
+fill subpath (3, 4) of ff -- z.C -- cycle withcolor 1/2[Blues 8 2, Greens 7 2];
+fill subpath (3, 4) of ff -- z.F -- cycle withcolor Greens 7 2;
 
 drawoptions(withpen pencircle scaled 1/4);
-for i=1 upto 5:
+  for i=1 upto 5:
     draw subpath (-2, 1) of unitsquare 
         xscaled (xpart point i-1 of ff - xpart point i of ff)
         yscaled (ypart point i-1 of ff - ypart point i of ff)
-        shifted point i of ff
-        if i <> 4: dashed evenly scaled 1/2 fi;
-    draw z0
-        -- (xpart point i of ff, 0) 
-        -- point i of ff 
+        shifted point i of ff if i <> 4: dashed evenly scaled 1/2 fi;
+    draw z.O -- (xpart point i of ff, 0) -- point i of ff 
         if i < 3: dashed evenly scaled 1/2 fi;
     draw (origin -- u * left) shifted point i of gg
-        cutafter (z0 -- point i-1 of gg)
+        cutafter (z.O -- point i-1 of gg)
         if i <> 4: dashed evenly scaled 1/2 fi;
     draw (origin -- u * right) shifted point i-1 of gg
-        cutafter (z0 -- (xpart point i of ff, 0))
+        cutafter (z.O -- (xpart point i of ff, 0))
         if i <> 4: dashed evenly scaled 1/2 fi;
-endfor
+  endfor
 drawoptions(withpen pencircle scaled 3/4 withcolor 2/3 blue);
-draw ff; draw gg; draw aa;
-label.rt("$y={1\over 2\left(1+t^2\right)}$", point 6 of ff);
-label.rt("$t^2 + \left(y+1\right)^2=1$", point 6 of gg);
-label.lrt("$\arctan x$", point 0 of aa);
+  draw ff; draw gg; draw aa;
+  label.rt("$y={1\over 2\left(1+t^2\right)}$", point 6 of ff);
+  label.rt("$t^2 + \left(y+1\right)^2=1$", point 6 of gg);
+  label.lrt("$\arctan x$", point 0 of aa);
 drawoptions();
 
 drawarrow tt; label.rt("$t$", point 1 of tt);
 drawarrow yy; label.top("$y$", point 1 of yy);
+% DUMP capture=False, replace="% ... the rest is labels ... "
 label.lft("$1/2$", (0, 1/2u));
 label.llft("$0$", origin);
 label.lft("$-1$", (0, -u));
@@ -3693,29 +3641,25 @@ label.lrt("$t_{i-1}$", (xpart point 3 of ff, 0));
 label.lrt("$t_{i}$", (xpart point 4 of ff, 0));
 dotlabel.lrt("$x$", (xpart point 5 of ff, 0));
 
-dotlabel.lrt ("$\scriptstyle O$", (0, -u));
-dotlabel.ulft("$\scriptstyle P$", z1);
+dotlabel.lrt ("$\scriptstyle O$", z.O);
+dotlabel.ulft("$\scriptstyle P$", z.P);
 dotlabel.top ("$\scriptstyle R$\strut", point 3 of gg);
-dotlabel.lrt ("$\scriptstyle S$", z2);
+dotlabel.lrt ("$\scriptstyle S$", z.S);
 dotlabel.rt  ("$\scriptstyle Q$", point 4 of gg);
 dotlabel.ulft("$\scriptstyle A$", (xpart point 3 of ff, 0));
 dotlabel.urt ("$\scriptstyle B$", (xpart point 4 of ff, 0));
-dotlabel.lft ("$\scriptstyle C$", z3);
+dotlabel.lft ("$\scriptstyle C$", z.C);
 dotlabel.urt ("$\scriptstyle D$", point 4 of ff);
 dotlabel.urt ("$\scriptstyle E$", point 3 of ff);
-dotlabel.urt ("$\scriptstyle F$", z4);
+dotlabel.urt ("$\scriptstyle F$", z.F);
 
 path mark; mark = (xpart point 3 of ff + 1, 1/2 ypart point 4 of ff)
                -- (xpart point 4 of ff - 1, 1/2 ypart point 4 of ff);
-
 drawdblarrow mark withpen pencircle scaled 1/4;
 picture m; m = thelabel("$\Delta t$", point 1/2 of mark);
-fill bbox m withcolor 3/4[Blues 8 2, Oranges 7 2];
-draw m;
+fill bbox m withcolor 3/4[Blues 8 2, Oranges 7 2]; draw m;
 
 label.top("$\displaystyle \arctan x = \int_0^x{1\over 1+t^2}\,dt$", point 5/2 of bbox currentpicture);
-
-
 label(btex 
 \def\Area(#1){\mathord{\hbox{Area}}\left(#1\right)}
 \def\rect#1#2{\mathord{\vcenter{\vbox{\hrule height.#2pt
@@ -3725,10 +3669,12 @@ label(btex
 \Area(\rect74 ABEF) = \Area(\triangle ORS) = {1\over2}\cdot{1\over1+t_{i}^2}\cdot\Delta t\cr
 \therefore\quad{1\over2}\arctan x = \int_0^x{1\over2\left(1+t^2\right)}\,dt\cr
 }} etex, point 5/8 of bbox currentpicture);
+% DUMP capture=True
 \end{mplibcode}
 $$
 \vfill
 \contrib{Aage Bondesen}
+%----------------------------------------------------
 \section{The method of last resort — Weierstrass substitution}
 
 \vfill
@@ -3773,9 +3719,9 @@ label.ulft("$\sqrt{1+u^2}$", 1/2[z1, z2]);
 drawoptions();
 
 label.bot(btex \vbox{\openup 12pt\halign{\hfil $\displaystyle #$ \hfil\cr
-u = \tan{\theta\over2},\quad DE = 2\sin{\theta\over2}= {2u\over\sqrt{1+u^2}}\cr
-{CE\over DE} = {OA\over BA} \quad \Longrightarrow \quad \sin\theta = {2u \over 1 + u^2}\cr
-{CD\over DE} = {OB\over BA} \quad \Longrightarrow \quad \cos\theta = {1 - u^2 \over 1 + u^2}\cr
+  u=\tan\frac{\theta}{2}, \quad DE=2\sin\frac{\theta}{2}=\frac{2u}{\sqrt{1+u^2}}\cr
+  \frac{CE}{DE}=\frac{OA}{BA} \quad\Longrightarrow\quad \sin\theta=\frac{2u}{1+u^2}\cr
+  \frac{CD}{DE}=\frac{OB}{BA} \quad\Longrightarrow\quad \cos\theta=\frac{1-u^2}{1+u^2}\cr
 }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 
 
@@ -3789,20 +3735,14 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path xx, yy, ff;
-xx = 10 left -- 300 right;
-yy = 10 down -- 240 up;
-
-ff = subpath (3.7, 2.15) of fullcircle
-    xscaled 560 yscaled 410
-    shifted 300 right
-    shifted  20 down;
+path xx, yy; xx = 10 left -- 300 right; yy = 10 down -- 240 up;
+path ff; ff = subpath (3.7, 2.15) of fullcircle xscaled 560 yscaled 410 shifted (300, -20);
 
 numeric t[];
 for i=0 upto 6:
-    numeric u;
-    (t[i], u) = ff intersectiontimes yy shifted (i/7)[(xpart point 0 of ff, 0), (xpart point infinity of ff, 0)];
-    z[10 + i] = point t[i] of ff;
+  (t[i], whatever) = ff intersectiontimes
+          yy shifted (i/7)[(xpart point 0 of ff, 0), (xpart point infinity of ff, 0)];
+  z[10 + i] = point t[i] of ff;
 endfor
 for i=0 upto 5:
     z[i] = (xpart point t[i+1] of ff, ypart point t[i] of ff);
@@ -3819,22 +3759,15 @@ for i=2 upto 5:
     draw trig;
     draw point 1 of trig -- z[11+i] dashed evenly;
 endfor
-draw z5 -- z16;
-draw (x1, y16) -- (x0, y16) -- z11;
+draw z5 -- z16; draw (x1, y16) -- (x0, y16) -- z11;
 draw z11 -- (0, y11) dashed evenly;
 draw (x0, y16) -- (0, y16) dashed evenly;
-
 draw ff withpen pencircle scaled 3/4 withcolor Blues 8 8;
-
-drawarrow xx;
-drawarrow yy;
-
-label.rt("$x$", point 1 of xx);
-label.top("$y$", point 1 of yy);
+drawarrow xx; label.rt("$x$", point 1 of xx); 
+drawarrow yy; label.top("$y$", point 1 of yy);
 
 label.lft("$f\left(x_0\right)$", (0, y11));
 label.lft("$f\left(x_n\right)$", (0, y16));
-
 label.urt("$y=f\left(x\right)$", point infinity of ff) withcolor Blues 8 8;
 
 label.bot("\strut\llap{$a={}$}$x_0$", (x0, 0));
@@ -3860,43 +3793,38 @@ $$
 \vfill
 \noindent
 \begin{mplibcode}
-numeric r;
-r = 150;   
-path xx, yy, base, hh;
-xx = 12 left -- 3/2 r * right;
-yy = xx rotated 90;
-base = quartercircle scaled 2r;
-hh = point 0 of base
-for t=4 step 4 until 48:
-hide(numeric a; a = ypart dir t / xpart dir t;)
-.. (a ++ 1, a) scaled r
+numeric r; r = 150;   
+path xx; xx = 12 left -- 3/2 r * right;
+path yy; yy = xx rotated 90;
+path base; base = quartercircle scaled 2r;
+path hh; hh = point 0 of base for t=4 step 4 until 48:
+    hide(numeric a; a = ypart dir t / xpart dir t;)
+    .. (a ++ 1, a) scaled r
 endfor;
-numeric t; t = 10;
-z1 = point t of hh;
-z2 = (r, y1);
+z1 = point 10 of hh; z2 = (r, y1);
 
 picture P[];
 P0 = image(
-draw base withcolor 2/3 blue;
-draw hh withcolor 2/3 red;
-draw xx; draw yy;
+    draw base withcolor 2/3 blue;
+    draw hh withcolor 2/3 red;
+    draw xx; draw yy;
 );
 P1 = image(
-draw origin -- z2 -- z1 withcolor 1/2 white;
-draw fullcircle scaled 2 abs(z1-z2) shifted z2 withcolor 1/2 white;
-draw yy shifted point 0 of base withcolor 1/2 white;
-draw P0;
-label.lft("I.", point 3 of bbox P0 shifted 30 left);
+    draw origin -- z2 -- z1 withcolor 1/2 white;
+    draw fullcircle scaled 2 abs(z1-z2) shifted z2 withcolor 1/2 white;
+    draw yy shifted point 0 of base withcolor 1/2 white;
+    draw P0;
+    label.lft("I.", point 3 of bbox P0 shifted 30 left);
 );
 P2 = image(
-draw origin -- z2 -- z1 -- cycle withcolor 1/2 white;
-z3 = whatever * z1;
-z4 = whatever * z2;
-x3 = r; y3 = y4;
-draw z3 -- z4 withcolor 1/2 white;
-draw yy shifted point 0 of base withcolor 1/2 white;
-draw P0;
-label.lft("II.", point 3 of bbox P0 shifted 30 left);
+    draw origin -- z2 -- z1 -- cycle withcolor 1/2 white;
+    z3 = whatever * z1;
+    z4 = whatever * z2;
+    x3 = r; y3 = y4;
+    draw z3 -- z4 withcolor 1/2 white;
+    draw yy shifted point 0 of base withcolor 1/2 white;
+    draw P0;
+    label.lft("II.", point 3 of bbox P0 shifted 30 left);
 );
 
 draw P1;
@@ -3909,14 +3837,10 @@ draw P2 shifted (1.8r * down);
 \vfill
 $$
 \begin{mplibcode}
-path xx, yy, ee, directrix, cf, cd;
 numeric a, b, c, d;
+a = 233; b = 144; c = a +-+ b; d/a = a/c;
 
-a = 233;
-b = 144;
-c = a +-+ b;
-d/a = a/c;
-
+path xx, yy, ee, directrix, cf, cd;
 xx = 13 left -- (d+34) * right;
 yy = 13 down -- (b+21) * up;
 ee = fullcircle xscaled 2a yscaled 2b;
@@ -3924,13 +3848,12 @@ directrix = (36 down -- (b+6) * up) shifted (d, 0);
 cf = fullcircle scaled 2a shifted (0, b);
 cd = fullcircle scaled 2d shifted (0, b);
 
-z1 = whatever[(0,b), (c,0)]; x1 = a + 21;
-x2 = a; y2 = y1;
+z1 = whatever[(0,b), (c,0)]; x1 = a + 21; x2 = a; y2 = y1;
 drawoptions(withcolor 1/2 white);
-draw z1 -- (0, b) -- point 0 of cd dashed evenly;
-draw z2 --           point 0 of cf dashed evenly;
-draw subpath (8, 6) of cf cutafter ((0,b) -- z1);
-draw subpath (8, 6) of cd cutafter ((0,b) -- z1);
+    draw z1 -- (0, b) -- point 0 of cd dashed evenly;
+    draw z2 --           point 0 of cf dashed evenly;
+    draw subpath (8, 6) of cf cutafter ((0,b) -- z1);
+    draw subpath (8, 6) of cd cutafter ((0,b) -- z1);
 drawoptions();
 
 draw directrix withcolor 1/2 blue;
@@ -3950,10 +3873,14 @@ dotlabel.urt("$(d, 0)$", (d, 0));
 label.rt("$x$", point 1 of xx);
 label.top("$y$", point 1 of yy);
 
-label.urt("$\displaystyle {x^2\over a^2} + {y^2\over b^2} = 1$", point 1.1 of ee) withcolor 1/2 red;
-label.bot("$\displaystyle D : x = {a^2\over c}$", point 0 of directrix) withcolor 1/3 blue;
-label.bot("$\displaystyle c=\sqrt{a^2-b^2}$, \quad $\displaystyle{d\over a}={a\over c}$, \quad $\displaystyle d={a^2\over c}$", 
-(1/2c, ypart point 0 of directrix));
+label.urt("$\displaystyle {x^2\over a^2} + {y^2\over b^2} = 1$", point 1.1 of ee) 
+    withcolor 1/2 red;
+label.bot("$\displaystyle D : x = {a^2\over c}$", point 0 of directrix) 
+    withcolor 1/3 blue;
+label.bot(btex $\displaystyle c=\sqrt{a^2-b^2}$, \quad 
+               $\displaystyle{d\over a}={a\over c}$, \quad 
+               $\displaystyle d={a^2\over c}$ etex, 
+    (1/2c, ypart point 0 of directrix));
 
 
 \end{mplibcode}
@@ -3967,36 +3894,43 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path S[]; numeric a, b;
-S0 = unitsquare scaled 4in;
-a = 233; b = 144;
-S1 = for i=0 upto 3: point i + a/(a+b) of S0 -- endfor cycle;
-S2 = for i=0 upto 3: point i of S0 reflectedabout(point i-1 of S1, point i of S1) -- endfor cycle;
+numeric a, b; a = 233; b = 144;
+path S[]; 
+S0 = unitsquare scaled 288;
+S1 = for i=0 upto 3: 
+    point i + a/(a+b) of S0 -- 
+  endfor cycle;
+S2 = for i=0 upto 3: 
+    point i of S0 reflectedabout(point i-1 of S1, point i of S1) -- 
+  endfor cycle;
 
 fill S0 withcolor Greens 7 2;
 fill S1 withcolor Oranges 7 2;
 fill S2 withcolor Reds 7 1;
 
-for i=0 upto 3: draw point i of S1 -- point i of S2 dashed evenly; endfor
-draw S1;
-draw S0; 
+for i=0 upto 3: 
+  draw point i of S1 -- point i of S2 dashed evenly; 
+endfor
+draw S1; draw S0; 
 
 label.lft("$a$", 1/2[point 3 of S1, point 3 of S0]);
 label.lft("$b$", 1/2[point 3 of S1, point 0 of S0]);
-
 label.bot("$a$", 1/2[point 0 of S1, point 0 of S0]);
 label.bot("$b$", 1/2[point 0 of S1, point 1 of S0]);
-
 label.urt("$b$", 1/2[point 0 of S1, point 1 of S2]);
 
-draw thelabel.top("$b$", origin)   rotated (90 - 2 angle (a,b)) shifted 1/2[point 1 of S1, point 2 of S2];
-draw thelabel.top("$a-b$", origin) rotated (90 - 2 angle (a,b)) shifted point 3/2 of S2;
+draw thelabel.top(TEX("$b$"), origin) 
+    rotated (90 - 2 angle (a,b))
+    shifted 1/2[point 1 of S1, point 2 of S2];
 
-label.bot(btex $
-               \hbox{$\displaystyle \left(a+b\right)^2 \ge 4ab$} 
+draw thelabel.top(TEX("$a-b$"), origin) 
+    rotated (90 - 2 angle (a,b))
+    shifted point 3/2 of S2;
+
+label.bot(btex $\displaystyle \left(a+b\right)^2 \ge 4ab$ 
                \quad\Longrightarrow\quad 
-               \hbox{$\displaystyle {a+b\over2} \ge \sqrt{ab}$}
-               $ etex, point 1/2 of bbox currentpicture shifted 42 down);
+               $\displaystyle {a+b\over2} \ge \sqrt{ab}$
+          etex, point 1/2 of bbox currentpicture shifted 42 down);
 
 \end{mplibcode}
 $$
@@ -4006,62 +3940,52 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-picture P[];
-path base, zz, xy;
-base = fullcircle scaled 160;
-zz = (point 0 of base -- point 4 of base) scaled 4 shifted 42 up rotated -42
+path base; base = fullcircle scaled 160;
+path zz; zz = (point 0 of base -- point 4 of base) 
+    scaled 4 shifted 42 up rotated -42
     cutbefore subpath (4, 8) of base
     cutafter subpath (0, 4) of base;
-
-numeric s, t, u; s = 11/16;
-path p; 
-p = point 1/2 of zz -- 16[point s of base, point 1/2 of zz];
-(t, u) = base intersectiontimes p;
-xy = point s of base -- point t of base;
+numeric s; s = 11/16; 
+numeric t; (t, whatever) = base intersectiontimes 
+    (point 1/2 of zz -- 16[point s of base, point 1/2 of zz]);
+path xy; xy = point s of base -- point t of base;
+% z0 = intersection of xy and zz, z1 = closest point on xy to center, z2 = for label
 z0 = whatever[point s of base, point t of base] = whatever[point 0 of zz, point 1 of zz];
 z1 = whatever[point s of base, point t of base];
 z1 - center base = whatever * (point s of base - point t of base) rotated 90;
-
+z2 = point 6 of base shifted 21 down;
+picture P[];
 P1 = image(
-    draw xy withcolor 1/2 red;
-    draw zz withcolor 1/2 red;
-    draw base;
-    drawdot center base withpen pencircle scaled dotlabeldiam;
-    label.ulft("$x$", 3/8[point t of base, z0]);
-    label.ulft("$y$", 1/2[point s of base, z0]);
-    label.llft("$z$", point 1/4 of zz);
-    label.llft("$z$", point 3/4 of zz);
-    label.bot("$z^2 = xy$", point 6 of base shifted 20 down);
+  draw xy withcolor 1/2 red; draw zz withcolor 1/2 red;
+  draw base; drawdot center base withpen pencircle scaled dotlabeldiam;
+  label.ulft("$x$", 3/8[point t of base, z0]);
+  label.ulft("$y$", 1/2[point s of base, z0]);
+  label.llft("$z$", point 1/4 of zz);
+  label.llft("$z$", point 3/4 of zz);
+  label.bot("$z^2 = xy$", z2);
 );
-
 P2 = image(
-    draw unitsquare scaled 5 rotated angle (center base - z1) shifted z1 withcolor 3/4 white;
-    draw xy withcolor 1/2 red;
-    draw zz withcolor 1/2 red;
-    draw z0 -- center base -- z1 withcolor 2/3 blue;
-    draw base;
-    drawdot center base withpen pencircle scaled dotlabeldiam;
-    label.ulft("$x$", 3/8[point t of base, z0]);
-    label.ulft("$y$", 1/2[point s of base, z0]);
-    label.llft("$\sqrt{xy}$", point 1/4 of zz);
-    label.llft("$\sqrt{xy}$", point 3/4 of zz);
-    label.lft("$d$", 1/2[z1, center base]);
-    label.lrt("$c$", 1/2[z0, center base]);
-    label.bot("$\hbox{$d<c$} \quad\Longrightarrow\quad \hbox{$x+y > 2 \sqrt{xy}$}$", point 6 of base shifted 20 down);
+  draw unitsquare scaled 5 rotated angle (center base - z1) shifted z1 withcolor 3/4 white;
+  draw xy withcolor 1/2 red; draw zz withcolor 1/2 red;
+  draw z0 -- center base -- z1 withcolor 2/3 blue; draw base;
+  draw center base withpen pencircle scaled dotlabeldiam;
+  label.ulft("$x$", 3/8[point t of base, z0]);
+  label.ulft("$y$", 1/2[point s of base, z0]);
+  label.llft("$\sqrt{xy}$", point 1/4 of zz);
+  label.llft("$\sqrt{xy}$", point 3/4 of zz);
+  label.lft("$d$", 1/2[z1, center base]);
+  label.lrt("$c$", 1/2[z0, center base]);
+  label.bot("$d<c$\quad\Longrightarrow\quad$x+y>2\sqrt{xy}$", z2);
 );
-
 P3 = image(
-    draw (point 0 of base -- point 4 of base) rotated angle (point s of base - point t of base) withcolor 1/2 red;
-    draw (point 0 of base -- point 4 of base) rotated -42 withcolor 1/2 red;
-    draw base;
-    drawdot center base withpen pencircle scaled dotlabeldiam;
-    label.bot("$\hbox{$d=c=0$} \quad\Longrightarrow\quad \hbox{$x+y = 2 \sqrt{xy}$}$", point 6 of base shifted 20 down);
+  for p = xy, zz:
+    draw (point 0 of base -- point 4 of base) 
+      rotated angle (point 1 of p - point 0 of p) withcolor 1/2 red;
+  endfor
+  draw base; draw center base withpen pencircle scaled dotlabeldiam;
+  label.bot("$d=c=0$\quad\Longrightarrow\quad$x+y=2\sqrt{xy}$", z2);
 );
-
-draw P1 shifted 240 up;
-draw P2 shifted 120 left;
-draw P3 shifted 120 right;
-
+draw P1 shifted 240 up; draw P2 shifted 120 left; draw P3 shifted 120 right;
 \end{mplibcode}
 $$
 \vfill
@@ -4105,9 +4029,12 @@ label.lft("$a^{1-t} b^t$", (0, y4));
 label.lft("$(1-t)a + tb$", (0, y5)); 
 label.bot("$(1-t)\ln a + t\ln b$", (x4, 0));
 
-label.bot("$0 < a < b$, $0 < t < 1$ \quad\Rightarrow\quad $(1-t)a + tb > a^{1-t}b^t$", point 1/2 of bbox currentpicture shifted 36 down);
-label.bot("$\displaystyle t={1\over2}$ \quad\Rightarrow\quad $\displaystyle {a + b\over2} > \sqrt{ab}$", point 1/2 of bbox currentpicture shifted 36 down);
-
+label.bot(btex 
+  $0 < a < b$,\quad $0 < t < 1$ \quad\Longrightarrow\quad $(1-t)a + tb > a^{1-t}b^t$
+  etex, point 1/2 of bbox currentpicture shifted 36 down);
+label.bot(btex
+  $t=\frac12$ \quad\Longrightarrow\quad $\displaystyle \frac{a+b}{2} > \sqrt{ab}$
+  etex, point 1/2 of bbox currentpicture shifted 36 down);
 \end{mplibcode}
 $$
 \vfill
@@ -4119,21 +4046,21 @@ $$
 numeric a, b, c, k;
 k = 48; k * a = 72; b = 3/4 a; c = 3/8 a;
 
-path ab, bc, ac, aa, bb, cc;
+path ab, bc, ac, asq, bsq, csq;
 ab = unitsquare xscaled b yscaled a scaled k;
 bc = unitsquare xscaled c yscaled b scaled k shifted point 1 of ab;
 ac = unitsquare xscaled a yscaled c scaled k shifted point 1 of bc;
 
-aa = unitsquare scaled a scaled k;
-bb = unitsquare scaled b scaled k shifted point 1 of aa;
-cc = unitsquare scaled c scaled k shifted point 1 of bb;
+asq = unitsquare scaled a scaled k;
+bsq = unitsquare scaled b scaled k shifted point 1 of asq;
+csq = unitsquare scaled c scaled k shifted point 1 of bsq;
 
 picture P[];
 P1 = image(
     fill ab withcolor Spectral 9 5;
     fill bc withcolor Spectral 9 4;
     fill ac withcolor Spectral 9 3;
-    forsuffixes $=aa, bb:
+    forsuffixes $=asq, bsq:
         draw subpath (1, 3) of $ dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
     endfor
     forsuffixes $=ab, bc, ac:
@@ -4142,9 +4069,9 @@ P1 = image(
     endfor
 );
 P2 = image(
-    forsuffixes $=aa, bb, cc:
+    forsuffixes $=asq, bsq, csq:
         draw $;
-        label("$" & substring (1,2) of str $ & "^2$", center $);
+        label("$" & substring (0,1) of str $ & "^2$", center $);
     endfor
 );
 
@@ -4153,6 +4080,7 @@ draw P2 shifted (100 right - center bbox P2);
 label("${}\le{}$", origin);
 label("\textsc{Lemma}: $ab + bc + ac \le a^2 + b^2 + c^2$", 64 up);
 
+% DUMP capture=False, replace="% and much the same for the Theorem pictures"
 path bca, bcb, bcc, aca, acb, acc, aba, abb, abc;
 
 bca = unitsquare yscaled (-b*c) xscaled a scaled k; 
@@ -4258,15 +4186,16 @@ dotlabel.ulft("$H$", z.H);
 dotlabel.urt ("$M$", z.M);
 
 interim bboxmargin := 32;
-label.top("$a, b > 0$ \quad\Longrightarrow\quad $\displaystyle {a+b\over2} \ge \sqrt{ab} \ge {2ab\over a+b}$", point 5/2 of bbox currentpicture);
+label.top(btex 
+  $a,b > 0$ \quad\Longrightarrow\quad 
+  $\displaystyle {a+b\over2}\ge\sqrt{ab}\ge{2ab\over a+b}$
+  etex, point 5/2 of bbox currentpicture);
 label.bot(btex \vbox{\openup 12pt\halign{\hfil #\hfil\cr
-$\displaystyle \overline{AM} = {a+b\over2}$, \quad
-$\displaystyle \overline{GM} = \sqrt{ab}$, \quad
-$\displaystyle \overline{HM} = {2ab\over a+b}$,\cr
-$\overline{AM} \ge
-\overline{GM} \ge
-\overline{HM}$.\cr
-}} etex, point 1/2 of bbox currentpicture);
+  $\displaystyle \overline{AM} = {a+b\over2}$, \quad
+  $\displaystyle \overline{GM} = \sqrt{ab}$, \quad
+  $\displaystyle \overline{HM} = {2ab\over a+b}$,\cr
+  $\overline{AM} \ge \overline{GM} \ge \overline{HM}$.\cr
+  }} etex, point 1/2 of bbox currentpicture);
 \end{mplibcode}
 $$
 \vfill
@@ -7150,7 +7079,8 @@ $n\equiv1\pmod4$, then there exists a self-complementary simple graph $G_n$ with
 \bigskip\noindent
 \textsc{Proof}:
 
-$$\begin{mplibcode}
+$$
+\begin{mplibcode}
 numeric u, v; u = 13; v = -24;
 picture G[], dot, rdot, bdot; 
 dot = image(fill fullcircle scaled 4 withcolor 3/4; draw fullcircle scaled 4);
