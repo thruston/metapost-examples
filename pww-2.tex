@@ -4167,19 +4167,20 @@ x.G = x.M; y.G = y.A;
 z.H = whatever [z.A, z.M];
 z.H - z.G = whatever * (z.M - z.A) rotated 90;
 
-draw unitsquare scaled 6 shifted z.G withcolor 1/2 white;
-draw unitsquare scaled 6 rotated angle (z.A - z.H) shifted z.H withcolor 1/2 white;
+draw unitsquare scaled 6                           shifted z.G withcolor 1/2;
+draw unitsquare scaled 6 rotated angle (z.A - z.H) shifted z.H withcolor 1/2;
 draw z.A -- z.M -- z.G -- z.H withcolor 3/4 blue;
 draw sc; 
 
 path a, b;
 a = (point 4 of sc -- z.G) shifted 21 down;
 b = (z.G -- point 0 of sc) shifted 21 down;
-forsuffixes $=a, b:
-drawdblarrow $;
-unfill fullcircle scaled 24 shifted point 1/2 of $;
-label("$" & str $ & "$", point 1/2 of $);
+forsuffixes n = a, b:  % suffixes so that str works...
+  drawdblarrow n;
+  unfill fullcircle scaled 24 shifted point 1/2 of n;
+  label("$" & str n & "$", point 1/2 of n);
 endfor
+
 dotlabel.bot ("$A$", z.A);
 dotlabel.bot ("$G$", z.G);
 dotlabel.ulft("$H$", z.H);
@@ -4207,70 +4208,51 @@ $$
 path xx, yy, ff; numeric t; t=2;
 xx = 12 left -- (18,0) -- (18+t, 4t) -- (18+3t, -4t) -- (18+4t, 0) -- (240, 0);
 yy = 12 down -- 160 up;
-
 ff = ((1,1){1, -1} .. (2, 1/2){4, -1} .. (3, 1/3){9, -1} .. (4, 1/4){16, -1}) 
-xscaled 64 yscaled 108 shifted (-36, 12);
-
+  xscaled 64 yscaled 108 shifted (-36, 12);
 numeric a, b, m, s, t, u, v, w;
-a = 42;
-b = 200;
-m = 1/2a + 1/2b;
-s = sqrt(a*b);
-
-z1 = (a, 0);
-z2 = (b, 0);
-z3 = (m, 0);
-z4 = (s, 0);
-
-(t, t') = ff intersectiontimes (yy shifted z1);
-(u, u') = ff intersectiontimes (yy shifted z2);
-(v, v') = ff intersectiontimes (yy shifted z3);
-(w, w') = ff intersectiontimes (yy shifted z4);
-
+a = 42;           z1 = (a,0);  (t,whatever) = ff intersectiontimes (yy shifted z1);
+b = 200;          z2 = (b,0);  (u,whatever) = ff intersectiontimes (yy shifted z2);
+m = 1/2a + 1/2b;  z3 = (m,0);  (v,whatever) = ff intersectiontimes (yy shifted z3);
+s = sqrt(a*b);    z4 = (s,0);  (w,whatever) = ff intersectiontimes (yy shifted z4);
 picture P[];
-
 P0 = image(
-draw ff withcolor 2/3 red withpen pencircle scaled 3/4;
-label.top("$\displaystyle y={1\over x}$", point 0 of ff) withcolor 1/2 red;
-drawarrow xx; label.rt("$x$", point infinity of xx);
-drawarrow yy; label.top("$y$", point infinity of yy);
-label.bot("\strut $a$", z1);
-label.bot("\strut $b$", z2);
+  draw ff withcolor 2/3 red withpen pencircle scaled 3/4;
+  label.top("$\displaystyle y={1\over x}$", point 0 of ff) withcolor 1/2 red;
+  drawarrow xx; label.rt("$x$", point infinity of xx);
+  drawarrow yy; label.top("$y$", point infinity of yy);
+  label.bot("\strut $a$", z1); label.bot("\strut $b$", z2);
 );
-
 P1 = image(
-x5 = x1; z5 = whatever * direction v of ff shifted point v of ff;
-x6 = x2; z6 = whatever * direction v of ff shifted point v of ff;
-fill z2 -- z1 -- subpath (t, u) of ff -- cycle withcolor Oranges 7 1;
-fill z2 -- z1 -- z5 -- z6 -- cycle withcolor Oranges 7 3;
-draw z1 -- point t of ff withpen pencircle scaled 1/4;
-draw z2 -- point u of ff withpen pencircle scaled 1/4;
-draw z3 -- point v of ff withpen pencircle scaled 1/4;
-draw z5 -- z6 withpen pencircle scaled 1/4;
-draw point u of ff -- (xpart point u of ff, ypart point v of ff) -- (xpart point t of ff, ypart point v of ff)
-    dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
-draw P0;
-label.bot("\strut ${a+b\over2}$", z3);
-label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle # $\hfil\cr
-\ln b - \ln a > {2\over a+b} (b - a)\cr
-{a+b\over2} > {b-a\over \ln b - \ln a}\cr}} etex, point 2 of bbox P0);
-
+  x5 = x1; z5 = whatever * direction v of ff shifted point v of ff;
+  x6 = x2; z6 = whatever * direction v of ff shifted point v of ff;
+  fill z2 -- z1 -- subpath (t, u) of ff -- cycle withcolor Oranges 7 1;
+  fill z2 -- z1 -- z5 -- z6 -- cycle withcolor Oranges 7 3;
+  draw z1 -- point t of ff withpen pencircle scaled 1/4;
+  draw z2 -- point u of ff withpen pencircle scaled 1/4;
+  draw z3 -- point v of ff withpen pencircle scaled 1/4;
+  draw z5 -- z6 withpen pencircle scaled 1/4;
+  draw point u of ff -- (xpart point u of ff, ypart point v of ff) 
+      -- (xpart point t of ff, ypart point v of ff)
+      dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+  draw P0; label.bot("\strut ${a+b\over2}$", z3);
+  label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle # $\hfil\cr
+    \ln b - \ln a > {2\over a+b} (b - a)\cr
+    {a+b\over2} > {b-a\over \ln b - \ln a}\cr}} etex, point 2 of bbox P0);
 );
 P2 = image(
-fill z2 -- z1 -- subpath (t, u) of ff -- cycle withcolor Oranges 7 2;
-draw z1 -- point t of ff -- point w of ff -- point u of ff -- z2 withpen pencircle scaled 1/4;
-draw z4 --                  point w of ff                        withpen pencircle scaled 1/4; 
-draw P0;
-label.bot("\strut $\scriptstyle\sqrt{ab}$", z4);
-label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle # $\hfil\cr
-\ln b - \ln a < {ab-a\over 2a\sqrt{ab}} + {a-ab\over2b\sqrt{ab}} = {b - a\over\sqrt{ab}}\cr
-\sqrt{ab} < {b-a\over \ln b - \ln a}\cr}} etex, point 2 of bbox P0);
+  fill z2 -- z1 -- subpath (t, u) of ff -- cycle withcolor Oranges 7 2;
+  draw z1 -- point t of ff -- point w of ff -- point u of ff -- z2 withpen pencircle scaled 1/4;
+  draw z4 --                  point w of ff                        withpen pencircle scaled 1/4; 
+  draw P0; label.bot("\strut $\scriptstyle\sqrt{ab}$", z4);
+  label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle # $\hfil\cr
+  \ln b - \ln a < {ab-a\over 2a\sqrt{ab}} + {a-ab\over2b\sqrt{ab}} = {b - a\over\sqrt{ab}}\cr
+  \sqrt{ab} < {b-a\over \ln b - \ln a}\cr}} etex, point 2 of bbox P0);
 );
-
-draw P1;
-draw P2 shifted 240 down;
-label.top("$\displaystyle b > a > 0 \;\Longrightarrow\; {a+b\over2} > {b-a\over \ln b - \ln a} > \sqrt{ab}$", point 5/2 of bbox currentpicture shifted 24 up);
-
+draw P1; draw P2 shifted 240 down;
+label.top(btex $\displaystyle 
+  b > a > 0 \;\Longrightarrow\; {a+b\over2} > {b-a\over \ln b - \ln a} > \sqrt{ab}
+  $ etex , point 5/2 of bbox currentpicture shifted 24 up);
 \end{mplibcode}
 $$
 \vfill
@@ -4279,12 +4261,11 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path a[], b[], c[], d[];
-numeric u; u = 5mm;
-a0 = unitsquare scaled 3u;
-b0 = unitsquare scaled 4u;
-c0 = unitsquare scaled 6u;
-d0 = unitsquare scaled 7u;
+path a[], b[], c[], d[];   color sh.a, sh.b, sh.c, sh.d;
+a0 = unitsquare scaled 42.5; sh.a = Greens 7 3;  
+b0 = unitsquare scaled 56.7; sh.b = Oranges 7 2; 
+c0 = unitsquare scaled 85.0; sh.c = Blues 7 2;
+d0 = unitsquare scaled 99.2; sh.d = Reds 7 2;
 
 a1 = a0 rotated -90;
 b1 = b0 rotated -90 shifted point 1 of a1; 
@@ -4303,33 +4284,20 @@ d3 = d0 rotated -90 shifted (subpath (2,3) of c1 intersectionpoint subpath (1,2)
 d4 = d0 rotated -90 shifted (subpath (2,3) of c4 intersectionpoint subpath (1,2) of c2);
 a4 = a0 rotated -90 shifted (subpath (2,3) of d3 intersectionpoint subpath (1,2) of d4);
 
-color sh[];
-sh1 = Greens 7 3;
-sh2 = Oranges 7 2;
-sh3 = Blues 7 2;
-sh4 = Reds 7 2;
-numeric i; i = 0;
-forsuffixes $=a,b,c,d:
-    i := i + 1;
-    forsuffixes @=1,2,3,4:
-        if known $.@:
-            fill $.@ withcolor sh[i];
-            draw $.@;
-            % label(str $ & str @, center $.@);
-        fi
-    endfor
-endfor
+forsuffixes $=a,b,c,d: forsuffixes @=1,2,3,4: 
+  fill $.@ withcolor sh.$; draw $.@; 
+endfor endfor
 
 path o[]; 
-o1 = buildcycle(b1, b2); fill o1 withcolor 15/16 sh2;       
-o2 = buildcycle(c3, a4); fill o2 withcolor 1/2[sh3, sh1]; 
-o3 = buildcycle(c1, c4); fill o3 withcolor 15/16 sh3;      
-o4 = buildcycle(c2, c4); fill o4 withcolor 15/16 sh3;      
-o5 = buildcycle(d1, d3); fill o5 withcolor 15/16 sh4;      
-o6 = buildcycle(d4, d3); fill o6 withcolor 15/16 sh4;      
-o7 = buildcycle(d2, d4); fill o7 withcolor 15/16 sh4;      
-o8 = buildcycle(b3, d3); fill o8 withcolor 3/4[sh2, sh4];      
-o9 = buildcycle(b4, d4); fill o9 withcolor 3/4[sh2, sh4];      
+o1 = buildcycle(b1, b2); fill o1 withcolor 15/16 sh.b;       
+o2 = buildcycle(c3, a4); fill o2 withcolor 1/2[sh.c, sh.a]; 
+o3 = buildcycle(c1, c4); fill o3 withcolor 15/16 sh.c;      
+o4 = buildcycle(c2, c4); fill o4 withcolor 15/16 sh.c;      
+o5 = buildcycle(d1, d3); fill o5 withcolor 15/16 sh.d;      
+o6 = buildcycle(d4, d3); fill o6 withcolor 15/16 sh.d;      
+o7 = buildcycle(d2, d4); fill o7 withcolor 15/16 sh.d;      
+o8 = buildcycle(b3, d3); fill o8 withcolor 3/4[sh.b, sh.d];      
+o9 = buildcycle(b4, d4); fill o9 withcolor 3/4[sh.b, sh.d];      
 
 for i=1 upto 9: draw o[i]; endfor
 
@@ -4342,6 +4310,7 @@ label.lft("\hbox to 16pt{\hss$\vdots$\hss}", point +1/2 of c1);
 label.top("$|x_n|$", point -1/2 of d2);
 label.lft("$|x_n|$", point +1/2 of d1);
 
+% DUMP capture=False, replace="% plus the display labels..."
 label.top("$\displaystyle {1\over n}\sum_{i=1}^n x_i^2 \ge \left({1\over n} \sum_{i=1}^n x_i \right)^2$",
 point 5/2 of bbox currentpicture shifted 21 up);
 
@@ -4366,9 +4335,9 @@ $$
 numeric wd, ht; wd = 400; ht = 300;
 path box; box = unitsquare xscaled wd yscaled ht;
 for i=6,15,34,59,90:
-z[i] = (i/120)*(wd, ht);
-draw subpath (0,1) of box shifted (0, y[i]) dashed evenly withpen pencircle scaled 1/4;
-draw subpath (3,4) of box shifted (x[i], 0) dashed evenly withpen pencircle scaled 1/4;
+  z[i] = (i/120)*(wd, ht);
+  draw subpath (0,1) of box shifted (0, y[i]) dashed evenly withpen pencircle scaled 1/4;
+  draw subpath (3,4) of box shifted (x[i], 0) dashed evenly withpen pencircle scaled 1/4;
 endfor
 path s[];
 s1 = unitsquare xscaled (x34-x15) yscaled (y34-y15);
@@ -4402,12 +4371,14 @@ label.lft("$y_i$", 1/2(0, y15+y34));
 label.lft("$y_j$", 1/2(0, y59+y90));
 label.lft("$y_n$", 1/2(0, y90+ ht));
 
-label.top("$\displaystyle \sum_{i=1}^n x_i \sum_{i=1}^n y_i \le \sum_{i=1}^n x_i y_i$", point 5/2 of bbox currentpicture shifted 24 up);
-
+label.top("$\displaystyle \sum_{i=1}^n x_i \sum_{i=1}^n y_i \le \sum_{i=1}^n x_i y_i$", 
+  point 5/2 of bbox currentpicture shifted 24 up);
 label.bot(btex \vbox{\openup12pt\halign{\hfil$#$\hfil\cr
-x_i < x_j \;\&\; y_i < y_j \quad\Rightarrow\quad x_i y_j + x_j y_i \le x_i y_i + x_j y_j \cr 
-\therefore\quad \left(x_1 + x_2 + \cdots + x_n\right)\left(y_1 + y_2 + \cdots + y_n\right)
-\le n\left(x_1y_1 + x_2y_2 + \cdots + x_ny_n\right) \cr}} etex, point 1/2 of bbox currentpicture shifted 24 down);
+  x_i < x_j \;\&\; y_i < y_j \quad\Rightarrow\quad x_i y_j + x_j y_i \le x_i y_i + x_j y_j \cr 
+  \therefore\quad 
+  \left(x_1 + x_2 + \cdots + x_n\right)\left(y_1 + y_2 + \cdots + y_n\right)
+  \le n\left(x_1y_1 + x_2y_2 + \cdots + x_ny_n\right) \cr
+  }} etex, point 1/2 of bbox currentpicture shifted 24 down);
 \end{mplibcode}
 $$
 \vfill
@@ -4417,41 +4388,39 @@ $$
 $$
 \begin{mplibcode}
 path C, C'; 
-C = fullcircle scaled 320;
-pair A, B, M, O, P, Q;
-O = origin;
-A = point 0 of C;
-t = 1.2;
-P = point t of C;
-Q = point 8-t of C;
+pair A, B, M, O, P, Q; numeric t; t = 1.2;
+C = fullcircle scaled 320; O = origin; 
+A = point 0 of C; P = point t of C; Q = point 8-t of C;
 ypart M = ypart O; xpart M = xpart P;
-C' = fullcircle scaled abs (P-Q) shifted M;
+path C'; C' = fullcircle scaled abs (P-Q) shifted M;
 B = point 0 of C';
 
-draw fullcircle scaled 32 shifted O 
-    cutafter (O--P) withpen pencircle scaled 1/4;
-draw unitsquare scaled 6 shifted M withpen pencircle scaled 1/4;
+% angle marks
+drawoptions(withpen pencircle scaled 1/4);
+  draw unitsquare scaled 6 shifted M;
+  draw fullcircle scaled 32 shifted O cutafter (O--P);
+  label("$x$", 22 dir 1/2 angle (P-O));
+drawoptions();
 
-draw 12 left shifted point 4 of C -- 12 right shifted B;
-draw O -- P -- Q;
-draw C withcolor 2/3 blue;
-draw C' withcolor 2/3 red;
+draw point 4 of C + 12 left -- B + 12 right; draw O -- P -- Q;
+draw C withcolor 2/3 blue; draw C' withcolor 2/3 red;
 
 forsuffixes $=P: dotlabel.urt("$" & str $ & "$", $); endfor
 forsuffixes $=O, Q: dotlabel.bot("$" & str $ & "$", $); endfor
 forsuffixes $=A,B,M: dotlabel.lrt("$" & str $ & "$", $); endfor
 
 label.ulft("$1$", 1/2[O,P]);
-label("$x$", 22 dir 1/2 angle (P-O));
 draw thelabel.top("$\sin x$", origin) rotated 90 shifted 1/2[M,P];
 
-label.top("$\displaystyle 0 \le x \le {\pi\over2}\quad\Rightarrow\quad{2x\over\pi}\le\sin x \le x$",
-   point 5/2 of bbox currentpicture shifted 21 up);
+label.top(btex $\displaystyle 
+  0 \le x \le {\pi\over2} \quad\Rightarrow\quad {2x\over\pi}\le\sin x \le x
+  $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 
-label.bot(btex \vbox{\openup 12pt\halign{\hfil$#$&$\displaystyle\enspace\Rightarrow\enspace #$\hfil\cr
-OB=OM+MP \ge OA & \overarc5 PBQ \ge \overarc{6.5} PAQ \ge \overline{PQ}\cr
-&\pi \sin x \ge 2x \ge 2 \sin x\cr
-& {2x\over\pi} \le \sin x \le x\cr}} etex, point 1/2 of bbox currentpicture shifted 24 down);
+label.bot(btex \vbox{\openup 12pt\halign{\hfil$#$&\quad\Rightarrow\quad $#$\hfil\cr
+  OB=OM+MP \ge OA & \overarc5 PBQ \ge \overarc{6.5} PAQ \ge \overline{PQ}\cr
+  &\pi\sin x \ge 2x \ge 2\sin x\cr
+  &2x/\pi \le \sin x \le x\cr
+  }} etex, point 1/2 of bbox currentpicture shifted 24 down);
 
 \end{mplibcode}
 $$
@@ -4477,53 +4446,46 @@ with equality if and only if $b=\phi(a)$.
 \textsc{Proof}:
 $$
 \begin{mplibcode}
-path xx, yy, ff;
-picture P[];
-
 z0 = (160, 133);
+path xx, yy, ff;
 xx = 10 left -- (x0, 0);
 yy = 10 down -- (0, y0);
-
 ff = origin .. 1/2 z0 {dir 1/2 angle z0} .. z0;
 
 numeric a, b, c;
-a = arctime  3/4 arclength ff of ff;
-b = arctime 11/12 arclength ff of ff;
-c = arctime  1/2 arclength ff of ff;
-z1 = point a of ff; 
-z2 = point b of ff; 
-z3 = point c of ff; 
+a = arctime  3/4  arclength ff of ff; z1 = point a of ff;
+b = arctime 11/12 arclength ff of ff; z2 = point b of ff;
+c = arctime  1/2  arclength ff of ff; z3 = point c of ff;
 
+picture P[];
 P0 = image(
-    draw z1 -- (x1, 0) withpen pencircle scaled 1/4; label.bot("$a$", (x1, 0));
-    draw ff withcolor Reds 8 8;
-    drawarrow xx; 
-    drawarrow yy;
-    label.rt("$x$", point 1 of xx);
-    label.top("$y$", point 1 of yy);
-    label.top(btex\vbox{\openup2pt\halign{\hfil$#$\hfil\cr y=\phi(x)\cr x=\psi(y)\cr}} etex, point infinity of ff);
+  draw z1 -- (x1, 0) withpen pencircle scaled 1/4; label.bot("$a$", (x1, 0));
+  draw ff withcolor Reds 8 8;
+  drawarrow xx; 
+  drawarrow yy;
+  label.rt("$x$", point 1 of xx);
+  label.top("$y$", point 1 of yy);
+  label.top(btex\vbox{\openup2pt\halign{\hfil$#$\hfil\cr 
+    y = \phi(x)\cr 
+    x = \psi(y)\cr
+  }} etex, point infinity of ff);
 );
-
 P1 = image(
-    fill subpath(0, b) of ff -- (0, y2) -- cycle withcolor Blues 7 2;
-    fill subpath(0, a) of ff -- (x1, 0) -- cycle withcolor Reds 7 2;
-    draw z2 -- (0, y2) withpen pencircle scaled 1/4; label.lft("$b$", (0, y2));
-    draw z1 -- (x1,y2) withpen pencircle scaled 1/4;
-    draw P0;
-    label.bot("$b > \phi(a)$", point 1/2 of bbox P0 shifted 8 down);
+  fill subpath(0, b) of ff -- (0, y2) -- cycle withcolor Blues 7 2;
+  fill subpath(0, a) of ff -- (x1, 0) -- cycle withcolor Reds 7 2;
+  draw z2 -- (0, y2) withpen pencircle scaled 1/4; label.lft("$b$", (0, y2));
+  draw z1 -- (x1,y2) withpen pencircle scaled 1/4;
+  draw P0;
+  label.bot("$b > \phi(a)$", point 1/2 of bbox P0 shifted 8 down);
 );
 P2 = image(
-    fill subpath(0, c) of ff -- (0, y3) -- cycle withcolor Blues 7 2;
-    fill subpath(0, a) of ff -- (x1, 0) -- cycle withcolor Reds 7 2;
-    draw (x1, y3) -- (0, y3) withpen pencircle scaled 1/4; label.lft("$b$", (0, y3));
-    draw P0;
-    label.bot("$b < \phi(a)$", point 1/2 of bbox P0 shifted 8 down);
+  fill subpath(0, c) of ff -- (0, y3) -- cycle withcolor Blues 7 2;
+  fill subpath(0, a) of ff -- (x1, 0) -- cycle withcolor Reds 7 2;
+  draw (x1, y3) -- (0, y3) withpen pencircle scaled 1/4; label.lft("$b$", (0, y3));
+  draw P0;
+  label.bot("$b < \phi(a)$", point 1/2 of bbox P0 shifted 8 down);
 );
-
-draw P1 shifted (109 left - center P0);
-draw P2 shifted (109 right - center P0);
-
-
+label.lft(P1, 13 left); label.rt(P2, 13 right);
 \end{mplibcode}
 $$
 
@@ -4537,21 +4499,26 @@ $$
 input paintball
 
 for j=1 upto 6:
-for i=0 upto 6:
-    draw if j > i: bball shifted (20i - 140, -20j) else: rball shifted (20 + 20i, -20j) fi;
-endfor
+  for i=0 upto 6:
+    draw if j > i: 
+      bball shifted (20i - 140, -20j) 
+    else: 
+      rball shifted (20i +  20, -20j) 
+    fi;
+  endfor
 endfor
 for j=0 upto 5:
-for i=0 upto 5:
+  for i=0 upto 5:
     draw if j > i: bball else: rball fi shifted (20i - 140, -20j - 200);
-endfor
-draw bball shifted(40 + 20j, -20j - 200);
+  endfor
+  draw bball shifted(40 + 20j, -20j - 200);
 endfor
 label("${}+{}$", (0, -70));
 label("${}+{}$", (0, -250));
 drawarrow 140 down -- 180 down withpen pencircle scaled 1;
 
-label.bot("$\displaystyle 1+2+\cdots+n={1\over2}\left(n^2 + n\right)$", point 1/2 of bbox currentpicture shifted 36 down);
+label.bot("$\displaystyle 1+2+\cdots+n={1\over2}\left(n^2 + n\right)$", 
+  point 1/2 of bbox currentpicture shifted 36 down);
 \end{mplibcode}
 $$
 \vfill
@@ -4569,18 +4536,18 @@ input paintball
 
 numeric u; u = 36;
 for i=-4 upto 4:
-for j=0 upto 3:
+  for j=0 upto 3:
     draw if i+j > 1: rball else: bball fi shifted ((i, j) scaled u);
-endfor
+  endfor
 endfor
 
 draw (-3/2u, 3u) -- (3/2u, 0);
+
 vardef mark_dimen(expr S, a, b) = 
-save t; t = 1 + 4/abs(a-b);
-drawdblarrow t[b,a] -- t[a,b]; 
-save P; picture P; P = thelabel(S, origin);
-unfill bbox P shifted 1/2[a,b];
-draw P shifted 1/2[a,b];
+  save t; t = 1 + 4/abs(a-b); drawdblarrow t[b,a] -- t[a,b]; 
+  save P; picture P; P = thelabel(S, origin);
+  unfill bbox P shifted 1/2[a,b];
+  draw P shifted 1/2[a,b];
 enddef;
 
 interim bboxmargin := 4;
@@ -4589,16 +4556,17 @@ mark_dimen("$m$", (-4.75u, 0), (-4.75u, 3u));
 mark_dimen("${M-m+1\over2}$", (-4u, 3.75u), (-2u, 3.75u));
 mark_dimen("${M+m-1\over2}$", (-1u, 3.75u), (+4u, 3.75u));
 
-label.top(btex 
-\vbox{\openup8pt\halign{\hfil $#$&${} = #$\hfil\cr
-N & 2^n(2k+1)\quad \hbox{($n\ge0$, $k\ge1$)}\cr
-m & \min\left\{ 2^{n+1}, 2k+1\right\}\cr
-M & \max\left\{ 2^{n+1}, 2k+1\right\}\cr
-2N & mM\cr}} etex, point 5/2 of bbox currentpicture shifted 24 up);
+label.top(btex \vbox{\openup8pt\halign{\hfil $#$&${} = #$\hfil\cr
+  N & 2^n(2k+1)\quad \hbox{($n\ge0$, $k\ge1$)}\cr
+  m & \min\left\{ 2^{n+1}, 2k+1\right\}\cr
+  M & \max\left\{ 2^{n+1}, 2k+1\right\}\cr
+  2N & mM\cr
+  }} etex, point 5/2 of bbox currentpicture shifted 24 up);
 
 label.bot(btex $\displaystyle
-N = \left({M-m+1\over2}\right) + \left({M-m+1\over2}+1\right) + \cdots +
-\left({M+m-1\over2}\right)$ etex, point 1/2 of bbox currentpicture shifted 24 down);
+  N = \left({M-m+1\over2}\right) + \left({M-m+1\over2}+1\right) + \cdots +
+  \left({M+m-1\over2}\right)
+  $ etex, point 1/2 of bbox currentpicture shifted 24 down);
 \end{mplibcode}
 $$
 \vfill
@@ -4607,48 +4575,43 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-vardef f(expr n, c) = 
-save s, p; picture p; p = image(
-for y = 0 upto n-1:
+vardef f(expr n, c) = save s; image(
+  for y = 0 upto n-1:
     for x = 0 upto y:
-        path s; s = unitsquare shifted (x, y) scaled 8;
-        fill s withcolor c;
-        draw s;
+      path s; s = unitsquare shifted (x, y) scaled 8;
+      fill s withcolor c; draw s;
     endfor
-endfor); p
+  endfor)
 enddef;
-numeric x; x = 0;
-numeric dy; dy = 0;
+numeric x, dy; x = dy = 0;
 for i=1 upto 4:
-picture F, J, K; 
-F = f(i, Oranges 7 3);
-J = f(i, Blues 7 3); 
-J := J rotatedabout(center J, 180) shifted 8 right;
-
-x := x + 20i + 24;
-dy := - 8(i**2+2i);
-for y=0 upto i-1:
-    draw F shifted (x, dy + y*i*8);
-endfor
-for y=0 upto i:
-    draw J shifted (x, dy + y*i*8);
-endfor
-
-for y=0 upto i-1:
+  picture F, J; 
+  F = f(i, Oranges 7 3);
+  J = f(i, Blues 7 3); J := J rotatedabout(center J, 180) shifted 8 right;
+  x := x + 20i + 24;
+  dy := - 8(i**2+2i);
+  for y=0 upto i-1:
+    draw F shifted (x,           dy + y*i*8);
     draw F shifted (x + (i+2)*8, dy + y*i*8 + (y+1)*8);
-endfor
-for y=0 upto i:
+  endfor
+  for y=0 upto i:
+    draw J shifted (x,           dy + y*i*8);
     draw J shifted (x + (i+1)*8, dy + y*i*8 + (y)*8);
+  endfor
+  string s, t; 
+  s = decimal (i**2) for k = i**2 + 1 upto (i+1)**2 - 1: 
+    & if k=(i+1)**2-i: "&" else: "+" fi & decimal k 
+  endfor & "\cr";
+  t = "&" & decimal (2i+1) & "T_{" & decimal i & "}\hidewidth\cr";
+  label.llft("$\vbox{\halign{\hfil$#$&${}=#$\hfil\cr" & s & t & "}}$",
+    (x + (2i + 2.4) * 8, dy - 4));
 endfor
-
-string s, t; 
-s = decimal (i**2) for k = i**2 + 1 upto (i+1)**2 -1: & if k=(i+1)**2-i: "&" else: "+" fi & decimal k endfor & "\cr";
-t = "&" & decimal (2i+1) & "T_{" & decimal i & "}\hidewidth\cr";
-label.llft("$\vbox{\halign{\hfil$#$&${}=#$\hfil\cr" & s & t & "}}$", (x + (2i+2.4)*8, dy - 4));
-endfor
-label.urt("$T_k = 1+ 2 + \cdots + k$ \quad \Longrightarrow", point -1 of bbox currentpicture shifted 32 up);
+label.urt("$T_k = 1 + 2 + \cdots + k$ \quad \Longrightarrow", 
+  point -1 of bbox currentpicture shifted 32 up);
 label.bot(btex \vbox{\openup 8pt\halign{\hfil$#$&${}=#$\hfil\cr
-n^2 + (n^2+1) + \cdots + (n^2 + n)&(n^2+n+1) + \cdots + (n^2+2n)\cr&(2n+1)T_n\cr}} etex, point 1/2 of bbox currentpicture shifted 32 down);
+  n^2 + (n^2+1) + \cdots + (n^2 + n)&(n^2+n+1) + \cdots + (n^2+2n)\cr
+  &(2n+1)T_n\cr
+}} etex, point 1/2 of bbox currentpicture shifted 32 down);
 
 \end{mplibcode}
 $$
