@@ -4620,98 +4620,75 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-vardef p(expr x, y, z) = 
-0.50824829 * (1.73205x + 1.6z, -x + 1.8y + z)
-enddef;
-picture P[]; 
-    numeric q, s, h; s = 100; h = 3/4 s; q = 1/4 s;
-    path base; pair apex;
-    base = p(0,0,0) -- p(s, 0, 0) -- p(s, 0, s) -- p(0, 0, s) -- cycle;
-    apex = p(1/2s, h, 1/2s);
-P1 = image(
-    draw subpath(2, 4) of base   withcolor 7/8 white;
-    draw point 3 of base -- apex withcolor 7/8 white;
-    draw subpath(0, 2) of base; 
-    for i=0 upto 2: 
-        draw point i of base -- apex; 
-    endfor
-);
+% quick & dirty Isometric projection
+vardef p(expr x, y, z) = 0.50824829 * (1.73205x + 1.6z, -x + 1.8y + z) enddef;
+numeric q, s, h; s = 100; h = 3/4 s; q = 1/4 s;
+path base; base = p(0,0,0)--p(s,0,0)--p(s,0,s)--p(0,0,s)--cycle;
+pair apex; apex = p(1/2s,h,1/2s);
+path ft; ft = p(0,0,0)--p(q,0,0)--p(q,1/4h,0)--p(q,1/4h,q)--p(0,1/4h,q)--p(0,1/4h,0)--cycle; 
+path vv; vv = p(0,0,0)--p(0,0,q)--p(0,1/4h,q)--p(-1/2q,1/4h,q)--p(-1/2q,1/4h,0)--cycle;
+path ww; ww = p(0,0,0)--p(0,1/4h,1/2q)--p(-1/2q,1/4h,1/2q)--p(-1/2q,1/4h,0)--cycle;
 picture cube, wedge, corner;
 cube = image(
-    path ft; ft = p(0,0,0) -- 
-    p(q,0,0) -- 
-    p(q, 1/4h, 0) -- 
-    p(q, 1/4h, q) -- 
-    p(0, 1/4h, q) -- 
-    p(0, 1/4h, 0) -- cycle; 
-    fill ft withcolor white; draw ft; draw point 2 of ft -- point -1 of ft;
+  fill ft withcolor white; draw ft; draw point 2 of ft -- point -1 of ft;
 );
 wedge = image(
-    path vv; vv = p(0,0,0) -- p(0, 0, q) -- p(0, 1/4h, q) -- p(-1/2q, 1/4h, q) -- p(-1/2q, 1/4h, 0) -- cycle;
-    fill vv withcolor Oranges 8 3; 
-    draw point 1 of vv -- point 3 of vv withcolor Oranges 8 4;
-    draw vv withcolor Oranges 8 8; 
-    forsuffixes $=0, 2, 4: draw p(0, 1/4h, 0) -- point $ of vv withcolor Oranges 8 8;
-    endfor
+  fill vv withcolor Oranges 8 3; draw vv withcolor Oranges 8 8; 
+  draw point 1 of vv -- point 3 of vv withcolor Oranges 8 4;
+  forsuffixes $=0, 2, 4: draw p(0,1/4h,0) -- point $ of vv withcolor Oranges 8 8; endfor
 );
 corner = image(
-    path ww; ww = p(0,0,0) -- p(0, 1/4h, 1/2q) -- p(-1/2q, 1/4h, 1/2q) -- p(-1/2q, 1/4h, 0) -- cycle;
-    fill ww withcolor Blues 8 3;
-    draw ww withcolor Blues 8 8;
-    forsuffixes $=0, 1, 3: draw p(0, 1/4h, 0) -- point $ of ww withcolor Blues 8 8;
-    endfor
+  fill ww withcolor Blues 8 3; draw ww withcolor Blues 8 8;
+  forsuffixes $=0, 1, 3: draw p(0,1/4h,0) -- point $ of ww withcolor Blues 8 8; endfor
+);
+picture P[]; 
+P1 = image(
+  draw subpath(2, 4) of base   withcolor 7/8 white;
+  draw point 3 of base -- apex withcolor 7/8 white;
+  draw subpath(0, 2) of base; 
+  for i=0 upto 2: draw point i of base -- apex; endfor
 );
 P2 = image(
-    for k=0 upto 3:
-        for i=0 upto 3-k:
-            for j=3-k downto 0:
-                draw cube shifted p(i*q + 1/2q*k, k/4*h, j*q + 1/2q*k);
-            endfor
-        endfor
+  for k=0 upto 3:
+    for i=0 upto 3-k:
+      for j=3-k downto 0:
+        draw cube shifted p(i*q + 1/2q*k, k/4*h, j*q + 1/2q*k);
+      endfor
     endfor
-    picture nn; nn = thelabel("$n$", origin);
-    numeric o; o = 12;
-    path a[]; 
-    a1 = p(s+o, 0, 0) -- p(s+o, 0, s);
-    a2 = p(s+o, h, s) -- p(s+o, 0, s);
-
-    forsuffixes $=1,2:
-        drawdblarrow a$; 
-        unfill bbox nn shifted point 1/2 of a$; 
-        draw nn shifted point 1/2 of a$;
-    endfor
-
+  endfor
+  picture nn; nn = thelabel("$n$", origin); numeric o; o = 12; path a[]; 
+  a1 = p(s+o,0,0) -- p(s+o,0,s);
+  a2 = p(s+o,h,s) -- p(s+o,0,s);
+  forsuffixes $=1,2:
+    drawdblarrow a$; 
+    unfill bbox nn shifted point 1/2 of a$; 
+    draw nn shifted point 1/2 of a$;
+  endfor
 );
+% DUMP capture=False, replace="% ... plus simpler loops for P3 and P4"
 P3 = image(
-    for k=0 upto 3:
-        for j=3-k downto 0:
-            draw wedge shifted p(s - 1/2 q*k, k/4 * h, j*q + 1/2q * k);
-        endfor
+  for k=0 upto 3:
+    for j=3-k downto 0:
+      draw wedge shifted p(s - 1/2 q*k, k/4 * h, j*q + 1/2q * k);
     endfor
+  endfor
 );
 P4 = image(
-    for k=0 upto 3:
-        draw corner shifted p(s - 1/2 q * k, k/4 * h, 1/2q * k);
-    endfor
+  for k=0 upto 3:
+    draw corner shifted p(s - 1/2 q * k, k/4 * h, 1/2q * k);
+  endfor
 );
-draw P1 shifted (-6/4s, 0); 
-draw P3 shifted (0, 0);
-draw P4 shifted (6/4s, 0);
-
-draw P2 shifted (0, 7/4s);
-draw P3 shifted (0, 7/4s);
-draw P4 shifted (0, 7/4s);
-
+% DUMP capture=True
+draw P2 shifted (0, 7/4s); draw P3 shifted (0,7/4s); draw P4 shifted (0,7/4s);
+draw P1 shifted (-6/4s,0); draw P3 shifted (0,0);    draw P4 shifted (6/4s,0);
 label("$=$", (2s+20, 2s-20));
 label("${}+\quad4\times{}$", (52, 20));
 label("${}-\quad4\times{}$", (202,20));
-
+% DUMP capture=False
 label.bot(btex \vbox{\openup 16pt\halign{\hfil$#={}$&$\displaystyle #$\hfil\cr
-1^2 + 2^2 + \cdots + n^2 & {1\over3}n^2\times n \quad{}+{}\quad 4 \times {n(n+1)\over2} \times {1\over4}
-\quad - \quad 4 \times n \times {1\over12}\cr & {1\over6} n(n+1)(2n+1)\cr}} etex, 
-point 1/2 of bbox currentpicture shifted 42 down);
-
-
+  1^2 + 2^2 + \cdots + n^2 & {1\over3}n^2\times n \quad{}+{}\quad 4 \times {n(n+1)\over2} \times {1\over4}
+  \quad - \quad 4 \times n \times {1\over12}\cr & {1\over6} n(n+1)(2n+1)\cr}} etex, 
+  point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
@@ -4720,85 +4697,55 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-vardef p(expr x, y, z) = 
-0.50824829 * (1.73205x + 1.4z, -x + 2y + 1.5z)
-enddef;
-picture cube[];
-path pcube;
-numeric u;
-u = 10;
-pcube = origin -- p(u,0,0) -- p(u,0,u) -- p(u,u,u) -- p(0,u,u) -- p(0,u,0) -- cycle;
-cube0 = image(
-fill pcube withcolor Greens 8 2;
-draw pcube withcolor 1/2 white; 
-for t=1,3,5: draw point t of pcube -- p(u,u,0); endfor
-);
-cube1 = image(
-fill pcube withcolor Oranges 8 2;
-draw pcube withcolor 1/2 white; 
-for t=1,3,5: draw point t of pcube -- p(u,u,0); endfor
-);
-cube2 = image(
-fill pcube withcolor Blues 8 2;
-draw pcube withcolor 1/2 white; 
-for t=1,3,5: draw point t of pcube -- p(u,u,0); endfor
-);
-
-picture slab[], tee[];
+vardef p(expr x, y, z) = 5.0824829 * (1.73205x + 1.4z, -x + 2y + 1.5z) enddef;
+path pcube; pcube = origin--p(1,0,0)--p(1,0,1)--p(1,1,1)--p(0,1,1)--p(0,1,0)--cycle;
+vardef make_cube(expr shade) = image(
+  fill pcube withcolor shade; draw pcube withcolor 1/2 white; 
+  for t=1,3,5: draw point t of pcube -- p(1,1,0); endfor
+) enddef;
+picture cube[], slab[], tee[];
+cube0 = make_cube(Greens 8 2); cube1 = make_cube(Oranges 8 2);
 for k=1 upto 4:
-slab[k] = image(
-    for j=1 upto k:
-        for i=1 upto k:
-            draw cube[k mod 2] shifted p(i*u, 4u, -j*u);
-        endfor
-    endfor
-);
-tee[k] = image(
-    for j=1 upto k:
-        for i=1 upto 2j-1:
-            draw cube[k mod 2] shifted p((i-j+1)*u, (j-k+2)*u, (-k-3)*u);
-        endfor
-    endfor
-);
-pair t; t = (1 + 3/4(k**2), 5) scaled 2u;
-draw slab[k] shifted t;
-draw tee[k] shifted t;
-label("$" & decimal k & "^2$", p(k*u+u, 4u, -k*u-u)) shifted t;
+  slab[k] = image(for j=1 upto k: for i=1 upto k: 
+    draw cube[k mod 2] shifted p(i, 4, -j); 
+  endfor endfor);
+  tee[k] = image(for j=1 upto k: for i=1 upto 2j-1:
+    draw cube[k mod 2] shifted p(i-j+1, j-k+2, -k-3);
+  endfor endfor);
+  pair t; t = (1 + 3/4(k**2), 5) scaled 20;
+  draw slab[k] shifted t; draw tee[k] shifted t;
+  label("$" & decimal k & "^2$", p(k+1, 4, -k-1)) shifted t;
 endfor
-
 for k=4 downto 1:
-draw slab[k] shifted p(-2u,     -k*u, 0);
-draw tee[k]  shifted p( 6u,  (k-4)*u, (2k-1)*u);
-draw slab[k] shifted p(16u-k*u, -k*u, 0);
+  draw slab[k] shifted p(-2, -k, 0);
+  draw tee[k]  shifted p( 6, k-4, 2k-1);
+  draw slab[k] shifted p(16-k, -k, 0);
 endfor
-
 picture kk; kk = thelabel("$\sum k^2$", origin);
-for x=-5.1, 3.5, 8.6: draw kk shifted p(x*u, -4u, -u); endfor
-
-picture bank, block;
-bank = image(
-for k=4 downto 1:
-draw slab[k] shifted p(0, -k*u, 0);
-for j=k+1 upto 9-k: 
-    draw cube[(5-k) mod 2] shifted p(j*u, (4-k)*u, -k*u);
-endfor
-draw slab[k] shifted p(9u-k*u, -k*u, 0);
-endfor
-);
-block = image(
-draw bank;
-for k=0 upto 3:
-    for j=k-5 downto -5:
-        for i=1 upto 9:
-            draw cube2 shifted p(i*u, k*u, j*u);
-        endfor
+for x=-5.1, 3.5, 8.6: draw kk shifted p(x, -4, -1); endfor
+picture bank; bank = image(
+  for k=4 downto 1:
+    draw slab[k] shifted p(0, -k, 0);
+    for j=k+1 upto 9-k: 
+      draw cube[(5-k) mod 2] shifted p(j, 4-k, -k);
     endfor
-endfor
-);
-
-draw bank shifted (-50, -150);  label.bot("$3\sum k^2$", point 1/2 of bbox bank  shifted (-50, -150));
-draw block shifted (200, -150); label.bot("$6\sum k^2=n(n+1)(2n+1)$", point 1/2 of bbox block shifted (200, -150));
-label.top("$\displaystyle \sum_{k=1}^n k^2 = {n(n+1)(2n+1)\over 6}$", point 5/2 of bbox currentpicture shifted 32 up);
+    draw slab[k] shifted p(9-k, -k, 0);
+  endfor);
+cube2 = make_cube(Blues 8 2);
+picture block; block = image(
+  draw bank;
+  for k=0 upto 3:
+    for j=k-5 downto -5:
+      for i=1 upto 9:
+        draw cube2 shifted p(i, k, j);
+      endfor
+    endfor
+  endfor
+  label.bot("$6\sum k^2=n(n+1)(2n+1)$", point 1/2 of bbox currentpicture));
+bank := image(draw bank; label.bot("$3\sum k^2$", point 1/2 of bbox currentpicture));
+draw bank shifted (-50, -150); draw block shifted (200, -150); 
+label.top("$\displaystyle \sum_{k=1}^n k^2 = {n(n+1)(2n+1)\over 6}$", 
+  point 5/2 of bbox currentpicture shifted 32 up);
 \end{mplibcode}
 $$
 \vfill
@@ -4807,41 +4754,37 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path t[]; 
-t0 = for i=0 upto 2: 72 dir (90+120i) -- endfor cycle;
+path t[]; t0 = for i=0 upto 2: 72 dir (90+120i) -- endfor cycle;
 numeric s; s = 30 + arclength subpath (0, 1) of t0;
-
 for i=1 upto 3:
-t[i] = t0 rotated 120(2-i) shifted ((i-2)*s, s);
+  t[i] = t0 rotated 120(2-i) shifted ((i-2)*s, s);
 endfor
 for i=0 upto 3:
-filldraw t[i] withpen pencircle scaled 3 withcolor Blues 8 2;
+  filldraw t[i] withpen pencircle scaled 3 withcolor Blues 8 2;
 endfor
-
-picture elips;
-elips = thelabel("$\cdots$", origin);
+picture elips; elips = thelabel("$\cdots$", origin);
 for i=1, 3, 5:
-numeric n; n = 5 - 1/2(i-1);
-for k=1 upto 3:
+  numeric n; n = 5 - 1/2(i-1);
+  for k=1 upto 3:
     for j=0 upto n:
-        label(if j=2: elips rotated 60(1+k) else: "$" & decimal i & "$" fi, 
-        ((i-1)/10)[(j/n)[point 2 of t[k], point 1 of t[k]], point 0 of t[k]]);
+      label(if j=2: elips rotated 60(1+k) else: "$" & decimal i & "$" fi, 
+      ((i-1)/10)[(j/n)[point 2 of t[k], point 1 of t[k]], point 0 of t[k]]);
     endfor
     label("$\scriptstyle 2n-1$", point 0 of t[k]);
     label("$\scriptstyle 2n-3$", 4/5[point 1 of t[k], point 0 of t[k]]);
     label("$\scriptstyle 2n-3$", 4/5[point 2 of t[k], point 0 of t[k]]);
     label(elips rotated (60k-60), 3/5[point 1 of t[k], point 0 of t[k]]);
     label(elips rotated (60k), 3/5[point 2 of t[k], point 0 of t[k]]);
-endfor
+  endfor
 endfor
 label("$\scriptstyle 2n+1$", point 0 of t0);
 label(elips rotated 60, 3/5[point 0 of t0, point 1 of t0]);
 label(elips rotated -60, 3/5[point 0 of t0, point 2 of t0]);
 for i=1, 2, 4, 5:
-for j=0 upto i:
+  for j=0 upto i:
     label(if j=3: elips else: "$\scriptstyle 2n+1$" fi, 
-    (i/5)[point 0 of t0, (j/i)[point 1 of t0, point 2 of t0]]);
-endfor
+      (i/5)[point 0 of t0, (j/i)[point 1 of t0, point 2 of t0]]);
+  endfor
 endfor
 z1 = 1/2[center t1, center t2];
 z2 = 1/2[center t2, center t3];
@@ -4850,14 +4793,13 @@ label("${}+{}$", z1);
 label("${}+{}$", z2);
 label("${}={}$", (x1, y3));
 
-
-
-label.top("$\displaystyle k^2 = 1+3+\cdots+(2k-1) \quad\implies\quad \sum_{k=1}^n k^2 = {n(n+1)(2n+1)\over 6}$",
-point 5/2 of bbox currentpicture shifted 42 up);
+label.top(btex $\displaystyle 
+k^2 = 1+3+\cdots+(2k-1) \quad\implies\quad \sum_{k=1}^n k^2 = \frac{n(n+1)(2n+1)}{6}
+$ etex, point 5/2 of bbox currentpicture shifted 42 up);
 
 label.bot(btex \vbox{\openup 12pt\halign{\hss $\displaystyle #$&$\displaystyle {}=#$\hss\cr
-3\left(1^2 + 2^2 + \cdots + n^2 \right) & (2n+1)(1+2+\cdots+n)\cr
-\therefore\quad 1^2 + 2^2 + \cdots + n^2& {2n+1\over3}\cdot{n(n+1)\over2}\cr
+  3\left(1^2 + 2^2 + \cdots + n^2 \right) & (2n+1)(1+2+\cdots+n)\cr
+  \therefore\quad 1^2 + 2^2 + \cdots + n^2& \frac{2n+1}{3}\cdot\frac{n(n+1)}{2}\cr
 }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
@@ -4868,62 +4810,53 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u, n;
-n = 6; u = 42;
-pair uu, vv;
-
-uu = right scaled u;
-vv = uu rotated 120;
-
+numeric u, n; n = 6; u = 42;
+pair uu, vv; uu = right scaled u; vv = uu rotated 120;
 path xx, yy, ss; 
 xx = (left -- right) scaled 4u shifted (3/4 u * down);
 yy = point 1/2 of xx -- point 1/2 of xx shifted (7 vv + 3.5 uu);
 ss = yy shifted (5u * left);
-
 x0 = 0; y0 = y1 = 2/3(n-1) * ypart vv;
 x1 = xpart point 0 of ss;
 
 drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4); 
-for t=1,2: draw yy rotatedabout(z0, 120t); endfor
-draw z0 -- z1;
+  for t=1,2: draw yy rotatedabout(z0, 120t); endfor
+  draw z0 -- z1;
 drawoptions();
 draw xx; drawarrow yy; draw ss;
-
-drawdot z0 withpen pencircle scaled 4;
-
-input paintball
-
-for i=0 upto n-1:
-for j=0 upto i:
-    draw bball shifted (i * vv + j * uu);
-endfor 
-endfor
-
+draw z0 withpen pencircle scaled 4;
 label.top("$y$", point 1 of yy);
+
 y = -1;
 for i=1 upto n:
-draw (left--right) scaled 3 shifted (x1, incr y * ypart vv);
-if i <= 2:
+  draw (left--right) scaled 3 shifted (x1, incr y * ypart vv);
+  if i <= 2:
     label.lft("$" & decimal i & "$", (x1 -3, y * ypart vv));
-elseif i = n-1:
+  elseif i = n-1:
     label.lft("$n-1$", (x1 -3, y * ypart vv));
-elseif i = n:
+  elseif i = n:
     label.lft("$n$", (x1 -3, y * ypart vv));
-fi
+  fi
 endfor
 label.lft("$\bar{y}$", (x1 - 3, y1));
 
-picture b; b = bball shifted (-1/4u, -3/2u);
+input paintball
+for i=0 upto n-1:
+  for j=0 upto i:
+    draw bball shifted (i * vv + j * uu);
+  endfor 
+endfor
 
+picture b; b = bball shifted (-1/4u, -3/2u);
 label.lft("$\Bigl($", point -1/2 of bbox b shifted 4 right);
 draw b; 
 label.rt("${}=1\Bigr)$", point 3/2 of bbox b shifted 4 left);
 
 label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle # $\hfil\cr
-\bar{y} = 1 + {2\over3}(n-1) = {1\cdot1+2\cdot2+\cdots+n\cdot n\over1+2+\cdots+n}\cr
-\therefore\quad 1^2 + 2^2 + \cdots + n^2 = {n(n+1)\over2}\cdot{1\over3}(2n+1) = {1\over6} n(n+1)(2n+1) \cr}} etex,
-point 1/2 of bbox currentpicture shifted 42 down);
-
+  \bar{y} = 1 + \frac23 (n-1) = \frac{1\cdot1+2\cdot2+\cdots+n\cdot n}{1+2+\cdots+n}\cr
+  \therefore\quad 
+  1^2 + 2^2 + \cdots + n^2 = \frac{n(n+1)}{2}\cdot \frac13 (2n+1) = \frac16 n(n+1)(2n+1)\cr
+  }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
