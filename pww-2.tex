@@ -4867,70 +4867,45 @@ $$
 \begin{mplibcode}
 input isometric_projection
 set_projection(24, -32); ipscale := 16;
-path upper, front, side;  
-upper = p(0,1,0) -- p(1,1,0) -- p(1,1,1) -- p(0,1,1) -- cycle;
-front = p(0,0,0) -- p(1,0,0) -- p(1,1,0) -- p(0,1,0) -- cycle;
-side  = p(1,0,0) -- p(1,0,1) -- p(1,1,1) -- p(1,1,0) -- cycle;
+path upper; upper = p(0,1,0) -- p(1,1,0) -- p(1,1,1) -- p(0,1,1) -- cycle;
+path front; front = p(0,0,0) -- p(1,0,0) -- p(1,1,0) -- p(0,1,0) -- cycle;
+path side; side  = p(1,0,0) -- p(1,0,1) -- p(1,1,1) -- p(1,1,0) -- cycle;
+vardef make_cube(expr u, f, s) =  image(
+  fill upper withcolor u; fill front withcolor f; fill side withcolor s;
+  draw upper; draw front; draw side) enddef;
 picture Cube[];
-Cube1 = image(
-fill upper withcolor Oranges 8 3;
-fill front withcolor background;
-fill side withcolor Oranges 8 1;
-draw upper; draw front; draw side;
-);
-Cube2 = image(
-fill upper withcolor Blues 8 3;
-fill front withcolor background;
-fill side withcolor Blues 8 1;
-draw upper; draw front; draw side;
-);
-Cube3 = image(
-fill upper withcolor Greens 8 3;
-fill front withcolor background;
-fill side withcolor Greens 8 1;
-draw upper; draw front; draw side;
-);
-
-
+Cube1 = make_cube(Oranges 8 3, background, Oranges 8 1);
+Cube2 = make_cube(Blues   8 3, background, Blues   8 1);
+Cube3 = make_cube(Greens  8 3, background, Greens  8 1);
 picture ix, xxv;
-
 ix = image(
-for i=0 downto -2:
-    for j=0 upto 2:
-        draw Cube1 shifted p(j,0,i);
-    endfor
-endfor
-draw p(3, 0, -1) -- p(3, 1, -1) -- p(2,1,-1) -- p(2,1,0) -- p(1,1,0) -- p(1,1,1) withpen pencircle scaled 1;
-);
+  for i=0 downto -2: for j=0 upto 2: draw Cube1 shifted p(j,0,i); endfor endfor
+  draw p(3, 0, -1) -- p(3, 1, -1) -- p(2,1,-1) -- p(2,1,0) -- p(1,1,0) -- p(1,1,1) 
+    withpen pencircle scaled 1);
 xxv = image(
-for i=0 downto -4:
-    for j=0 upto 4:
-        draw Cube1 shifted p(j,0,i);
-    endfor
-endfor
-draw p(5, 0, -3) for t=4 downto 1: -- p(t+1, 1, 1-t) -- p(t,1,1-t) -- p(t,1,2-t) endfor withpen pencircle scaled 1;
-);
-
+  for i=0 downto -4: for j=0 upto 4: draw Cube1 shifted p(j,0,i); endfor endfor
+  draw p(5, 0, -3) for t=4 downto 1: -- p(t+1, 1, 1-t) -- p(t,1,1-t) -- p(t,1,2-t) endfor
+    withpen pencircle scaled 1);
 picture P[];
-P0 = image(
-draw Cube1;
-draw ix shifted p(0,-2,0);
-draw xxv shifted p(0, -5, 0);
-label.top("$1^2$",      (-72, ypart p(0,  0,  0)));
-label.top("$3^2$",      (-72, ypart p(0, -2, -2)));
-label.top("$\vdots$",   (-72, ypart p(0, -3.5, -3)));
-label.top("$(2n-1)^2$", (-72, ypart p(0, -5, -4)));
-);
+% P0 is the three "slabs" plus the labels on the left
+P0 = image(draw Cube1; draw ix shifted p(0,-2,0); draw xxv shifted p(0, -5, 0);
+  label.top("$1^2$",      (-72, ypart p(0,  0,  0)));
+  label.top("$3^2$",      (-72, ypart p(0, -2, -2)));
+  label.top("$\vdots$",   (-72, ypart p(0, -3.5, -3)));
+  label.top("$(2n-1)^2$", (-72, ypart p(0, -5, -4))));
+
+% P1 is the two stacks of cubes on the right 
 P1 = image(
 for j=-4 upto 0:
-    for k=0 downto j:
-        for i=0 upto -k:
-            draw Cube1 shifted p(i, 5/4 j, k);
-            draw Cube1 shifted p(i, j, k) shifted 108 right;
-        endfor
+  for k=0 downto j:
+    for i=0 upto -k:
+      draw Cube1 shifted p(i, 5/4 j, k);
+      draw Cube1 shifted p(i, j, k) shifted 108 right;
     endfor
-endfor
-);
+  endfor
+endfor);
+
+% DUMP capture=False, replace="% P2 and P3 are similar, but longer..."
 P2 = image(
 for j=-4 upto 0:
     for k=0 downto j:
@@ -4986,23 +4961,18 @@ for i=2,3:
             -- p(i+3, -3, -4) -- p(i+3, -4, -4)
     withpen pencircle scaled 1;
 endfor
-
-
 );
+% DUMP capture=True
 
-draw P0;
-draw P1 shifted 160 right;
-draw P2 shifted 180 down shifted 40 left;
-draw P3 shifted 180 down shifted 200 right;
+draw P0; draw P1 shifted (160,0); draw P2 shifted (-40, -180); draw P3 shifted (200, -180);
 
 label.top("$\displaystyle 1^2 + 2^2 + \cdots + \left(2n-1\right)^2 = {n(2n-1)(2n+1)\over3}$", 
-      point 5/2 of bbox currentpicture shifted 42 up);
-
+  point 5/2 of bbox currentpicture shifted 42 up);
 label.bot(btex \vbox{\openup 12pt\halign{\hfil$\displaystyle #$&$\displaystyle{}=#$\hfil\cr
-3 \times \left(1^2 + 3^2 + \cdots + \left(2n-1\right)^2\right)
-&\left(1+2+\cdots+(2n-1)\right) \times (2n+1)\cr
-&{(2n-1)(2n)(2n+1)\over2} = n(2n-1)(2n+1)\cr}} etex,
-point 1/2 of bbox currentpicture shifted 24 down);
+  3 \times \left(1^2 + 3^2 + \cdots + \left(2n-1\right)^2\right)
+  &\left(1+2+\cdots+(2n-1)\right) \times (2n+1)\cr
+  &{(2n-1)(2n)(2n+1)\over2} = n(2n-1)(2n+1)\cr
+  }} etex, point 1/2 of bbox currentpicture shifted 24 down);
 \end{mplibcode}
 $$
 \vfill
