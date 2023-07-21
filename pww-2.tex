@@ -5554,158 +5554,143 @@ $$
 \begin{mplibcode}
 input isometric_projection
 set_projection(20, -32); ipscale := 16;
-path upper, front, side;  
-upper = p(0,1,0) -- p(1,1,0) -- p(1,1,1) -- p(0,1,1) -- cycle;
-front = p(0,0,0) -- p(1,0,0) -- p(1,1,0) -- p(0,1,0) -- cycle;
-side  = p(1,0,0) -- p(1,0,1) -- p(1,1,1) -- p(1,1,0) -- cycle;
-picture Cube[];
-Cube1 = image(
-fill upper withcolor Oranges 8 3;
-fill front withcolor background;
-fill side withcolor Oranges 8 1;
-draw upper; draw front; draw side;
-);
-Cube2 = image(
-fill upper withcolor Blues 8 3;
-fill front withcolor background;
-fill side withcolor Blues 8 1;
-draw upper; draw front; draw side;
-);
-Cube3 = image(
-fill upper withcolor Greens 8 3;
-fill front withcolor background;
-fill side withcolor Greens 8 1;
-draw upper; draw front; draw side;
-);
-vardef dimity(expr p, t) = 
-save pp, tt; 
-path pp; pp = p shifted (unitvector(direction 1/2 of p) rotated 90 scaled 4 labeloffset); 
-picture tt; tt = thelabel(t, point 1/2 of pp);
-drawdblarrow pp; unfill bbox tt; draw tt;
+path face; face = p(0,0,0) -- p(1,0,0) -- p(1,1,0) -- p(0,1,0) -- cycle;
+path side; side = p(1,0,0) -- p(1,0,1) -- p(1,1,1) -- p(1,1,0) -- cycle;
+path lid; lid = p(0,1,0) -- p(1,1,0) -- p(1,1,1) -- p(0,1,1) -- cycle;
+vardef make_cube(expr f, s, l) = image(
+  fill face withcolor f; fill side withcolor s; fill lid withcolor l;
+  draw face; draw subpath (0, 3) of side; draw subpath (2, 4) of lid;
+) enddef;
+picture o_cube; o_cube = make_cube(background, Oranges 8 1, Oranges 8 3);
+picture b_cube; b_cube = make_cube(background, Blues   8 1, Blues   8 3);
+vardef show_dim(expr p, s) = save pp, tt; 
+  path pp; pp = p shifted (unitvector(direction 1/2 of p) rotated 90 scaled 4 labeloffset); 
+  picture tt; tt = thelabel("$\scriptstyle " & s & "$", point 1/2 of pp);
+  drawdblarrow pp; unfill bbox tt; draw tt;
 enddef;
-
 picture P[];
 P1 = image(
-for x=0 upto 4:
+  for x=0 upto 4:
     for y=0 upto 4-x:
-        draw Cube1 shifted p(x,y,0);
+      draw o_cube shifted p(x,y,0);
     endfor
-endfor
-dimity(p(0,0,0) -- p(0,5,0), "$\scriptstyle n$");
-dimity(p(5,0,0) -- p(0,0,0), "$\scriptstyle n$");
-label("$T_n$", p(2,-3,0));
+  endfor
+  show_dim(p(0,0,0) -- p(0,5,0), "n");
+  show_dim(p(5,0,0) -- p(0,0,0), "n");
+  label("$T_n$", p(2,-3,0));
 );
 P2 = image(
-for x=0 upto 5:
+  for x=0 upto 5:
     for y=0 upto 5-x:
-        for z=4 downto 0:
-            draw if x=0: Cube2 else: Cube1 fi shifted p(x,y,z);
-        endfor
+      for z=4 downto 0:
+        draw if x=0: b_cube else: o_cube fi shifted p(x,y,z);
+      endfor
     endfor
-endfor
-dimity(p(0,0,0) -- p(0,6,0), "$\scriptstyle n+1$");
-dimity(p(6,0,0) -- p(0,0,0), "$\scriptstyle n+1$");
-dimity(p(6,0,6) -- p(6,0,1), "$\scriptstyle n$");
-label("$n\cdot T_{n+1}$", p(3,-3,0));
+  endfor
+  show_dim(p(0,0,0) -- p(0,6,0), "n+1");
+  show_dim(p(6,0,0) -- p(0,0,0), "n+1");
+  show_dim(p(6,0,6) -- p(6,0,1), "n");
+  label("$n\cdot T_{n+1}$", p(3,-3,0));
 );
+
+% DUMP capture=False, replace="% ... and so on ..."
 P3 = image(
-for x=0 upto 5:
+  for x=0 upto 5:
     for y=0 upto 5-x:
-        for z=4 downto 0:
-            draw if x=0: Cube2 shifted p(-3,y,z-1) else: Cube1 shifted p(x,y,z) fi;
-        endfor
+      for z=4 downto 0:
+        draw if x=0: b_cube shifted p(-3,y,z-1) else: o_cube shifted p(x,y,z) fi;
+      endfor
     endfor
-endfor
-draw p(-3,5,-1) -- p(-2,5,-1) -- p(-2,5,0) -- p(-2,4,0) 
-  -- p(-2,4,1) -- p(-2,3,1) -- p(-2,3,2) -- p(-2,2,2) 
-  -- p(-2,2,3) -- p(-2,1,3) -- p(-2,1,4) withpen pencircle scaled 1.21;
-label("$2\cdot T_n + n\cdot T_n$", p(1, -3, 0));
+  endfor
+  draw p(-3,5,-1) -- p(-2,5,-1) -- p(-2,5,0) -- p(-2,4,0) 
+    -- p(-2,4,1) -- p(-2,3,1) -- p(-2,3,2) -- p(-2,2,2) 
+    -- p(-2,2,3) -- p(-2,1,3) -- p(-2,1,4) withpen pencircle scaled 1.21;
+  label("$2\cdot T_n + n\cdot T_n$", p(1, -3, 0));
 );
 P4 = image(
-for x=0 upto 4:
+  for x=0 upto 4:
     for y=0 upto 4-x:
-        for z=6 downto 0:
-            draw
-            if z mod 6 = 0:
-                Cube2 shifted p(x,y,z if z>0: + else: - fi 1/8)
-            else:
-                Cube1 shifted p(x,y,z)
-            fi;
-        endfor
+      for z=6 downto 0:
+        draw
+          if z mod 6 = 0:
+            b_cube shifted p(x,y,z if z>0: + else: - fi 1/8)
+          else:
+            o_cube shifted p(x,y,z)
+          fi;
+      endfor
     endfor
-endfor
-dimity(p(0,0,0) -- p(0,5,0), "$\scriptstyle n$");
-dimity(p(5,0,0) -- p(0,0,0), "$\scriptstyle n$");
-dimity(p(5,0,8) -- p(5,0,1), "$\scriptstyle n+2$");
-label("$(n+2)\cdot T_n$", p(5,-2,0));
+  endfor
+  show_dim(p(0,0,0) -- p(0,5,0), "n");
+  show_dim(p(5,0,0) -- p(0,0,0), "n");
+  show_dim(p(5,0,8) -- p(5,0,1), "n+2");
+  label("$(n+2)\cdot T_n$", p(5,-2,0));
 );
+% DUMP capture=True
 
-draw P1 shifted 60 left;
-draw P2 shifted 60 right;
-draw P3 shifted (-72, -180);
-draw P4 shifted (+96, -180);
-
+draw P1 shifted 60 left;     draw P2 shifted 60 right;
+draw P3 shifted (-72, -180); draw P4 shifted (+96, -180);
 label.top(btex $\displaystyle
-1+2+\cdots+n=T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
-$ etex, point 5/2 of bbox currentpicture shifted 21 up);
+  1+2+\cdots+n=T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
+  $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 label.bot(btex $\displaystyle
-n\cdot T_{n+1} = (n+2) \cdot T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
-$ etex, point 1/2 of bbox currentpicture shifted 21 down);
+  n\cdot T_{n+1} = (n+2) \cdot T_n \enspace\Rightarrow\enspace T_{n+1} = {n+2\over n}T_n
+  $ etex, point 1/2 of bbox currentpicture shifted 21 down);
 \end{mplibcode}
 $$
 \vfill
 
-\section{Indenties for triangular numbers}
+\section{Identities for triangular numbers}
 \vfill
 $$
 \begin{mplibcode}
 numeric u; u = 8;
-vardef T(expr n) = 
-numeric m; m = abs(n);
-numeric r; r = n/m; % don't use n=0
-picture s; s = image(
+vardef T(expr n) = save m, r, s;
+  numeric m; m = abs(n);
+  numeric r; r = n/m; % don't use n=0
+  picture s; s = image(
     fill unitsquare scaled u withcolor if r < 0: Oranges 8 1 else: Greens 8 2 fi;
     draw unitsquare scaled u withpen pencircle scaled 1/4;
-);
-picture trig; 
-trig = image(
+  );
+  image(
     for i=0 upto m - 1:
-        for j=0 upto m - 1 - i:
-            draw s shifted (u*(i, j));
-        endfor
+      for j=0 upto m - 1 - i:
+        draw s shifted (u*(i, j));
+      endfor
     endfor
-    draw (origin -- for i=0 upto m-1: (m-i, i) -- (m-i, i+1) -- endfor (0, m) -- cycle) scaled u;
-) rotated (90+90r);
-trig
+    draw (origin -- for i=0 upto m-1: 
+        (m-i, i) -- (m-i, i+1) -- 
+      endfor (0, m) -- cycle) scaled u;
+  ) rotated (90+90r)
 enddef;
-picture P[];
 picture t[]; t5 = T(-5); t6 = T(6);
-
+picture P[];
 P1 = image(
-for x=0 upto 3:
+  for x=0 upto 3:
     for y=0 upto 3-x:
-        draw t5 shifted (6u*(x,y));
-        if x+y < 3:
-            draw t6 shifted (6u*(x+1, y+1));
-        fi
+      draw t5 shifted (6u*(x,y));
+      if x+y < 3:
+        draw t6 shifted (6u*(x+1, y+1));
+      fi
     endfor
-endfor
-label.urt("$T_{n-1}T_k + T_n T_{k-1} = T_{nk-1}$", (20u, 4u));
+  endfor
+  label.urt("$T_{n-1}T_k + T_n T_{k-1} = T_{nk-1}$", (20u, 4u));
 );
 P2 = image(
-for x=0 upto 3:
+  for x=0 upto 3:
     for y=0 upto 3-x:
-        draw t6 shifted (-6u*(x,y));
-        if x+y < 3:
-            draw t5 shifted (-6u*(x+1, y+1));
-        fi
+      draw t6 shifted (-6u*(x,y));
+      if x+y < 3:
+        draw t5 shifted (-6u*(x+1, y+1));
+      fi
     endfor
-endfor
-label.llft("$T_{n}T_k + T_{n-1} T_{k-1} = T_{nk}$", -(20u, 4u));
+  endfor
+  label.llft("$T_{n}T_k + T_{n-1} T_{k-1} = T_{nk}$", -(20u, 4u));
 );
-draw P1;
-draw P2 shifted 36(u, u);
-label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", point 5/2 of bbox currentpicture shifted 42 up);
+
+draw P1; draw P2 shifted 36(u, u);
+
+label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", 
+  point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
@@ -5716,53 +5701,55 @@ $$
 $$
 \begin{mplibcode}
 numeric u; u = 8;
-vardef T(expr n) = 
-numeric m; m = abs(n);
-numeric r; r = n/m; % don't use n=0
-picture s; s = image(
+vardef T(expr n) = save m, r, s;
+  numeric m; m = abs(n);
+  numeric r; r = n/m; % don't use n=0
+  picture s; s = image(
     fill unitsquare scaled u withcolor if r < 0: Oranges 8 1 else: Greens 8 2 fi;
     draw unitsquare scaled u withpen pencircle scaled 1/4;
-);
-picture trig; 
-trig = image(
+  );
+  image(
     for i=0 upto m - 1:
-        for j=0 upto m - 1 - i:
-            draw s shifted (u*(i, j));
-        endfor
+      for j=0 upto m - 1 - i:
+        draw s shifted (u*(i, j));
+      endfor
     endfor
-    draw (origin -- for i=0 upto m-1: (m-i, i) -- (m-i, i+1) -- endfor (0, m) -- cycle) scaled u;
-) rotated (90+90r);
-trig
+    draw (origin -- for i=0 upto m-1: 
+        (m-i, i) -- (m-i, i+1) -- 
+      endfor (0, m) -- cycle) scaled u;
+  ) rotated (90+90r)
 enddef;
-picture P[];
 picture t[]; t6 = T(6); t5 = T(5) rotated 180;
 picture sq; sq = image(
-fill unitsquare scaled 6u withcolor Oranges 8 1;
-for i=1 upto 5:
+  fill unitsquare scaled 6u withcolor Oranges 8 1;
+  for i=1 upto 5:
     draw ((i, 0) -- (i, 6)) scaled u dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
     draw ((0, i) -- (6, i)) scaled u dashed withdots scaled 1/4 withpen pencircle scaled 1/4;
-endfor
-draw unitsquare scaled 6u;
+  endfor
+  draw unitsquare scaled 6u;
 );
+picture P[];
 P1 = image(
-for x=0 upto 3:
+  for x=0 upto 3:
     for y=0 upto 3-x:
-        draw if x+y < 3: sq else: t5 fi shifted (6u*(x,y));
+      draw if x+y < 3: sq else: t5 fi shifted (6u*(x,y));
     endfor
-endfor
-label.urt("$n^2T_{k-1} + kT_{n-1} = T_{nk-1}$", (20u, 4u));
+  endfor
+  label.urt("$n^2T_{k-1} + kT_{n-1} = T_{nk-1}$", (20u, 4u));
 );
 P2 = image(
-for x=0 upto 3:
+  for x=0 upto 3:
     for y=0 upto 3-x:
-        draw if x+y < 3: sq rotated 180 else: t6 fi shifted (-6u*(x,y));
+      draw if x+y < 3: sq rotated 180 else: t6 fi shifted (-6u*(x,y));
     endfor
-endfor
-label.llft("$n^2T_{k-1} + kT_{n} = T_{nk}$", -(20u, 4u));
+  endfor
+  label.llft("$n^2T_{k-1} + kT_{n} = T_{nk}$", -(20u, 4u));
 );
-draw P1;
-draw P2 shifted 36(u, u);
-label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", point 5/2 of bbox currentpicture shifted 42 up);
+
+draw P1; draw P2 shifted 36(u, u);
+
+label.top("$T_n=1+2+\cdots+n\enspace\Rightarrow$", 
+  point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
@@ -5773,74 +5760,55 @@ $$
 $$
 \begin{mplibcode}
 numeric s, r, d; s = 18; 1.8d = s; r = s / 2 / cosd 54;
-path p[];
-picture P[], xo, o[];
-color cb[]; cb0 = Blues 7 6; cb1 = Oranges 7 3;  cb2 = Greens 7 1;
-xo = image(draw fullcircle scaled .9d; 
-draw (left--right) scaled 0.6 d rotated 45;
-draw (left--right) scaled 0.6 d rotated -45;
+picture xo; xo = image(draw fullcircle scaled 0.9 d; 
+  draw (left--right) scaled 0.6 d rotated 45;
+  draw (left--right) scaled 0.6 d rotated -45;
 );
-for i=0 upto 2:
-   o[i] = image(
-       fill fullcircle scaled d withcolor cb[i];
-       draw fullcircle scaled d;
-    );
-endfor
-
+picture o[];
+o0 = image(fill fullcircle scaled d withcolor Blues 7 4; draw fullcircle scaled d);
+o1 = image(fill fullcircle scaled d withcolor Oranges 7 3; draw fullcircle scaled d);
+o2 = image(fill fullcircle scaled d withcolor Greens 7 2; draw fullcircle scaled d);
+path p[];
 p1 = (for t=0 upto 4: up scaled r rotated  72t -- endfor cycle) shifted (0, -r);
 p2 = origin -- for t=0 upto 3: left scaled s rotated 60t -- endfor cycle;
-pair u, v; 
-u = point 2 of p2; v = point 3 of p2;
-
-for k=1 upto 2:
-   P[k] = image(
-       for i = 1 upto 3:
-           draw p[k] scaled i;
-       endfor
-       for i = 1 upto 3:
-           for t = i upto i * length(p[k]) - i: 
-               draw o0 shifted (point t/i of p[k] scaled i);
-           endfor
-       endfor
-       draw o0;
-       if k=2:
-           draw xo shifted 3u shifted v;
-           draw xo shifted 3u shifted 2v;
-           draw xo shifted 3u shifted 3v;
-           draw xo shifted 2u shifted 2v;
-           draw xo shifted 2u shifted 3v;
-           draw xo shifted  u shifted 3v;
-       fi
-   );
-endfor
-
-drawarrow (left--right) scaled 20;
-
-label.lft(P1, 42 left);
-label.rt(P2, 42 right);
-label.bot("$P_n = T_{2n-1} - T_{n-1}$", 64 down);
-
-P3 = image(
-    for i=0 upto 2:
-        for j=1 upto 3:
-            for k=1 upto j * length p2:
-                draw o[i] shifted (point k/j of p2 scaled j) 
-                    shifted -11/3 v shifted 1/3 u 
-                    rotated 120i;
-            endfor
-        endfor
+pair u, v; u = point 2 of p2; v = point 3 of p2;
+picture P[];
+for k=1 upto 2: P[k] = image(
+  for i = 1 upto 3:
+    draw p[k] scaled i;
+  endfor
+  for i = 1 upto 3:
+    for t = i upto i * length(p[k]) - i: 
+      draw o0 shifted (point t/i of p[k] scaled i);
     endfor
-    label.bot("$3P_n = T_{3n-1}$", 4(u+v));
+  endfor
+  draw o0;
+  if k=2:
+    draw xo shifted 3u shifted v;  draw xo shifted 2u shifted 2v;
+    draw xo shifted 3u shifted 2v; draw xo shifted 2u shifted 3v;
+    draw xo shifted 3u shifted 3v; draw xo shifted  u shifted 3v;
+  fi
+); endfor
+P3 = image(
+  for i=0 upto 2:
+    for j=1 upto 3:
+      for k=1 upto j * length p2:
+        draw o[i] shifted (point k/j of p2 scaled j) 
+          shifted -11/3 v shifted 1/3 u rotated 120i;
+      endfor
+    endfor
+  endfor
+  label.bot("$3P_n = T_{3n-1}$", 4(u+v));
 );
+
+label.lft(P1, 42 left); drawarrow (left--right) scaled 20; label.rt(P2, 42 right);
+label.bot("$P_n = T_{2n-1} - T_{n-1}$", 64 down);
 draw P3 shifted 180 down;
 
-label.top(btex $\left.
-\vcenter{\openup 4pt\halign{$#$\hfill\cr
-P_n = 1 + 4 + 7 + \cdots + (3n-2)\cr
-T_n = 1 + 2 + 3 + \cdots + n\cr}} \right\} \Rightarrow {}$ etex,
-point 5/2 of bbox currentpicture shifted 42 up);
-
-
+label.top(btex $\left. \vcenter{\openup 4pt\halign{$#$\hfill\cr
+  P_n = 1 + 4 + 7 + \cdots + (3n-2)\cr
+  T_n = 1 + 2 + 3 + \cdots + n\cr}} \right\} \Longrightarrow {}
+  $ etex, point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
 $$
 \vfill
@@ -5851,118 +5819,105 @@ $$
 $$
 \begin{mplibcode}
 numeric s, r, d; s = 18; 2d = s; 2r * cosd 67.5 = s;
+color cf[]; cf0 = Blues 7 1; cf1 = Oranges 7 1;  cf2 = Greens 7 1;
+color cb[]; cb0 = Blues 7 3; cb1 = Oranges 7 3;  cb2 = Greens 7 3;
 picture P[], o[];
-color cb[], cf[]; 
-cf0 = Blues 7 1; cf1 = Oranges 7 1;  cf2 = Greens 7 1;
-cb0 = Blues 7 3; cb1 = Oranges 7 3;  cb2 = Greens 7 3;
 for i=0 upto 2:
-   o[i] = image(
-       fill fullcircle scaled d withcolor cb[i];
-       draw fullcircle scaled d;
-   );
+  o[i] = image(fill fullcircle scaled d withcolor cb[i]; draw fullcircle scaled d);
 endfor
-
-P1 = image(
-   path octagon, O[];
-   octagon = (for t=0 upto 7: down scaled r rotated (45t-45/2) -- endfor cycle) shifted (0, -r);
-   O1 = octagon shifted - point 0 of octagon;
-   O2 = O1 scaled 2; 
-   fill point 0 of O2 -- subpath (3,5) of O2 -- cycle withcolor cf0;
-   for p = -1, 1:
-       fill subpath (1/2p, 3/2p) of O2 -- cycle withcolor cf1;
-       fill subpath (2p, 5/2p) of O2 -- point 2p of O1 -- cycle withcolor cf2;
-   endfor
-   draw O1; draw O2;
-   for t = 10, 13, 14, 15, 23, 23.5, 24, 24.5, 25:
-       draw o0 shifted point t mod 10 of O[floor (t/10)];
-   endfor
-   for t = 20.5, 21, 21.5, 26.5, 27, 27.5:
-       draw o1 shifted point t mod 10 of O[floor (t/10)];
-   endfor
-   for t = 12, 22, 22.5, 25.5, 26, 16:
-       draw o2 shifted point t mod 10 of O[floor (t/10)];
-   endfor
+P1 = image(path G[];
+  G0 = (for t=0 upto 7: down scaled r rotated (45t-45/2) -- endfor cycle) shifted (0, -r);
+  G1 = G0 shifted - point 0 of G0; G2 = G1 scaled 2; 
+  fill point 0 of G2 -- subpath (3,5) of G2 -- cycle withcolor cf0;
+  for p = -1, 1:
+    fill subpath (1/2p, 3/2p) of G2 -- cycle withcolor cf1;
+    fill subpath (2p, 5/2p) of G2 -- point 2p of G1 -- cycle withcolor cf2;
+  endfor
+  draw G1; draw G2;
+  for t = 10, 13, 14, 15, 23, 23.5, 24, 24.5, 25:
+    draw o0 shifted point t mod 10 of G[floor (t/10)];
+  endfor
+  for t = 20.5, 21, 21.5, 26.5, 27, 27.5:
+    draw o1 shifted point t mod 10 of G[floor (t/10)];
+  endfor
+  for t = 12, 22, 22.5, 25.5, 26, 16:
+    draw o2 shifted point t mod 10 of G[floor (t/10)];
+  endfor
 );
 P2 = image(
-   picture t[], q;
-   for i=1,2:
-       t[i] = image(
-           fill for j=0 upto 2: (0, d) rotated 120j -- endfor cycle withcolor cf[i];
-           for j=0 upto 2: draw o[i] shifted (0,d) rotated 120j; endfor);
-   endfor
-   q = image(
-       fill unitsquare shifted -(1/2, 1/2) scaled 2s withcolor cf0;
-       for j=-1 upto 1: for k=-1 upto 1: draw o0 shifted (j*s, k*s); endfor endfor);
-   draw t1 shifted (-s, 0); draw t1 shifted (s, 0); 
-   draw t2 shifted (-s, 3/2s); draw t2 shifted (s, 3/2s);
-   draw q shifted (0, 4s);
+  picture t[], q;
+  for i=1,2: t[i] = image(
+    fill for j=0 upto 2: (0, d) rotated 120j -- endfor cycle withcolor cf[i];
+    for j=0 upto 2: draw o[i] shifted (0,d) rotated 120j; endfor
+  ); endfor
+  q = image(
+    fill unitsquare shifted -(1/2, 1/2) scaled 2s withcolor cf0;
+    for j=-1 upto 1: for k=-1 upto 1: draw o0 shifted (j*s, k*s); endfor endfor
+  );
+  draw t1 shifted (-s, 0);    draw t1 shifted (s, 0); 
+  draw t2 shifted (-s, 3/2s); draw t2 shifted (s, 3/2s);
+  draw q shifted (0, 4s);
 );
+% DUMP capture=False, replace="% see source for octaframe routine "
 vardef octaframe(expr n, tag) = 
-   save t, m; numeric t, m;
-   m + 1 = n; 2t = m * m + m;
-   save A; picture A; 
-   save a, b, c; path a, b, c;
-   a = unitsquare xscaled t yscaled 2 scaled s;
-   b = unitsquare xscaled n yscaled m scaled s shifted point 1 of a;
-   c = unitsquare scaled n scaled s shifted point 3 of b; 
-   A = image(
-       if n > 1:
-           fill a withcolor cf1; draw a; draw point -1/2 of a -- point 3/2 of a;
-           fill b withcolor cf2; draw b; 
-           draw (left--right) scaled 400 rotated -45 shifted center b 
-               cutbefore subpath (3,2) of b cutafter subpath (1, 0) of b;
-       fi
-       fill c withcolor cf0; draw c;
-       for j=1 upto 2:
-           for i=1 upto t:
-               draw o1 shifted (i*s - 1/2 s, j*s - 1/2 s);
-           endfor
-       endfor
-       for i=1 upto n:
-           for j=1 upto m:
-               draw o2 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of b;
-           endfor
-       endfor
-       for i=1 upto n:
-           for j=1 upto n:
-               draw o0 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of c;
-           endfor
-       endfor
-       label.top(tag, point 5/2 of c);
-       draw point 0 of a -- point 1 of b -- point 2 of c withpen pencircle scaled 1;
-   ); A enddef;
-P3 = image(
-   draw octaframe(3, nullpicture);
-);
-
-draw P1 shifted 144 left; draw P2; draw P3 shifted 89 right;
-
-label.bot("$T_k = 1 + 2 + \cdots + k \Rightarrow O_k = k^2 + 4T_{k-1}$", 21 down);
-
+  save t, m; numeric t, m; m + 1 = n; 2t = m * m + m;
+  save a, b, c; path a, b, c;
+  a = unitsquare xscaled t yscaled 2 scaled s;
+  b = unitsquare xscaled n yscaled m scaled s shifted point 1 of a;
+  c = unitsquare scaled n scaled s shifted point 3 of b; 
+  image(
+    if n > 1:
+      fill a withcolor cf1; draw a; draw point -1/2 of a -- point 3/2 of a;
+      fill b withcolor cf2; draw b; 
+      draw (left--right) scaled 400 rotated -45 shifted center b 
+        cutbefore subpath (3,2) of b cutafter subpath (1, 0) of b;
+    fi
+    fill c withcolor cf0; draw c;
+    for j=1 upto 2:
+      for i=1 upto t:
+        draw o1 shifted (i*s - 1/2 s, j*s - 1/2 s);
+      endfor
+    endfor
+    for i=1 upto n:
+      for j=1 upto m:
+        draw o2 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of b;
+      endfor
+    endfor
+    for i=1 upto n:
+      for j=1 upto n:
+        draw o0 shifted (i*s - 1/2 s, j*s - 1/2 s) shifted point 0 of c;
+      endfor
+    endfor
+    label.top(tag, point 5/2 of c);
+    draw point 0 of a -- point 1 of b -- point 2 of c withpen pencircle scaled 1;
+  ) enddef;
+% DUMP capture=True
+P3 = image(draw octaframe(3, nullpicture));
 P4 = image(
-   draw octaframe(5, "$n$"); 
-   draw octaframe(4, "$\cdots$") shifted (0, 2s);
-   draw octaframe(3, "$3$")      shifted (0, 4s);
-   draw octaframe(2, "$2$")      shifted (0, 6s);
-   draw octaframe(1, "$1$")      shifted (0, 8s);
-   label.lft("$1$", (0, 17/2s));
-   label.rt("$n$", (15s, 13/2s));
-   label.rt("$n-1$", (15s, 2s));
-   picture a, b; path p, q;
-   p = (0, -s) -- (15s, -s);
-   q = (17s, 0) -- (17s, 9s);
-   a = thelabel("$\displaystyle {n(n+1)\over2}$", origin) shifted point 1/2 of p;
-   b = thelabel("$\displaystyle 2n - 1$", origin) shifted point 1/2 of q;
-   drawdblarrow p; unfill bbox a; draw a;
-   drawdblarrow q; unfill bbox b; draw b;
+  draw octaframe(5, "$n$"); 
+  draw octaframe(4, "$\cdots$") shifted (0, 2s);
+  draw octaframe(3, "$3$")      shifted (0, 4s);
+  draw octaframe(2, "$2$")      shifted (0, 6s);
+  draw octaframe(1, "$1$")      shifted (0, 8s);
+  % DUMP capture=False, replace="  % ... and the labels ..."
+  label.lft("$1$", (0, 17/2s));
+  label.rt("$n$", (15s, 13/2s));
+  label.rt("$n-1$", (15s, 2s));
+  picture a, b; path p, q; p = (0, -s) -- (15s, -s); q = (17s, 0) -- (17s, 9s);
+  a = thelabel("$\displaystyle {n(n+1)\over2}$", origin) shifted point 1/2 of p;
+  b = thelabel("$\displaystyle 2n - 1$", origin) shifted point 1/2 of q;
+  drawdblarrow p; unfill bbox a; draw a;
+  drawdblarrow q; unfill bbox b; draw b;
+  % DUMP capture=True
 );
-
+% DUMP capture=False, replace="% ... finally place P[] and labels "
+draw P1 shifted 144 left; draw P2; draw P3 shifted 89 right;
+label.bot("$T_k = 1 + 2 + \cdots + k \Rightarrow O_k = k^2 + 4T_{k-1}$", 21 down);
 draw P4 shifted (-15/2s, -15s);
-
-
 label.bot(btex $\displaystyle
-\sum_{k=1}^n O_k = 1 + 8 + 21 + 40 + \cdots + \left(n^2 + 4T_{n-1}\right) = {n(n+1)(2n-1)\over 2}
-$ etex, point 1/2 of bbox currentpicture shifted 24 down);
+  \sum_{k=1}^n O_k = 1 + 8 + 21 + 40 + \cdots + 
+  \left(n^2 + 4T_{n-1}\right) = {n(n+1)(2n-1)\over 2}
+  $ etex, point 1/2 of bbox currentpicture shifted 24 down);
 \end{mplibcode}
 $$
 \vfill
@@ -5974,42 +5929,48 @@ $$
 \begin{mplibcode}
 numeric s; s = 23;
 vardef box(expr n) = 
-    path a, b;
-    a = unitsquare xscaled n yscaled (n + 1) scaled s;
-    b = unitsquare xscaled 1 yscaled (n*(n+1)/2) scaled s rotated 90 shifted point 2 of a;
-    picture p; p = image(
-        fill a withcolor Blues 7 2; 
-        fill b withcolor Oranges 7 2; 
-        label(if n > 4: "$n(n+1)$" elseif n = 4: "$\cdots$" else: "$" & decimal n & "\cdot" & decimal (n+1) & "$" fi, 
-        (xpart center a, ypart center b - s));
-        label(if n > 4: "$1+2+\cdots+n$" elseif n = 4: "$\cdots$" else: "$1" for i=2 upto n: & "+" & decimal i endfor & "$" fi, center b);
-        path t; t = origin -- right scaled s;
-        draw t shifted (0,s) for i=2 upto n: -- t shifted (s*(i-1,i)) endfor dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
-        draw a;
-        draw b;
-    ); p
+  path a, b;
+  a = unitsquare xscaled n yscaled (n + 1) scaled s;
+  b = unitsquare xscaled 1 yscaled (n*(n+1)/2) scaled s rotated 90 shifted point 2 of a;
+  image(
+    fill a withcolor Blues 7 2; fill b withcolor Oranges 7 2; 
+    label(if n > 4: "$n(n+1)$" 
+      elseif n = 4: "$\cdots$" 
+              else: "$" & decimal n & "\cdot" & decimal (n+1) & "$" 
+                fi, (xpart center a, ypart center b - s));
+    label(if n > 4: "$1+2+\cdots+n$" 
+      elseif n = 4: "$\cdots$" 
+              else: "$1" for i=2 upto n: & "+" & decimal i endfor & "$" 
+                fi, center b);
+    path t; t = origin -- right scaled s;
+    draw t shifted (0,s) for i=2 upto n: -- t shifted (s*(i-1,i)) endfor 
+      dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+    draw a; draw b;
+  )
 enddef;
 
 for n=1 upto 5:
     draw box(n) shifted (s*n*(n-1)/2, 0);
 endfor
 
-path xx, yy; picture lx, ly; 
-xx = (origin -- 15 right * s) shifted 22 down;
-yy = (origin --  7 up * s) shifted 24 left;
-drawdblarrow xx; drawdblarrow yy; interim bboxmargin := 8;
-lx = thelabel("$\displaystyle {n(n+1)\over2}$", point 1/2 of xx); unfill bbox lx; draw lx;
-ly = thelabel("$n+2$", point 1/2 of yy); unfill bbox ly; draw ly;
+vardef show_dim(expr s, p) = save t; picture t; t = thelabel(s, point 1/2 of p);
+  drawdblarrow p; unfill bbox t; draw t;
+enddef;
+show_dim("$\displaystyle {n(n+1)\over2}$", (origin -- 15 right * s) shifted 22 down);
+show_dim("$n+2$", (origin --  7 up * s) shifted 24 left);
 
-label.top("$\displaystyle \sum_{k=1}^n k (k+1) = {n(n+1)(n+2)\over3}$", point
-5/2 of bbox currentpicture shifted 42 up);
-label.bot(btex
-\vbox{\openup 16pt\halign{#\hfill\cr
-$T_k = 1 + 2 + \cdots + k \enspace\Rightarrow$\cr
-\hfill $\displaystyle 1\cdot2 + 2\cdot3 + \cdots + n(n+1) + \left(T_1+T_2+\cdots+T_n\right)={n(n+1)(n+2)\over2}$,\cr
-\hfill $\displaystyle \left(T_1+T_2+\cdots+T_n\right) = {1\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right)$,\cr
-\hfill \therefore\quad$\displaystyle {3\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right) = {n(n+1)(n+2)\over2}$.\cr
-}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+label.top("$\displaystyle \sum_{k=1}^n k (k+1) = {n(n+1)(n+2)\over3}$", 
+  point 5/2 of bbox currentpicture shifted 42 up);
+label.bot(btex \vbox{\openup 16pt\halign{#\hfill\cr
+  $T_k = 1 + 2 + \cdots + k \enspace\Rightarrow$\cr
+  \hfill $\displaystyle 1\cdot2 + 2\cdot3 + \cdots + n(n+1) + 
+    \left(T_1+T_2+\cdots+T_n\right)={n(n+1)(n+2)\over2}$,\cr
+  \hfill $\displaystyle \left(T_1+T_2+\cdots+T_n\right) = 
+    {1\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right)$,\cr
+  \hfill \therefore\quad
+    $\displaystyle {3\over2}\left( 1\cdot2 + 2\cdot3 + \cdots + n(n+1)\strut\right) = 
+    {n(n+1)(n+2)\over2}$.\cr
+ }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
