@@ -589,7 +589,7 @@ P6 = image(
   arrow_label((0,0),(a-1/2,0),"$a$", 10);
   arrow_label((a+1/2,0),(a+b-1/2,0),"$b$", 10);
   arrow_label((a+b+1/2,0),(a+b+c,0),"$c$", 10));
-% DUMP capture=False, replace="%... and so on to define the other pictures"
+% DUMP capture=False, comment="... and so on to define the other pictures"
 P7 = btex \hbox to \textwidth{\hbox to 12pt{\hss II.}\quad $c = a+b-2r$\hss} etex;
 P8 = image(
     draw P4;
@@ -991,7 +991,7 @@ if the diagonals are perpendicular.
 I.\@ Convex quadrilaterals
 $$
 \begin{mplibcode}
-% DUMP replace="%-- Convex picture ----------------------------------"
+% DUMP comment="-- Convex picture ----------------------------------"
 z0 = origin; z1 = (48, 60); z2 = (144, 0); z3 = (72, -64);
 
 fill z0--z1--z2--z3--cycle withcolor Blues 6 2;
@@ -1021,7 +1021,7 @@ $$
 II.\@ Concave quadrilaterals
 $$
 \begin{mplibcode}
-% DUMP replace="%-- Concave picture ---------------------------------"
+% DUMP comment="-- Concave picture ---------------------------------"
 z0 = origin; z1 = (48, 120); z2 = (144, 0); z3 = (76, 42);
 
 fill z0--z1--z2--z3--cycle withcolor Blues 6 2;
@@ -1062,7 +1062,7 @@ to the diagonals of $Q$.
 I.\@ $Q$ convex
 $$
 \begin{mplibcode}
-% DUMP replace="%-- Convex picture ----------------------------------"
+% DUMP comment="-- Convex picture ----------------------------------"
 path Q; Q = origin -- 72 dir 0 -- 62 dir 42 -- 48 dir 84 -- cycle;
 pair s, t; s = point 1 of Q - point 3 of Q; t = point 2 of Q - point 0 of Q;
 path box; box = origin -- s -- s+t -- t -- cycle;
@@ -1103,7 +1103,7 @@ $$
 II.\@ $Q$ concave
 $$
 \begin{mplibcode}
-% DUMP capture=False, replace="% Concave picture is essentially the same, with a simpler grid"
+% DUMP capture=False, comment=" Concave picture is essentially the same, with a simpler grid"
 path Q; Q = origin -- 32 dir 28 -- 81 dir -8 -- 62 dir 74 -- cycle;
 pair s, t; s = point 3 of Q - point 1 of Q; t = point 2 of Q - point 0 of Q;
 path box; box = origin -- s -- s+t -- t -- cycle;
@@ -1877,7 +1877,7 @@ P2 = image(
     label.llft("$b$", point 1/2 of f);
     label.lft("$P_2$", point 0 of t);
 );
-% DUMP capture=False, replace="%... and so on to define four more pictures"
+% DUMP capture=False, comment="... and so on to define four more pictures"
 P3 = image(
     path f, t, s;
     f = origin -- p(b, 0, 0) -- p(b, h, 0) -- p(0, h, 0) -- cycle;
@@ -2178,7 +2178,7 @@ P2 = image(
     endfor
   endfor
 );
-% DUMP capture=False, replace="% part II is much the same, but with smaller s"
+% DUMP capture=False, comment=" part II is much the same, but with smaller s"
 s := unitsquare shifted -(1/2, 1/2) xscaled (ca-cb) yscaled (sa-sb) scaled u;
 P3 = image(
   fill s withcolor Oranges 7 2;
@@ -2310,7 +2310,7 @@ P1 = image(
   \sin\alpha & {\sin(\alpha+\beta) \over \cos\beta + \sin\beta\cos\alpha/\sin\alpha}\cr
   \sin(\alpha+\beta) & \sin\alpha\cos\beta + \cos\alpha\sin\beta\cr}} etex, (x2, y4-12));            
 );
-% DUMP capture=False, replace="% similarly for P2"
+% DUMP capture=False, comment=" similarly for P2"
 P2 = image(
     angle_mark(z3, z2, z1, 24, "$\alpha$", Blues 6 5);
     angle_mark(origin, z4, z1, 32, "$\beta$", Blues 6 5);
@@ -2340,7 +2340,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-% DUMP capture=False, replace="% Using the same angle_mark macro defined above..."
+% DUMP capture=False, comment=" Using the same angle_mark macro defined above..."
 input markle    
 % DUMP capture=True
 numeric alpha, beta; alpha = 62; beta = 1/2 alpha;
@@ -2382,7 +2382,7 @@ P1 = image(
     "                 x & (\sin\alpha-h\sin\beta)\cos\alpha \cr" &
     "\sin(\alpha-\beta) & \sin\alpha\cos\beta - \cos\alpha\sin\beta \cr }}", (x2, y4-12));            
 );
-% DUMP capture=False, replace="% P2 is the same except for the labels"
+% DUMP capture=False, comment=" P2 is the same except for the labels"
 P2 = image(
   draw P0;
   drawoptions(withcolor Reds 6 5);
@@ -2420,7 +2420,7 @@ z.D - z.B = whatever * dir beta;
 z.E = whatever[z.A, z.B]; z.E - z.D = whatever * (z.A - z.B) rotated 90;
 z.F = whatever[z.D, z.E];
 
-% DUMP capture=False, replace="% Using the same angle_mark macro defined above..."
+% DUMP capture=False, comment=" Using the same angle_mark macro defined above..."
 input markle    
 % DUMP capture=True, replace=" "
 angle_mark(z.A, z.D, z.E, 16, "$\alpha$", Blues 6 5);
@@ -2469,7 +2469,7 @@ z.E = whatever [origin, z.C];
 z.E - z.B = whatever * z.B rotated 90;
 y.E = y.D;
 
-% DUMP capture=False, replace="% Using the same angle_mark macro defined above..."
+% DUMP capture=False, comment=" Using the same angle_mark macro defined above..."
 input markle    
 % DUMP capture=True, replace=" "
 angle_mark(z.A, origin, z.C, 28, "$\alpha$", Blues 6 5);
@@ -2561,7 +2561,7 @@ F1 = image(
   label.lft("$\sin(\alpha+\beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta$", (-10, 32));
   label.lft("$\cos(\alpha+\beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$", (-10, 16));
 );
-% DUMP capture=False, replace="% more of the same for F2 ..."
+% DUMP capture=False, comment=" more of the same for F2 ..."
 F2 = image(
    fill t' withcolor Blues 8 3;
    path a[];
@@ -2600,7 +2600,7 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-% DUMP capture=False, replace="% very similar to previous page ..."
+% DUMP capture=False, comment=" very similar to previous page ..."
 vardef angled_label@#(expr t, p, r) = draw thelabel@#(t, origin) rotated r shifted p; enddef;
 picture F[]; path t, t', t'', s; numeric alpha; alpha = angle(1, 2) - angle (2, 1);
 t = (origin -- (180, 0) -- (180, 90) -- cycle) rotated alpha;
@@ -2710,7 +2710,7 @@ P3 = image(draw P1 shifted 89 left; draw P2 shifted 89 right;
   label.bot("$2\sin\theta\cos\theta = \sin 2\theta$", 
   point 1/2 of bbox currentpicture shifted 21 down)
 );
-% DUMP capture=False, replace="% P4, P5, and P6 are similar to P1, P2, and P3"
+% DUMP capture=False, comment=" P4, P5, and P6 are similar to P1, P2, and P3"
 path S; S = unitsquare yscaled -1/2 scaled abs(point 1 of R - point 0 of R);
 P4 = image(
   mark_angle(point 1 of S, point 0 of S, z0, 18, 24, "$\theta$");
@@ -3531,7 +3531,7 @@ $$
 $$
 \mathord{\hbox{Area}}\left(\vcenter{%
 \begin{mplibcode}
-% DUMP capture=False, replace="% See source for how the legend is done"
+% DUMP capture=False, comment=" See source for how the legend is done"
 input thatch; path s; s = unitsquare scaled 18; 
 fill s withcolor Blues 8 3; rule s withcolor white; draw s;
 \end{mplibcode}}\right)=
@@ -3630,7 +3630,7 @@ drawoptions();
 
 drawarrow tt; label.rt("$t$", point 1 of tt);
 drawarrow yy; label.top("$y$", point 1 of yy);
-% DUMP capture=False, replace="% ... the rest is labels ... "
+% DUMP capture=False, comment=" ... the rest is labels ... "
 label.lft("$1/2$", (0, 1/2u));
 label.llft("$0$", origin);
 label.lft("$-1$", (0, -u));
@@ -4080,7 +4080,7 @@ draw P2 shifted (100 right - center bbox P2);
 label("${}\le{}$", origin);
 label("\textsc{Lemma}: $ab + bc + ac \le a^2 + b^2 + c^2$", 64 up);
 
-% DUMP capture=False, replace="% and much the same for the Theorem pictures"
+% DUMP capture=False, comment=" and much the same for the Theorem pictures"
 path bca, bcb, bcc, aca, acb, acc, aba, abb, abc;
 
 bca = unitsquare yscaled (-b*c) xscaled a scaled k; 
@@ -4310,7 +4310,7 @@ label.lft("\hbox to 16pt{\hss$\vdots$\hss}", point +1/2 of c1);
 label.top("$|x_n|$", point -1/2 of d2);
 label.lft("$|x_n|$", point +1/2 of d1);
 
-% DUMP capture=False, replace="% plus the display labels..."
+% DUMP capture=False, comment=" plus the display labels..."
 label.top("$\displaystyle {1\over n}\sum_{i=1}^n x_i^2 \ge \left({1\over n} \sum_{i=1}^n x_i \right)^2$",
 point 5/2 of bbox currentpicture shifted 21 up);
 
@@ -4665,7 +4665,7 @@ P2 = image(
     draw nn shifted point 1/2 of a$;
   endfor
 );
-% DUMP capture=False, replace="% ... plus simpler loops for P3 and P4"
+% DUMP capture=False, comment=" ... plus simpler loops for P3 and P4"
 P3 = image(
   for k=0 upto 3:
     for j=3-k downto 0:
@@ -4905,7 +4905,7 @@ for j=-4 upto 0:
   endfor
 endfor);
 
-% DUMP capture=False, replace="% P2 and P3 are similar, but longer..."
+% DUMP capture=False, comment=" P2 and P3 are similar, but longer..."
 P2 = image(
 for j=-4 upto 0:
     for k=0 downto j:
@@ -5084,7 +5084,7 @@ endfor
 
 label.ulft("e.g., $n=3$:", point -1 of bbox currentpicture shifted 6 up);
 
-% DUMP capture=False, replace="% see source for the TeX label at the top"
+% DUMP capture=False, comment=" see source for the TeX label at the top"
 label.top(btex \vbox{\openup 8pt\halign{\hfil$#$&\hss${}#{}$\hss&$#$\hfil\cr
   3^2 + 4^2&=&5^2\cr
   10^2 + 11^2 + 12^2&=&13^2 + 14^2\cr
@@ -5193,7 +5193,7 @@ label.rt("$\scriptstyle \left(n+1\right)^2-1$", p(6.5, 0, 16.25));
 label.rt("$\scriptstyle \left(n+1\right)^2$", p(6.5, 0, 18.75));
 draw thelabel("$\cdots$", origin) rotated 33 shifted p(7, 0, 10);
 
-% DUMP capture=False, replace="% ... and so on"
+% DUMP capture=False, comment=" ... and so on"
 % now together...
 numeric dx, dz; dx = 18; dz = -25;
 for z=9 downto 5:
@@ -5593,7 +5593,7 @@ P2 = image(
   label("$n\cdot T_{n+1}$", p(3,-3,0));
 );
 
-% DUMP capture=False, replace="% ... and so on ..."
+% DUMP capture=False, comment=" ... and so on ..."
 P3 = image(
   for x=0 upto 5:
     for y=0 upto 5-x:
@@ -5858,7 +5858,7 @@ P2 = image(
   draw t2 shifted (-s, 3/2s); draw t2 shifted (s, 3/2s);
   draw q shifted (0, 4s);
 );
-% DUMP capture=False, replace="% see source for octaframe routine "
+% DUMP capture=False, comment=" see source for octaframe routine "
 vardef octaframe(expr n, tag) = 
   save t, m; numeric t, m; m + 1 = n; 2t = m * m + m;
   save a, b, c; path a, b, c;
@@ -5910,7 +5910,7 @@ P4 = image(
   drawdblarrow q; unfill bbox b; draw b;
   % DUMP capture=True
 );
-% DUMP capture=False, replace="% ... finally place P[] and labels "
+% DUMP capture=False, comment=" ... finally place P[] and labels "
 draw P1 shifted 144 left; draw P2; draw P3 shifted 89 right;
 label.bot("$T_k = 1 + 2 + \cdots + k \Rightarrow O_k = k^2 + 4T_{k-1}$", 21 down);
 draw P4 shifted (-15/2s, -15s);
@@ -6014,7 +6014,7 @@ P1 = image(
   label.rt(TEX("$1+2+\cdots+k$") rotated 90, point 3/2 of b4);
 );
 
-% DUMP capture=False, replace="% P2 is similiar..."
+% DUMP capture=False, comment=" P2 is similiar..."
 P2 = image(
   for i=n downto 1:
     filldraw b[i] withcolor if i=4: background else: Blues[9][i] fi;
@@ -6109,7 +6109,7 @@ P2 = image(
     point 1/2 of bbox currentpicture shifted 12 down);
 );
 
-% DUMP capture=False, replace="% .. and so on for P3 and P4"
+% DUMP capture=False, comment=" .. and so on for P3 and P4"
 P3 = image(
   fill s withcolor Oranges 8 3;
   fill p withcolor Oranges 8 2;
@@ -6275,7 +6275,8 @@ P2 = image(
   label.bot("$1\over4$", (+1/4u, -u)); label.bot("$1\over8$", (+5/8u, -u));
 );
 draw P1 shifted (-5/4u, 0); draw P2 shifted (+5/4u, 0);
-% DUMP capture=False
+
+% DUMP capture=False, comment="code for labels omitted to save space"
 label.top("$\displaystyle \frac12 - \frac14 + \frac18 - \frac1{16} + \frac1{32} - \frac1{64} + \cdots = \frac13$",
 point 5/2 of bbox currentpicture shifted 34 up);
 
@@ -6294,82 +6295,63 @@ $$
 Let $\left\{k_1, k_2, k_3 \right\}$ be a sequence of integers, each of which is at least 2.  Then
 $$
 \begin{mplibcode}
-vardef brace_label@#(expr port, a, b) = 
-pair m, u, v; u = unitvector(b-a); v = u rotated -90;
-m = 1/2[a, b] shifted 8v;
-draw a shifted (1/2u+v) {v rotated 10}.. {u} a shifted (4u + 4v) 
-    -- 
-    m shifted (-4u - 4v) {u} .. {v} m {-v} .. {u} m shifted (4u - 4v) 
-    -- 
-    b shifted (4v-4u) {u} .. {-v rotated -10} b shifted (v-1/2u);
-label@#(port, m);
-enddef;
-numeric u; u = 144;
-picture P[]; path s; s = unitsquare shifted -(1/2, 1/2) scaled u;
+numeric u; u = 144; path s; s = unitsquare shifted -(1/2, 1/2) scaled u;
+picture P[]; path t;
 P1 = image(
-for i=0 upto 3:
-    path t; t = unitsquare xscaled 1/5u yscaled u 
-                shifted point 1/5i of s; 
+  for i=0 upto 3:
+    t := unitsquare xscaled 1/5u yscaled u shifted point 1/5i of s; 
     fill t withcolor Blues[6][5-i]; 
     draw subpath (1,2) of t withpen pencircle scaled 1/4;
-endfor
-);
-P2 = image(
-draw P1; 
-for i=0 upto 2:
-    path t; t = unitsquare xscaled -1/5u yscaled -1/4u shifted point 2-1/4i of s; 
+  endfor);
+P2 = image(draw P1; 
+  for i=0 upto 2:
+    t := unitsquare xscaled -1/5u yscaled -1/4u shifted point 2-1/4i of s; 
     fill t withcolor Oranges[6][5-i]; 
     draw subpath (2,3) of t withpen pencircle scaled 1/4;
-endfor
-);
-P3 = image(
-draw P2;
-for i=0 upto 1:
-    path t; t = unitsquare xscaled (1/3 * 1/5u) yscaled 1/4u shifted point 4/5 + 1/15i of s;
+  endfor);
+P3 = image(draw P2;
+  for i=0 upto 1:
+    t := unitsquare xscaled (1/3 * 1/5u) yscaled 1/4u shifted point 4/5 + 1/15i of s;
     fill t withcolor Greens[4][3-i];
     draw subpath (1,2) of t withpen pencircle scaled 1/4;
-endfor
-);
-P4 = image(
-draw P3; 
-for i=0 upto 2:
-    path t; t = unitsquare xscaled -1/15u yscaled -1/16u shifted point 5/4-1/16i of s; 
+  endfor);
+P4 = image(draw P3; 
+  for i=0 upto 2:
+    t := unitsquare xscaled -1/15u yscaled -1/16u shifted point 5/4-1/16i of s; 
     fill t withcolor Reds[6][4-i]; 
     draw subpath (2,3) of t withpen pencircle scaled 1/4;
-endfor
-);
-P11 = image(
-draw P1; draw s;
-brace_label.bot("$k_1-1\over k_1$", point 0 of s, point 4/5 of s);
-brace_label.bot("$1\over k_1$", point 4/5 of s, point 1 of s);
-);
-P12 = image(
-draw P2; draw s;
-brace_label.rt("${k_2-1\over k_2}\cdot{1\over k_1}$", point 5/4 of s, point 2 of s);
-brace_label.rt("${1\over k_2 k_1}$", point 1 of s, point 5/4 of s);
-);
-P13 = image(
-draw P3; draw s;
-brace_label.bot("${k_3-1\over k_3}\cdot{1\over k_2 k_1}$", point 4/5 of s, point 14/15 of s);
-);
-P14 = image(
-draw P4; draw s; label.bot("$\cdots$", point 1 of s shifted 5 down);
-);
+  endfor);
 
-draw P11 shifted 100 left shifted 100 up;
-draw P12 shifted 100 right shifted 100 up;
-draw P13 shifted 100 left shifted 100 down;
-draw P14 shifted 100 right shifted 100 down;
+vardef brace_label@#(expr port, a, b) = 
+  pair m, u, v; u = unitvector(b-a); v = u rotated -90;
+  m = 1/2[a, b] shifted 8v;
+  draw a shifted (1/2u+v) {v rotated 10}.. {u} a shifted (4u + 4v) 
+    -- m shifted (-4u-4v) {u} .. {v} m {-v} .. {u} m shifted (4u - 4v) 
+    -- b shifted (4v-4u) {u} .. {-v rotated -10} b shifted (v-1/2u);
+  label@#(port, m);
+enddef;
 
+P11 = image(draw P1; draw s;
+  brace_label.bot("$k_1-1\over k_1$", point 0 of s, point 4/5 of s);
+  brace_label.bot("$1\over k_1$", point 4/5 of s, point 1 of s));
+P12 = image(draw P2; draw s;
+  brace_label.rt("${k_2-1\over k_2}\cdot{1\over k_1}$", point 5/4 of s, point 2 of s);
+  brace_label.rt("${1\over k_2 k_1}$", point 1 of s, point 5/4 of s));
+P13 = image(draw P3; draw s;
+  brace_label.bot("${k_3-1\over k_3}\cdot{1\over k_2 k_1}$", point 4/5 of s, point 14/15 of s););
+P14 = image(draw P4; draw s; label.bot("$\cdots$", point 1 of s shifted 5 down));
+
+draw P11 shifted (-100, +100); draw P12 shifted (+100, +100);
+draw P13 shifted (-100, -100); draw P14 shifted (+100, -100);
+
+% DUMP capture=False, comment="...plus the three arrows and the label at the top."
 drawarrow (left--right) scaled 20 shifted 100 up;
 drawarrow (left--right) scaled 20 rotated 225;
 drawarrow (left--right) scaled 20 shifted 100 down;
 
 label.top(btex $\displaystyle
-{k_1-1\over k_1} +
-{k_2-1\over k_2 k_1} +
-{k_3-1\over k_3 k_2 k_1} + \cdots = 1$ etex, point 5/2 of bbox currentpicture shifted 21 up);
-
+  {k_1-1\over k_1} + {k_2-1\over k_2 k_1} + {k_3-1\over k_3 k_2 k_1} + \cdots = 1
+  $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 \end{mplibcode}
 $$
 \vfill
@@ -6380,54 +6362,55 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u;
-u = 144;
+numeric u; u = 144;
 z0 = left * u;
 z1 = right * u;
 z2 = up * u shifted z1;
 z3 = whatever[z0, z2]; z3-z1 = whatever * (z2-z0) rotated 90;
 z4 = z2 shifted 13 right shifted 21 down;
+
 picture P[];
 P0 = image(
-draw unitsquare scaled 5 shifted z1 withcolor 1/2 white;
-draw unitsquare scaled 5 rotated angle (z0-z3) shifted z3 withcolor 1/2 white;
-draw z1 shifted 12 right -- z0 -- z2 -- z1 -- z3;
-label.ulft("$\sqrt{k}$", 5/8[z0, z2]);
-label.bot ("$\sqrt{k-1}$", 9/16[z0, z1]);
-label.rt  ("$1$", 1/2[z1, z2]);
+  draw unitsquare scaled 5 shifted z1 withcolor 1/2 white;
+  draw unitsquare scaled 5 rotated angle (z0-z3) shifted z3 withcolor 1/2 white;
+  draw z1 shifted 12 right -- z0 -- z2 -- z1 -- z3;
+  label.ulft("$\sqrt{k}$", 5/8[z0, z2]);
+  label.bot ("$\sqrt{k-1}$", 9/16[z0, z1]);
+  label.rt  ("$1$", 1/2[z1, z2]);
 );
 P1 = image(
-path a; a = quartercircle scaled 60 shifted z0 cutafter (z0--z2);
-draw a withcolor Reds 7 6;
-draw a shifted -z0 rotated 90 shifted z1 withcolor Reds 7 6;
-fill z2 -- z3 -- ((z3--z2) shifted 3/2 down cutbefore (z3--z1)) -- cycle
+  path a; a = quartercircle scaled 60 shifted z0 cutafter (z0--z2);
+  draw a withcolor Reds 7 6;
+  draw a shifted -z0 rotated 90 shifted z1 withcolor Reds 7 6;
+  fill z2 -- z3 -- ((z3--z2) shifted 3/2 down cutbefore (z3--z1)) -- cycle
     withcolor Reds 7 5;
-draw P0;
-label.rt("\rlap{$\displaystyle 1\over\sqrt{k}$}", z4);
-drawarrow z4 {left} .. 1/2[z2, z3] cutafter ((z3--z2) shifted 4 down) withcolor Reds 7 6;
+  draw P0;
+  label.rt("\rlap{$\displaystyle 1\over\sqrt{k}$}", z4);
+  drawarrow z4 {left} .. 1/2[z2, z3] cutafter ((z3--z2) shifted 4 down) withcolor Reds 7 6;
 );
 P2 = image(
-numeric theta; theta = angle (z2-z0);
-path a, b; 
-a = subpath(0, 5/4 theta / 45) of fullcircle scaled 4u rotated -1/8 theta shifted z0;
-b = buildcycle(z2 -- z3, a, (z3--z2) shifted 3/2 down, z1--z2);
-fill b withcolor Reds 7 5;
-draw a withcolor 1/2;
-draw P0;
-fill fullcircle scaled 2 shifted z0 withcolor 1/2;
-fill fullcircle scaled 1 shifted z0 withcolor 1;
-label.rt("\rlap{$\sqrt{k} - \sqrt{k-1}$}", z4);
-drawarrow z4 {left} .. center b cutafter ((z3--z2) shifted 4 down) withcolor Reds 7 6;
+  numeric theta; theta = angle (z2-z0);
+  path a; a = subpath(0, 5/4 theta / 45) of fullcircle scaled 4u rotated -1/8 theta shifted z0;
+  path b; b = buildcycle(z2 -- z3, a, (z3--z2) shifted 3/2 down, z1--z2);
+  fill b withcolor Reds 7 5;
+  draw a withcolor 1/2;
+  draw P0;
+  fill fullcircle scaled 3 shifted z0 withcolor 1/2;
+  fill fullcircle scaled 2 shifted z0 withcolor 1;
+  label.rt("\rlap{$\sqrt{k} - \sqrt{k-1}$}", z4);
+  drawarrow z4 {left} .. center b cutafter ((z3--z2) shifted 4 down) withcolor Reds 7 6;
 );
-label.top(P1, 7 up);
-label.bot(P2, 7 down);
+
+label.top(P1, 7 up);  label.bot(P2, 7 down);
+
+% DUMP capture=False, comment="plus the labels top and bottom."
 label.lrt("$\hbox{$k > 1$} \Rightarrow {}$", ulcorner bbox currentpicture);
 label.top("$\displaystyle n > 1 \enspace\Rightarrow\enspace \sum_{k=1}^n {1\over\sqrt{k}} > \sqrt{n}$", 
-      point 5/2 of bbox currentpicture shifted 13 up);
+point 5/2 of bbox currentpicture shifted 13 up);
 label.bot(btex \vbox{\openup 8pt\def\osr#1{{1\over\sqrt{#1}}}\halign{\hss $\displaystyle #$\hss\cr
-\osr{k} > \sqrt{k} - \sqrt{k-1}\cr
-\osr2 + \osr3 + \cdots + \osr{n} > \left(\sqrt2-1\right) + \left(\sqrt3-\sqrt2\right) + \cdots + \left(\sqrt{n} - \sqrt{n-1}\right)\cr
-\therefore\quad 1 + \osr2 + \osr3 + \cdots + \osr{n} > \sqrt{n}\cr
+  \osr{k} > \sqrt{k} - \sqrt{k-1}\cr
+  \osr2 + \osr3 + \cdots + \osr{n} > \left(\sqrt2-1\right) + \left(\sqrt3-\sqrt2\right) + \cdots + \left(\sqrt{n} - \sqrt{n-1}\right)\cr
+  \therefore\quad 1 + \osr2 + \osr3 + \cdots + \osr{n} > \sqrt{n}\cr
 }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
@@ -6440,33 +6423,39 @@ $$
 $$
 \begin{mplibcode}
 numeric u, n; u = 21; n = 5;
+path gg; gg = (origin for i=1 upto n: 
+  -- (2i-1, 1-i) -- (2i-1, -i) 
+endfor -- (0, -n) -- cycle) scaled u;
+
+vardef go(suffix shade) = image(
+  for i=1 upto n:
+    fill unitsquare xscaled ((1-2i)*u) yscaled -u shifted point 2i-1 of gg 
+      withcolor shade[9][7-i];
+  endfor
+  draw gg;
+) enddef;
+
 picture a, b, c;
-path gg;
-gg = (origin for i=1 upto n: -- (2i-1, 1-i) -- (2i-1, -i) endfor -- (0, -n) -- cycle) scaled u;
-vardef go(suffix shade) = 
-save p; picture p; p = image(
-    for i=1 upto n:
-        fill unitsquare xscaled ((1-2i)*u) yscaled -u shifted point 2i-1 of gg withcolor shade[9][7-i];
-    endfor
-    draw gg;
-); p enddef;
 a = go(Oranges);
 b = go(Greens) reflectedabout(up, down);
 c = go(Blues) reflectedabout(left, right) shifted (-2n*u, -n*u);
+
 draw a; draw b; draw c;
+
 for i=1 upto n:
-label("$" & if i=n: "2n-1" elseif i=n-1: "\cdots" else: decimal (2i-1) fi & "$", u * (i-1/2, 1/2-i));
+  label("$" & if i = n: "2n-1" 
+        elseif i = n-1: "\cdots" 
+                  else: decimal (2i-1) fi & "$", u * (i-1/2, 1/2-i));
 endfor
+
 path nn; nn = (origin -- 2n * u * left) shifted (1/2u * up); 
 picture pp; pp = thelabel("$2n$", point 1/2 of nn);
 drawdblarrow nn; unfill bbox pp; draw pp;
 
 label.bot(btex $\displaystyle 
-{1\over3} = {1+3\over5+7} = {1+3+5\over7+9+11} = \cdots = 
-{1+3+5+\cdots+(2n-1)\over (2n+1)+(2n+3)+\cdots+(2n+2n-1)}$ etex, point 1/2 of bbox currentpicture shifted 42 down);
-
-
-
+  {1\over3} = {1+3\over5+7} = {1+3+5\over7+9+11} = \cdots = 
+  {1+3+5+\cdots+(2n-1)\over (2n+1)+(2n+3)+\cdots+(2n+2n-1)}
+  $ etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
