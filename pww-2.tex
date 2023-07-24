@@ -5954,7 +5954,7 @@ for n=1 upto 5:
 endfor
 
 vardef show_dim(expr s, p) = save t; picture t; t = thelabel(s, point 1/2 of p);
-  drawdblarrow p; unfill bbox t; draw t;
+  drawdblarrow p; interim bboxmargin := 8; unfill bbox t; draw t;
 enddef;
 show_dim("$\displaystyle {n(n+1)\over2}$", (origin -- 15 right * s) shifted 22 down);
 show_dim("$n+2$", (origin --  7 up * s) shifted 24 left);
@@ -5980,79 +5980,83 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u, k, n; u = 12; k = 4; n = 5;
+numeric u, n; u = 12; n = 5;
 vardef t(expr n) = n*(n+1)/2 enddef;
-path b[]; for i=1 upto n: b[i] = unitsquare xscaled t(i + 2) yscaled -t(i) scaled u; endfor
-picture P[]; P1 = image(
-fill b4 withcolor Oranges 8 4;
-fill b3 withcolor background;
-z0 = (xpart point 2 of b3, ypart point 2 of b4);
-fill subpath (2,3) of b3 -- point 3 of b4 -- z0 -- cycle
-    withcolor Oranges 8 3;
-draw z0 -- point 2 of b3 dashed evenly withpen pencircle scaled 1/4;
-draw b3; draw b4;
-for i=0 upto k+2: draw (up--down) scaled 2 shifted (t(i)*u, 0); endfor
-for i=0 upto k: draw (left--right) scaled 2 shifted (0, -t(i)*u); endfor
-for i=1,2:
-    label.top("$" & decimal i & "$", 1/2u*(t(i-1)+t(i), 0));
-    label.lft("$" & decimal i & "$", -1/2u*(0, t(i-1)+t(i)));
+path b[]; 
+for i=1 upto n: 
+  b[i] = unitsquare xscaled t(i + 2) yscaled -t(i) scaled u; 
 endfor
-label.lft("$\vdots$", -1/2u*(0, t(2)+t(3)));
-label.lft("$k$",      -1/2u*(0, t(3)+t(4)));
-label.top("$\cdots$", 1/2u*(t(2)+t(3), 0));
-label.top("$k+1$", 1/2u*(t(4)+t(5), 0));
-label.top("$k+2$", 1/2u*(t(5)+t(6), 0));
-label.top("$1+2+\cdots+(k+1)$", point 5/2 of b3);
-label("$\displaystyle k{(k+1)(k+2)\over2}$", 1/2[point 2 of b3, point 3 of b4]);
-label("$\displaystyle (k+2){k(k+1)\over2}$", 1/2[point 1 of b4, z0]);
-label.rt(TEX("$1+2+\cdots+k$") rotated 90, point 3/2 of b4);
+
+picture P[]; 
+P1 = image(
+  fill b4 withcolor Oranges 8 4; fill b3 withcolor background;
+  z0 = (xpart point 2 of b3, ypart point 2 of b4);
+  fill subpath (2,3) of b3 -- point 3 of b4 -- z0 -- cycle
+    withcolor Oranges 8 3;
+  draw z0 -- point 2 of b3 dashed evenly withpen pencircle scaled 1/4;
+  draw b3; draw b4;
+  draw 2 left -- origin -- 2 up; % first ticks
+  numeric i, a, b; i = a = b = 0; 
+  for s = "1", "2", "\cdots", "k", "k+1", "k+2": 
+    a := b; b := t(incr i) * u;
+    draw (up--down) scaled 2 shifted (b, 0);
+    label.top("$" & s & "$", (1/2(a+b), 0));
+  endfor
+  numeric i, a, b; i = a = b = 0; 
+  for s = "1", "2", "\vdots", "k": 
+    a := b; b := t(incr i) * u;
+    draw (left--right) scaled 2 shifted (0, -b);
+    label.lft("$" & s & "$", (0, -1/2(a+b)));
+  endfor
+  label.top("$1+2+\cdots+(k+1)$", point 5/2 of b3);
+  label("$\displaystyle k{(k+1)(k+2)\over2}$", 1/2[point 2 of b3, point 3 of b4]);
+  label("$\displaystyle (k+2){k(k+1)\over2}$", 1/2[point 1 of b4, z0]);
+  label.rt(TEX("$1+2+\cdots+k$") rotated 90, point 3/2 of b4);
 );
+
+% DUMP capture=False, replace="% P2 is similiar..."
 P2 = image(
-for i=n downto 1:
+  for i=n downto 1:
     filldraw b[i] withcolor if i=4: background else: Blues[9][i] fi;
     draw if i=4: subpath (1,3) of fi b[i];
     label("$" & if i=n: "n(n+1)(n+2)" elseif i=n-1: "\ddots" else:
-        decimal i for j=1,2: & "\cdot" & decimal (i+j) endfor fi & "$",
-        point 5/2 of b[i] shifted (0, 1/2u*(t(i)-t(i-1))));
-endfor
-
-% ticks
-for i=0 upto n+2: draw (up--down) scaled 2 shifted (t(i)*u, 0); endfor
-for i=0 upto n: draw (left--right) scaled 2 shifted (0, -t(i)*u); endfor
-
-for i=1 upto n:
-    label.top("$" & decimal i & "$", 1/2u*(t(i-1)+t(i), 0));
-endfor
-label.top("$\cdots$", 1/2u*(t(5)+t(6), 0));
-label.top("$n+2$", 1/2u*(t(6)+t(7), 0));
-
-for i=1 upto 3:
-    label.lft("$" & decimal i & "$", -1/2u*(0, t(i-1)+t(i)));
-endfor
-label.lft("$\vdots$", -1/2u*(0, t(3)+t(4)));
-label.lft("$n$",      -1/2u*(0, t(4)+t(5)));
-
-path xx, yy; picture lx, ly; 
-xx = subpath (2, 3) of b5 shifted 18 down;
-yy = subpath (3, 4) of b5 shifted 24 left;
-drawdblarrow xx; drawdblarrow yy; interim bboxmargin := 8;
-lx = thelabel("${(n+2)(n+3)\over2}$", point 1/2 of xx); unfill bbox lx; draw lx;
-ly = thelabel("${n(n+1)\over2}$", point 1/2 of yy); unfill bbox ly; draw ly;
-label.lft("$\vdots$", -1/2u*(0, t(3)+t(4)));
+      decimal i for j=1,2: & "\cdot" & decimal (i+j) endfor fi & "$",
+      point 5/2 of b[i] shifted (0, 1/2u*(t(i)-t(i-1))));
+  endfor
+  for i=1 upto n + 2: 
+    draw (up--down) scaled 2 shifted (t(i)*u, 0);
+    label.top("$" & if i = n + 2: "n+2"
+                elseif i = n + 1: "\cdots"
+                else: decimal i fi & "$", 1/2u*(t(i-1)+t(i), 0)); 
+  endfor
+  for i=1 upto n:
+    draw (left--right) scaled 2 shifted (0, -t(i)*u); 
+    label.lft("$" & if i = n: "n"
+            elseif i = n - 1: "\vdots"
+            else: decimal i fi & "$", -1/2u*(0, t(i-1)+t(i)));
+  endfor
+  path xx, yy; picture lx, ly; 
+  xx = subpath (2, 3) of b5 shifted 18 down;
+  yy = subpath (3, 4) of b5 shifted 24 left;
+  drawdblarrow xx; drawdblarrow yy; interim bboxmargin := 8;
+  lx = thelabel("${(n+2)(n+3)\over2}$", point 1/2 of xx); unfill bbox lx; draw lx;
+  ly = thelabel("${n(n+1)\over2}$", point 1/2 of yy); unfill bbox ly; draw ly;
 );
-label.top(P1, 2u * up);
-label.bot(P2, 3u * down + u * left);
+% DUMP capture=True
+
+label.top(P1, 2u * up); label.bot(P2, 3u * down + u * left);
 label(btex $\displaystyle 
-k{(k+1)(k+2)\over2}+(k+2){k(k+1)\over2}=k(k+1)(k+2)
-$ etex, origin);
-label.top("$\displaystyle \sum_{k=1}^n k(k+1)(k+2) = {n(n+1)(n+2)(n+3)\over4}$",
-point 5/2 of bbox currentpicture shifted 21 up);
+  k{(k+1)(k+2)\over2}+(k+2){k(k+1)\over2}=k(k+1)(k+2)
+  $ etex, origin);
+label.top(btex $\displaystyle 
+  \sum_{k=1}^n k(k+1)(k+2) = {n(n+1)(n+2)(n+3)\over4}
+  $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 label.bot(btex \vbox{%
-\leftline{$1\cdot 2 \cdot 3 + 2 \cdot 3 \cdot 4 + \cdots + n(n+1)(n+2)$}
-\smallskip
-\rightline{$\displaystyle {}= {n(n+1)\over2}\times{(n+2)(n+3)\over2}={n(n+1)(n+2)(n+3)\over4}$}
-} etex, 
-point 1/2 of bbox currentpicture);
+  \leftline{$1\cdot 2 \cdot 3 + 2 \cdot 3 \cdot 4 + \cdots + n(n+1)(n+2)$}
+  \bigskip
+  \rightline{$\displaystyle {} = \frac{n(n+1)}{2}\times\frac{(n+2)(n+3)}{2}
+                               = \frac{n(n+1)(n+2)(n+3)}{4}$}
+  } etex, point 1/2 of bbox currentpicture);
 \end{mplibcode}
 $$
 \vfill
@@ -6072,53 +6076,51 @@ r = unitsquare shifted -(1/2, 1/2) scaled 89;
 s = unitsquare shifted -(1/2, 1/2) scaled 144;
 t = unitsquare shifted -(1/2, 1/2) xscaled 34 yscaled 55;
 u = unitsquare shifted -(1/2, 1/2) xscaled 55 yscaled 89;
+
 picture P[]; 
 P0 = image(
-label.top("$F_{n-1}$", point 5/2 of u shifted (point 1 of p - point 0 of u));
-path a; a = subpath(0, 1) of s shifted 10 down;
-picture t; t = thelabel("$F_{n+1}$", point 1/2 of a);
-drawdblarrow a; unfill bbox t; draw t;
+  label.top("$F_{n-1}$", point 5/2 of u shifted (point 1 of p - point 0 of u));
+  path a; a = subpath(0, 1) of s shifted 10 down;
+  picture t; t = thelabel("$F_{n+1}$", point 1/2 of a);
+  drawdblarrow a; unfill bbox t; draw t;
 );
 P1 = image(
-fill s withcolor Oranges 8 3;
-fill p withcolor Oranges 8 2;
-for i=0 upto 4:
+  fill s withcolor Oranges 8 3; fill p withcolor Oranges 8 2;
+  for i=0 upto 4:
     draw subpath (1,4) of u shifted (point 1 of p - point 0 of u) rotated 90i;
-endfor
-
-label.top("$F_{n-2}$", point 5/2 of p);
-label.top("$F_{n}$",   point 3/2 of u shifted (point 1 of p - point 0 of u) rotated 90);
-draw P0;
-label.bot("$F_{n+1}^2 = 4 F_n F_{n-1} + F_{n-2}^2$", point 1/2 of bbox currentpicture shifted 12 down);
+  endfor
+  draw P0;
+  label.top("$F_{n-2}$", point 5/2 of p);
+  label.top("$F_{n}$",   point 3/2 of u shifted (point 1 of p - point 0 of u) rotated 90);
+  label.bot("$F_{n+1}^2 = 4 F_n F_{n-1} + F_{n-2}^2$", 
+    point 1/2 of bbox currentpicture shifted 12 down);
 );
 P2 = image(
-path a, b;
-a = r shifted (point 1 of p - point 1 of r);
-b = r shifted (point 3 of p - point 3 of r);
-fill s withcolor Oranges 8 3;
-fill a withcolor Oranges 8 4;
-fill b withcolor Oranges 8 4;
-fill p withcolor Oranges 8 5;
-draw subpath (0, 2) of a; draw subpath (2, 4) of b;
-draw s;
-
-label.top("$F_{n-2}$", point 5/2 of p);
-label.top("$F_{n}$",   point 3/2 of u shifted (point 1 of p - point 0 of u) rotated 90);
-draw P0;
-
-label.bot("$F_{n+1}^2 = 2 F_n^2 + 2 F_{n-1}^2 - F_{n-2}^2$", point 1/2 of bbox currentpicture shifted 12 down);
+  path a, b;
+  a = r shifted (point 1 of p - point 1 of r);
+  b = r shifted (point 3 of p - point 3 of r);
+  fill s withcolor Oranges 8 3; fill a withcolor Oranges 8 4;
+  fill b withcolor Oranges 8 4; fill p withcolor Oranges 8 5;
+  draw subpath (0, 2) of a; draw subpath (2, 4) of b; draw s;
+  label.top("$F_{n-2}$", point 5/2 of p);
+  label.top("$F_{n}$",   point 3/2 of u shifted (point 1 of p - point 0 of u) rotated 90);
+  draw P0;
+  label.bot("$F_{n+1}^2 = 2 F_n^2 + 2 F_{n-1}^2 - F_{n-2}^2$",
+    point 1/2 of bbox currentpicture shifted 12 down);
 );
+
+% DUMP capture=False, replace="% .. and so on for P3 and P4"
 P3 = image(
-fill s withcolor Oranges 8 3;
-fill p withcolor Oranges 8 2;
-for i=0 upto 4:
+  fill s withcolor Oranges 8 3;
+  fill p withcolor Oranges 8 2;
+  for i=0 upto 4:
     path aa; aa = q shifted (point 2 of p - point 0 of q) rotated 90i;
     fill aa withcolor Oranges 8 4; draw subpath (-1, 1) of aa;
-endfor
-draw p; draw s;
-draw P0;
-label.top("$F_{n-1}$", point 5/2 of q shifted (point 3 of p - point 1 of q));
-label.top("$F_{n-2}$", point 5/2 of s);
+  endfor
+  draw p; draw s;
+  draw P0;
+  label.top("$F_{n-1}$", point 5/2 of q shifted (point 3 of p - point 1 of q));
+  label.top("$F_{n-2}$", point 5/2 of s);
 
 label.bot("$F_{n+1}^2 = 4 F_{n-1}^2 + 4F_{n-1}F_{n-2} + F_{n-2}^2$", 
 point 1/2 of bbox currentpicture shifted 12 down);
@@ -6142,8 +6144,10 @@ label.top("$F_{n-2}$", point 5/2 of s);
 label.bot("$F_{n+1}^2 = 4 F_n^2 - 4F_{n-1}F_{n-2} - 3F_{n-2}^2$", 
 point 1/2 of bbox currentpicture shifted 12 down);
 );
+% DUMP capture=True
+
 draw P1 shifted (-89, +144); draw P2 shifted (+89, +144);
-draw P3 shifted (-89, -89); draw P4 shifted (+89, -89);
+draw P3 shifted (-89, -89);  draw P4 shifted (+89, -89);
 \end{mplibcode}
 $$
 \vfill
@@ -6155,10 +6159,13 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-picture t[];
 numeric s; s = 6;
-t0 = image(fill fullcircle scaled s withcolor Blues 8 3; 
-           draw fullcircle scaled s);
+picture t[];
+t0 = image(
+  fill fullcircle scaled s withcolor Blues 8 3; 
+  draw fullcircle scaled s;
+);
+
 for i=1 upto 5:
     numeric delta; delta = 2**(i-1);
     t[i] = image(
@@ -6167,18 +6174,23 @@ for i=1 upto 5:
         draw t[i-1] shifted ((-3/2s * delta, 0) rotated 60);
     );
 endfor
+
 numeric x; x = 0;
 for i=0 upto 4:
-    draw t[i] shifted (x, 0); label.bot("$3^" & decimal i & "$", point 1/2 of bbox t[i] + (x, 0));
+    draw t[i] shifted (x, 0); 
+    label.bot("$3^" & decimal i & "$", point 1/2 of bbox t[i] + (x, 0));
     x := x + 4.5s * (i+1);
 endfor
+
 z0 = (22, -20) * s;
 t5 := t5 shifted z0;
 draw t5;
 draw point 1/2 of bbox t5 -- point 5/2 of bbox t5;
 drawdot z0 withpen pencircle scaled 0.9s withcolor Reds 8 3;
-label.top("$\displaystyle \sum_{k=0}^{n-1} 3^k = {3^n-1 \over 2} $", point 5/2 of bbox currentpicture shifted 12 up);
 label("$\displaystyle 3^n-1 = 2\sum_{k=0}^{n-1} 3^k$", point 1.5 of bbox t5);
+
+label.top("$\displaystyle \sum_{k=0}^{n-1} 3^k = {3^n-1 \over 2} $", 
+  point 5/2 of bbox currentpicture shifted 12 up);
 \end{mplibcode}
 $$
 \vfill
@@ -6190,22 +6202,22 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-path t; 
-t = for i=0 upto 2: up scaled 233 rotated 120i -- endfor cycle;
-
+path t; t = for i = 0 upto 2: up scaled 233 rotated 120i -- endfor cycle;
 fill t withcolor Greens 8 1;
 for i=1 upto 8:
-path tt, ttt; 
-numeric s; s = 2**(i-1);
-tt = t shifted - point 1 of t scaled (1/2 ** i) shifted point 1/s of t;
-ttt = tt reflectedabout(up, down);
-fill tt withcolor Blues 7 2; draw tt withpen pencircle scaled 1/4;
-fill ttt withcolor Oranges 7 2; draw ttt withpen pencircle scaled 1/4;
+  numeric s; s = 2 ** (i-1);
+  path a; a = t shifted - point 1 of t 
+                scaled (1/2 ** i) 
+                shifted point 1/s of t;
+  path b; b = a reflectedabout(up, down);
+  fill a withcolor Blues   7 2; draw a withpen pencircle scaled 1/4;
+  fill b withcolor Oranges 7 2; draw b withpen pencircle scaled 1/4;
 endfor
 draw t;
 
-label.top("$\displaystyle {1\over4} + \left(1\over4\right)^2 + \left(1\over4\right)^3 + \cdots = {1\over 3}$",
-point 5/2 of bbox currentpicture shifted 21 up);
+label.top(btex $\displaystyle 
+ \frac14 + \left(\frac14\right)^2 + \left(\frac14\right)^3 + \cdots = \frac13
+ $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 \end{mplibcode}
 $$
 \vfill
@@ -6216,57 +6228,54 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u; u = 88;
-path a, b; numeric x, y; x = y = 1;
-a = (origin for i=1 upto 8: 
-hide(y := y * 1/2;) -- (1-x, 1-y) 
-hide(x := x * 1/2;) -- (1-x, 1-y) 
+numeric u; u = 88; numeric x, y; x = y = 1;
+path a; a = (origin for i=1 upto 8: 
+  hide(y := y * 1/2) -- (1-x, 1-y) 
+  hide(x := x * 1/2) -- (1-x, 1-y) 
 endfor) scaled u;
-b = a reflectedabout(left, right);
+path b; b = a reflectedabout(left, right);
 picture P[];
 P0 = image(
-draw unitsquare shifted (-1/2, -1/2) scaled 2u;
-draw u * left -- origin;
-draw a;
-draw b;
+  draw unitsquare shifted (-1/2, -1/2) scaled 2u;
+  draw u * left -- origin; draw a; draw b;
 );
 P1 = image(
-draw P0;
-for i=1 upto 3: 
+  draw P0;
+  for i=1 upto 3: 
     label("$A_" & decimal i & "$", 5/8u * dir 120i); 
-endfor
+  endfor
 );
 P2 = image(
-draw P0;
-drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
-draw origin -- u * right;
-for t=1 upto length(a):
-    if t < 7:
-        picture ff; 
-        ff = thelabel("${1\over" & decimal (2**t) & "}-{1\over" & decimal (2**(t+1)) & "}$", origin) scaled (7/8 ** t);
-    fi
+  draw P0;
+  for t=1 upto 6:
+    string p, q; p = decimal (2 ** t); q = decimal (2 ** (t+1));
+    picture ff; 
+    ff = thelabel("$\frac1{" & p & "} - \frac1{" & q & "}$", origin) scaled (7/8 ** t);
     forsuffixes $=a, b:
-        numeric signum; signum = ypart point t of $ / abs(ypart point t of $);
-        draw point t of $ -- if odd t: (xpart point t of $, u * signum) else: (u, ypart point t of $) fi;
-        if t < 7:
-            draw ff shifted if odd t:
-                (xpart point t of $ - (1/2 ** ((t+1)/2)) * u, ypart point t of $)
-            else: 
-                (xpart point t of $, 1/2(ypart point t of $ + ypart point t-2 of $))
-            fi;
-        fi
+      draw ff shifted if odd t:
+        (xpart point t of $ - (1/2 ** ((t+1)/2)) * u, ypart point t of $)
+      else: 
+        (xpart point t of $, 1/2(ypart point t of $ + ypart point t-2 of $))
+      fi;
     endfor
-endfor
-drawoptions();
-label.lft("$1\over2$", (-u, 1/2u));
-label.lft("$1\over2$", (-u, -1/2u));
-label.bot("$1\over2$", (-1/2u, -u));
-label.bot("$1\over4$", (+1/4u, -u));
-label.bot("$1\over8$", (+5/8u, -u));
+  endfor
+  drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
+  draw origin -- u * right;
+  for t = 1 upto length a:
+    forsuffixes $=a, b:
+      numeric signum; signum = ypart point t of $ / abs(ypart point t of $);
+      draw point t of $ -- 
+        if odd t: (xpart point t of $, u * signum) 
+            else: (u, ypart point t of $) fi;
+    endfor
+  endfor
+  drawoptions();
+  label.lft("$1\over2$", (-u, 1/2u)); label.lft("$1\over2$", (-u, -1/2u));
+  label.bot("$1\over2$", (-1/2u, -u));
+  label.bot("$1\over4$", (+1/4u, -u)); label.bot("$1\over8$", (+5/8u, -u));
 );
-draw P1 shifted (-5/4u, 0);
-draw P2 shifted (+5/4u, 0);
-
+draw P1 shifted (-5/4u, 0); draw P2 shifted (+5/4u, 0);
+% DUMP capture=False
 label.top("$\displaystyle \frac12 - \frac14 + \frac18 - \frac1{16} + \frac1{32} - \frac1{64} + \cdots = \frac13$",
 point 5/2 of bbox currentpicture shifted 34 up);
 
