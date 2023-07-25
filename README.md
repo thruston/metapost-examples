@@ -32,12 +32,35 @@ The documents are strictly for educational and tutorial purposes only.  All the
 original books and therefore all the pictures are copyrighted by the
 Mathematical Association of America.
 
-Update: May 2023 -- currently I am working on a Python routine that will create 
-a "parallel text" version of these documents, showing the MP source on the left and 
-the picture on the right in a single PDF.  This is a Work In Progress.  The first draft
-is available to review as 
+Each document contains over 100 fairly complex Metapost drawings, and on my Mac
+it takes about 3-4 seconds to compile each one, or roughly 20-30 full page drawings
+per second.  Your mileage may vary. 
+
+You can view each document in three ways:
+
+- You can just admire the PDF versions: pww-1.pdf and pww-2.pdf
+
+- You could open the corresponding TeX file in your editor, and browse 
+  the source and the corresponding PDF output side by side
+
+- Or you can read the "parallel" versions.  
+
+These parallel versions are generated from the same LuaLaTeX source
+files by the Python script that it included in the source
+
+- `duplicate_mplibcode_as_examples.py`
+
+This script is not very general, it is depends on the particular structure
+that I use for these document, but it will generate a "parallel code" version
+that shows the MP source on the left and the MP image on the right of each double page
+spread.  These parallel PDFs are probably best viewed on a large screen
+with a PDD viewer that lets you show two pages side by side.  The parallel files
+are 
 
 - `pww-1-parallel.pdf`
+- `pww-2-parallel.pdf`
+
+The code colouring is done using the included `dwmpcode.sty` style file.
 
 ## Excursions
 

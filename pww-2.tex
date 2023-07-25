@@ -53,6 +53,26 @@ endfig;}
 \begin{document}
 \maketitle
 \tableofcontents
+
+\vskip 1in
+\noindent \textbf{Note:} when reading the source for each illustration, you
+might like to bear in mind that the there are three \texttt{luamplib} options set that 
+affect how the drawings are processed.
+
+First \texttt{mplibtextextlabel} is enabled so that strings passed to \texttt{label} 
+commands are automatically processed by \TeX.  And secondly 
+  \texttt{everymplib} is set so that every drawing:
+\begin{itemize}
+  \item loads \texttt{colorbrewer-rgb} for the extended colours
+  \item sets \texttt{ahangle} to 30° so that you get slimmer arrow heads
+  \item sets a numeric variable \texttt{tw} to the current text width
+  \item and finally inserts the required \texttt{beginfig(0)}
+\end{itemize}
+Thirdly \texttt{everyendmplib} is set to insert the required \texttt{endfig}
+and to scale down the current picture if it is wider than the text width.
+
+
+
 \chapter{Geometry and Algebra}
 
 \minitoc
@@ -6466,82 +6486,66 @@ $$
 \vfill
 $$
 \begin{mplibcode}
-numeric u, n, r;
-u = 108; r = 1/5; 
-n = 7;
-
-path s[];
-s0 = origin;  
-for i=1 upto n:
-s[i] = unitsquare xscaled (1/i) yscaled r scaled u;
-endfor
+% DUMP squash=True
+numeric u, n, r; u = 108; r = 1/5; n = 7;
+path s[]; for i=1 upto n: s[i] = unitsquare xscaled (1/i) yscaled r scaled u; endfor
 
 picture P[];
-P1 = image(
-for i=1 upto n-1:
-    numeric x, y;
-    x = 0; y = -r * i * 1.05 u;
-    for j=1 upto i:
-        fill s[j] shifted (x, y) withcolor 1/2[Oranges[9][i], white];
-        draw s[j] shifted (x, y);
-        if (3 < i) and (i < n-1):
-            if j=1: label("$\vdots$", center s1 shifted (x, y)); fi
-        else:
-            label("$" & if j=1: "1" elseif j=n-1: "{1\over n-1}" 
-            elseif j > 3: "\cdots" else: "{1\over " & decimal j & "}" fi & "$",
-            center s[j] shifted (x, y));
-        fi
-        x := x + u/j;
-    endfor
-endfor
-);
-P2 = image(
-for i=1 upto n:
-    numeric x, y;
-    x = 0; y = -r * i * 1.05 u;
-    for j=1 upto i-1:
-        x := x + u/j;
-    endfor
-    for j=i upto n:
-        fill s[j] shifted (x, y) withcolor 1/2[Blues[9][j], white];
-        draw s[j] shifted (x, y);
-        if (3 < i) and (i < n-1):
-            if j=1: label("$\vdots$", center s1 shifted (x, y)); fi
-        else:
-            label("$" & if j=1: "1" elseif j=n-1: "{1\over n-1}" elseif j=n: "{1\over n}"
-            elseif j > 3: "\cdots" else: "{1\over " & decimal j & "}" fi & "$",
-            center s[j] shifted (x, y));
-        fi
-        x := x + u/j;
-    endfor
-endfor
-);
+P1 = image(for i=1 upto n-1:
+  numeric y, x; y = -r * i * 1.05 u; x = 0;
+  for j=1 upto i:
+    fill s[j] shifted (x, y) withcolor 1/2[Oranges[9][i], white];
+    draw s[j] shifted (x, y);
+    if (3 < i) and (i < n-1):
+      if j=1: label("$\vdots$", center s1 shifted (x, y)); fi
+    else:
+      label("$" & if j=1: "1" elseif j=n-1: "\frac1{n-1}" 
+      elseif j > 3: "\cdots" else: "\frac1{" & decimal j & "}" fi & "$",
+      center s[j] shifted (x, y));
+    fi
+    x := x + u/j;
+  endfor
+endfor);
+
+P2 = image(for i=1 upto n:
+  numeric y; y = -r * i * 1.05 u; 
+  numeric x; x = 0 for j=1 upto i-1: + u/j endfor;
+  for j=i upto n:
+    fill s[j] shifted (x, y) withcolor 1/2[Blues[9][j], white];
+    draw s[j] shifted (x, y);
+    if (3 < i) and (i < n-1):
+      if j=1: label("$\vdots$", center s1 shifted (x, y)); fi
+    else:
+      label("$" & if j=1: "1" elseif j=n-1: "\frac1{n-1}" elseif j=n: "\frac1{n}"
+      elseif j > 3: "\cdots" else: "\frac1{" & decimal j & "}" fi & "$",
+      center s[j] shifted (x, y));
+    fi
+    x := x + u/j;
+  endfor
+endfor);
+
 P3 = image(
-draw P1;
-draw P2 shifted (0, r * 1.05u);
-label.lft("${}={}$", point -1/2 of bbox currentpicture shifted 13 left);
-begingroup; interim bboxmargin := 0;
-path a, b; 
-a = subpath (2, 3) of bbox P2 shifted (0, 8 + 1.05 * r * u);
-b = subpath (1, 2) of bbox P2 shifted (8, 0 + 1.05 * r * u);
-drawdblarrow a;
-drawdblarrow b;
-endgroup;
-picture hh, nn; 
-hh = thelabel("$H_n$", point 1/2 of a); 
-nn = thelabel("$n$", point 1/2 of b); 
-unfill bbox hh; draw hh;
-unfill bbox nn; draw nn;
+  draw P1; draw P2 shifted (0, r * 1.05u);
+  label.lft("${}={}$", point -1/2 of bbox currentpicture shifted 13 left);
+  begingroup; interim bboxmargin := 0;
+    path a; a = subpath (2, 3) of bbox P2 shifted (0, 8 + 1.05 * r * u);
+    path b; b = subpath (1, 2) of bbox P2 shifted (8, 0 + 1.05 * r * u);
+  endgroup;
+  drawdblarrow a; drawdblarrow b;
+  picture hh; hh = thelabel("$H_n$", point 1/2 of a); unfill bbox hh; draw hh;
+  picture nn; nn = thelabel("$n$", point 1/2 of b); unfill bbox nn; draw nn;
 );
 
-draw P1 shifted - center bbox P1 shifted (-3/4u, -2r * u);
-draw P2 shifted - center bbox P2 shifted ( 1/8u,  1/2r * u);
-label("${}+{}$", origin);
+label(P1, (-3/4u, -2r * u)); label("$+$", origin); label(P2, (1/8u,  1/2r * u));
+label(P3, (-1/8u, -9/4u));
 
-draw P3 shifted - center bbox P3 shifted (-1/8u, -9/4u);
-label.bot("$\displaystyle \sum_{k=1}^{n-1} H_k + n = nH_n$", point 1/2 of bbox currentpicture shifted 13 down);
-label.top("$\displaystyle H_k = 1 + {1\over2} + {1\over3} + \cdots + {1\over k} \enspace\Rightarrow\enspace \sum_{k=1}^{n-1} H_k = nH_n - n$",
-point 5/2 of bbox currentpicture shifted 21 up);
+% DUMP capture=False, comment="plus labels top and bottom"
+label.bot("$\displaystyle \sum_{k=1}^{n-1} H_k + n = nH_n$", 
+  point 1/2 of bbox currentpicture shifted 13 down);
+label.top(btex $\displaystyle
+  H_k = 1 + \frac12 + \frac13 + \cdots + \frac1k \enspace\Rightarrow\enspace 
+  \sum_{k=1}^{n-1} H_k = nH_n - n
+  $ etex, point 5/2 of bbox currentpicture shifted 21 up);
 \end{mplibcode}
 $$
 \vfill
@@ -6551,10 +6555,10 @@ $\mathbf{A}$ and $\mathbf{B}$ are matrices}
 \vfill
 $$
 \begin{mplibcode}
-path A, B, AB, A', B', AB';
 numeric ax, ay, bx, by;
 ax = 89; ay = 55; bx = 61; by = 98.7; 
 
+path A, B, AB, A', B', AB';
 A = unitsquare xscaled ax yscaled ay;
 B = unitsquare xscaled bx yscaled by shifted point 2 of A;
 AB = unitsquare xscaled bx yscaled ay shifted point 1 of A;
@@ -6563,9 +6567,10 @@ AB' = AB reflectedabout((-1,1), (1,-1));
 B' = B reflectedabout((-1,1), (1,-1));
 
 forsuffixes $=A,B,AB:
-draw $; label("$\mathbf{" & str $ & "}$", center $);
-draw $'; label("$\mathbf{" & str $ & "}^T$", center $');
+  draw $;  label("$\mathbf{" & str $ & "}$", center $);
+  draw $'; label("$\mathbf{" & str $ & "}^T$", center $');
 endfor
+
 draw (left--right) scaled 144 rotated -45 dashed evenly withcolor Reds 7 7;
 
 \end{mplibcode}
@@ -6585,122 +6590,122 @@ $$
 input isometric_projection
 set_projection(10, -21); ipscale := 16;
 pair A, B, C, D;
-A = p(-1, 3, 0);
-B = p(2, 4, 0);
-C = p(5, 0, 0);
-D = p(0, 0, 5);
+A = p(-1, 3, 0); B = p(2, 4, 0); C = p(5, 0, 0); D = p(0, 0, 5);
 
 picture P[];
-
 P1 = image(
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  draw D -- D+A;
-drawoptions(withpen pencircle scaled 1/4);
-draw A -- A+D -- A+D+C -- A+C -- cycle;
-draw A+C -- C;
-draw A+C+D -- C+D;
-drawoptions();
-drawarrow origin -- A; label.lft("$\vA$", 1/2A);
-drawarrow origin -- C; label.bot("$\vC$", 1/2C);
-drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  draw D -- D+A;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw A -- A+D -- A+D+C -- A+C -- cycle;
+  draw A+C -- C;
+  draw A+C+D -- C+D;
+  drawoptions();
+  drawarrow origin -- A; label.lft("$\vec{A}$", 1/2A);
+  drawarrow origin -- C; label.bot("$\vec{C}$", 1/2C);
+  drawarrow C -- C + D; label.lrt("$\vec{D}$", 1/2[C, C+D]);
 );
 P2 = image(
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  draw D -- D+B;
-drawoptions(withpen pencircle scaled 1/4);
-draw B -- B+D -- B+D+C -- B+C -- cycle;
-draw B+C -- C;
-draw B+C+D -- C+D;
-drawoptions();
-drawarrow origin -- B; label.lft("$\vB$", 1/2B);
-drawarrow origin -- C; label.bot("$\vC$", 1/2C);
-drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  draw D -- D+B;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw B -- B+D -- B+D+C -- B+C -- cycle;
+  draw B+C -- C;
+  draw B+C+D -- C+D;
+  drawoptions();
+  drawarrow origin -- B; label.lft("$\vec{B}$", 1/2B);
+  drawarrow origin -- C; label.bot("$\vec{C}$", 1/2C);
+  drawarrow C -- C + D; label.lrt("$\vec{D}$", 1/2[C, C+D]);
 );
+
+% DUMP capture=False, comment="... and so on ... "
 P3 = image(
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  
-draw D -- A+D -- A+B+D;
-draw A -- A+D -- A+C+D;
-drawoptions(withpen pencircle scaled 1/4);
-draw A -- A+C -- A+C+D;
-draw C -- A+C -- A+B+C -- A+B;
-draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
-draw A+B -- A+B+D;
-draw A+B+C -- A+B+C+D;
-drawoptions();
-drawarrow origin -- A; label.lft("$\vA$", 1/2A);
-drawarrow A -- A+B; label.lft("$\vB$", 1/2[A, A+B]);
-drawarrow origin -- C; label.bot("$\vC$", 1/2C);
-drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  
+  draw D -- A+D -- A+B+D;
+  draw A -- A+D -- A+C+D;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw A -- A+C -- A+C+D;
+  draw C -- A+C -- A+B+C -- A+B;
+  draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
+  draw A+B -- A+B+D;
+  draw A+B+C -- A+B+C+D;
+  drawoptions();
+  drawarrow origin -- A; label.lft("$\vA$", 1/2A);
+  drawarrow A -- A+B; label.lft("$\vB$", 1/2[A, A+B]);
+  drawarrow origin -- C; label.bot("$\vC$", 1/2C);
+  drawarrow C -- C + D; label.lrt("$\vD$", 1/2[C, C+D]);
 );
 P4 = image(
-pair dx; dx = -1/2C;
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  
-draw D -- A+B+D;
-draw A + dx -- A+D + dx;
-draw D + dx -- A+D + dx -- A+B+D + dx;
-drawoptions(withpen pencircle scaled 1/4);
-draw C -- A+C -- A+B+C -- A+B;
-draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
-draw A+B -- A+B+D;
-draw A+C -- A+C+D;
-draw A+B+C -- A+B+C+D;
-draw origin + dx -- D+ dx -- A+B+D+ dx -- A+B+ dx;
-drawoptions();
-drawarrow origin -- A+B;
-drawarrow origin -- C;
-drawarrow C -- C + D; 
-drawarrow origin + dx -- A + dx; 
-drawarrow origin + dx -- A+B + dx; 
-drawarrow A + dx -- A+B + dx;
-label("$\vA+\vB$", 1/2(A+B+ dx));
-label.bot("$\vC$", 1/2C);
-label.lft("$\vA$", 1/2A+ dx);
-label.lft("$\vB$", 1/2[A+ dx, A+B+ dx]);
-label.lrt("$\vD$", 1/2[C, C+D]);
+  pair dx; dx = -1/2C;
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  
+  draw D -- A+B+D;
+  draw A + dx -- A+D + dx;
+  draw D + dx -- A+D + dx -- A+B+D + dx;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw C -- A+C -- A+B+C -- A+B;
+  draw C+D -- A+C+D -- A+B+C+D -- A+B+D;
+  draw A+B -- A+B+D;
+  draw A+C -- A+C+D;
+  draw A+B+C -- A+B+C+D;
+  draw origin + dx -- D+ dx -- A+B+D+ dx -- A+B+ dx;
+  drawoptions();
+  drawarrow origin -- A+B;
+  drawarrow origin -- C;
+  drawarrow C -- C + D; 
+  drawarrow origin + dx -- A + dx; 
+  drawarrow origin + dx -- A+B + dx; 
+  drawarrow A + dx -- A+B + dx;
+  label("$\vA+\vB$", 1/2(A+B+ dx));
+  label.bot("$\vC$", 1/2C);
+  label.lft("$\vA$", 1/2A+ dx);
+  label.lft("$\vB$", 1/2[A+ dx, A+B+ dx]);
+  label.lrt("$\vD$", 1/2[C, C+D]);
 );
 P5 = image(
-pair dx; dx = 3/2C;
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  
-draw D -- A+B+D;
-draw A + dx -- A+D + dx;
-draw D + dx -- A+D + dx -- A+B+D + dx;
-drawoptions(withpen pencircle scaled 1/4);
-draw C -- A+C -- A+B+C -- A+B;
-draw C -- C+D -- A+C+D -- A+B+C+D -- A+B+D;
-draw A+B -- A+B+D;
-draw A+C -- A+C+D;
-draw A+B+C -- A+B+C+D;
-draw D + dx -- A+B+D+ dx -- A+B+ dx;
-drawoptions();
-drawarrow origin + dx -- D + dx;
-drawarrow origin -- A+B;
-drawarrow origin -- C;
-drawarrow + dx -- A+ dx; 
-drawarrow + dx -- A+B+ dx; 
-drawarrow A+ dx -- A+B+ dx;
-label.lft("$\vA+\vB$", 1/2(A+B));
-label.bot("$\vC$", 1/2C);
-label.lrt("$\vD$", 1/2[dx, dx+D]);
+  pair dx; dx = 3/2C;
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  
+  draw D -- A+B+D;
+  draw A + dx -- A+D + dx;
+  draw D + dx -- A+D + dx -- A+B+D + dx;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw C -- A+C -- A+B+C -- A+B;
+  draw C -- C+D -- A+C+D -- A+B+C+D -- A+B+D;
+  draw A+B -- A+B+D;
+  draw A+C -- A+C+D;
+  draw A+B+C -- A+B+C+D;
+  draw D + dx -- A+B+D+ dx -- A+B+ dx;
+  drawoptions();
+  drawarrow origin + dx -- D + dx;
+  drawarrow origin -- A+B;
+  drawarrow origin -- C;
+  drawarrow + dx -- A+ dx; 
+  drawarrow + dx -- A+B+ dx; 
+  drawarrow A+ dx -- A+B+ dx;
+  label.lft("$\vA+\vB$", 1/2(A+B));
+  label.bot("$\vC$", 1/2C);
+  label.lrt("$\vD$", 1/2[dx, dx+D]);
 );
 P6 = image(
-drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
-draw origin -- D -- D+C;  draw D -- A+B+D;
-drawoptions(withpen pencircle scaled 1/4);
-draw C -- A+B+C -- A+B;
-draw C+D -- A+B+C+D -- A+B+D;
-draw A+B -- A+B+D;
-draw A+B+C -- A+B+C+D;
-drawoptions();
-drawarrow origin -- A+B;
-drawarrow origin -- C;
-drawarrow C -- C + D; 
-label.lft("$\vA+\vB$", 1/2(A+B));
-label.bot("$\vC$", 1/2C);
-label.lrt("$\vD$", 1/2[C, C+D]);
+  drawoptions(dashed evenly withpen pencircle scaled 1/4 withcolor 1/2);
+  draw origin -- D -- D+C;  draw D -- A+B+D;
+  drawoptions(withpen pencircle scaled 1/4);
+  draw C -- A+B+C -- A+B;
+  draw C+D -- A+B+C+D -- A+B+D;
+  draw A+B -- A+B+D;
+  draw A+B+C -- A+B+C+D;
+  drawoptions();
+  drawarrow origin -- A+B;
+  drawarrow origin -- C;
+  drawarrow C -- C + D; 
+  label.lft("$\vA+\vB$", 1/2(A+B));
+  label.bot("$\vC$", 1/2C);
+  label.lrt("$\vD$", 1/2[C, C+D]);
 );
+% DUMP capture=True
+
 draw P1; label("$+$", 1/4(A+B+6C+2D));
 draw P2 shifted 2C;     
 draw P3 shifted -3/2(A+B);
@@ -6713,6 +6718,7 @@ label("$=$", 1/2(A+B+3C+D)-3/2(A+B));
 label("$=$", 1/2(A+B+3C+D)-3/2(A+B)+3C);
 label("$=$", 1/2(A+B+3C+D)-3(A+B)+1/2C);
 
+% DUMP capture=False
 label.top("$\vA\cdot\left(\vC \times \vD\right) + \vB\cdot\left(\vC \times \vD\right) =\left(\vA+\vB\right)\cdot\left(\vC \times \vD\right)$",
 point 5/2 of bbox currentpicture shifted 42 up);
 \end{mplibcode}
@@ -6725,20 +6731,15 @@ $$
 \vfill
 $$
 \begin{mplibcode}
+% DUMP squash=True
 input isometric_projection
 set_projection(13, -36); ipscale := 23;
 
-numeric x, y, z; 
-x = 7/2;
-y = 9/8;
-z = 9/8;
+numeric x, y, z; x = 7/2; y = 9/8; z = 9/8;
 
 pair a, b, c, d, o; 
+a = p(3/4, 2, 0); b = p(4, 0, 0); c = p(0, 0, 5); d = x*a + y*b + z*c;
 o = origin;
-a = p(3/4, 2, 0);
-b = p(4, 0, 0);
-c = p(0, 0, 5);
-d = x*a + y*b + z*c;
 
 path base[]; 
 base0 = o -- b -- b + c -- c -- cycle;
@@ -6746,47 +6747,51 @@ base1 = base0 shifted a;
 base2 = base0 shifted (x*a);
 base3 = base0 shifted d;
 
-draw point 3 of base2 -- point 3 of base3 - y*b -- point 3 of base3 dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
-draw point 1 of base2 -- point 1 of base3 - z*c -- point 1 of base3 dashed evenly scaled 1/2 withpen pencircle scaled 1/4;
+
+drawoptions(dashed evenly scaled 1/2 withpen pencircle scaled 1/4);
+  draw point 3 of base2 -- point 3 of base3 - y*b -- point 3 of base3;
+  draw point 1 of base2 -- point 1 of base3 - z*c -- point 1 of base3;
+drawoptions();
 
 fill base0 withcolor Blues 8 3;
 draw base0 withpen pencircle scaled 1/4;
 forsuffixes $=2, 3:
-draw point 1 of base 0 -- point 1 of base$ withpen pencircle scaled 1/4 withcolor 0;
-draw point 2 of base 0 -- point 2 of base$ withpen pencircle scaled 1/4 withcolor 1/4;
-draw point 3 of base 0 -- point 3 of base$ dashed withdots scaled 1/4 withcolor 3/4;
+  draw point 1 of base 0 -- point 1 of base$ withpen pencircle scaled 1/4;
+  draw point 2 of base 0 -- point 2 of base$ withpen pencircle scaled 1/4 withcolor 1/4;
+  draw point 3 of base 0 -- point 3 of base$ dashed withdots scaled 1/4 withcolor 3/4;
 endfor
 draw base1 withpen pencircle scaled 1/4;
 forsuffixes $=2, 3:
-fill base$ withcolor Blues[8][2];
-draw base$ withpen pencircle scaled 1/4;
+  fill base$ withcolor Blues[8][2];
+  draw base$ withpen pencircle scaled 1/4;
 endfor
 forsuffixes $=a,b,c,d:
-drawarrow origin -- $ withpen pencircle scaled 1;
+  drawarrow origin -- $ withpen pencircle scaled 1;
 endfor
 drawarrow a -- x*a withpen pencircle scaled 1;
 
 drawoptions(withpen pencircle scaled 1/4 withcolor Blues 8 8);
-drawarrow p(0, 0,  -4) -- o -- p(0, 9, 0);
-draw      p(0, 2, -3) -- p(0, 2, 0) -- a;
-draw      p(0, 2x, -4) -- p(0, 2x, 0) -- x*a;
-numeric s; s = 1/4;
-draw p(0,2,-s)--p(0,2-s,-s)--p(0,2-s,0)--p(s,2-s,0)--p(s,2,0);
-draw p(0,2x,-s)--p(0,2x-s,-s)--p(0,2x-s,0)--p(s,2x-s,0)--p(s,2x,0);
-path hx, h; picture lhx, lh;
-h = p(0, 0, -5/2)--p(0, 2, -5/2);
-hx = p(0, 0, -7/2)--p(0, 2x, -7/2);
-interim ahangle := 20; ahlength := 2;
-drawdblarrow h; lh = thelabel("$h$", point 1/2 of h); unfill bbox lh; draw lh;
-drawdblarrow hx; lhx = thelabel("$xh$", point 3/4 of hx); unfill bbox lhx; draw lhx;
+  drawarrow p(0, 0,  -4) -- o -- p(0, 9, 0);
+  draw      p(0, 2, -3) -- p(0, 2, 0) -- a;
+  draw      p(0, 2x, -4) -- p(0, 2x, 0) -- x*a;
+  numeric s; s = 1/4;
+  draw p(0,2,-s)--p(0,2-s,-s)--p(0,2-s,0)--p(s,2-s,0)--p(s,2,0);
+  draw p(0,2x,-s)--p(0,2x-s,-s)--p(0,2x-s,0)--p(s,2x-s,0)--p(s,2x,0);
+  path hx, h; picture lhx, lh;
+  h = p(0, 0, -5/2)--p(0, 2, -5/2);
+  hx = p(0, 0, -7/2)--p(0, 2x, -7/2);
+  interim ahangle := 20; ahlength := 2;
+  drawdblarrow h; lh = thelabel("$h$", point 1/2 of h); unfill bbox lh; draw lh;
+  drawdblarrow hx; lhx = thelabel("$xh$", point 3/4 of hx); unfill bbox lhx; draw lhx;
 drawoptions();
 
-label.rt("$\textbf{a}$", 3/4a);
+label.rt("$\textbf{a}$", 3/4a); 
 label.rt("$x\textbf{a}$", 3/4a*x);
 label.bot("$\textbf{b}$", 3/4b);
 label.ulft("$\textbf{c}$", 3/4c);
 label.ulft("$\textbf{d}$", 5/8d);
 
+% DUMP capture=False
 label.bot(btex \vbox{\openup 12pt \def\va{\textbf{a}}\def\vb{\textbf{b}}\def\vc{\textbf{c}}\def\vd{\textbf{d}}
 \halign{\hss $\displaystyle # $\hss\cr
 x\va+ y\vb+ z\vc = \vd \enspace\Rightarrow\enspace \det(\vd,\vb,\vc) = \det(x\va,\vb,\vc) = x\det(\va,\vb,\vc)\cr
@@ -6807,15 +6812,17 @@ label.lft("$a$", point 1/2 of t);
 label.bot("$b$", point -1/2 of t);
 label.urt("$c$", point 3/2 of t);
 
-label.top("${a\over2}, b, c \in \mathbb{Z}^+$,\quad $(a,b)=1$", point 5/2 of bbox currentpicture shifted 21 up);
+label.top("${a\over2}, b, c \in \mathbb{Z}^+$,\quad $(a,b)=1$", 
+  point 5/2 of bbox currentpicture shifted 21 up);
+
 label.bot(btex \vbox{\openup 12 pt\halign{#\hfil&$\displaystyle {}\Rightarrow #$\hfil\cr
-$\displaystyle {c+b\over a}={n\over m}$, \enspace $(n, m) = 1$ 
-& {c-b\over a} = {m\over n},\cr
-& {c \over a} = {n^2 + m^2 \over 2mn},\enspace
-  {b \over a} = {n^2 - m^2 \over 2mn},\cr
-& n \not\equiv m \pmod2.\cr
-\therefore\enspace $(a,b,c) = \bigl(2mn, n^2-m^2, n^2+m^2\bigr)$.\hidewidth&\omit\cr
-}} etex, point 1/2 of bbox currentpicture shifted 42 down);
+  $\displaystyle \frac{c+b}{a}=\frac{n}{m}$, \enspace $(n, m) = 1$ 
+    & \frac{c-b}{a} = \frac{m}{n},\cr
+  & \frac{c}{a} = \frac{n^2 + m^2}{2mn},\enspace
+    \frac{b}{a} = \frac{n^2 - m^2}{2mn},\cr
+  & n \not\equiv m \pmod2.\cr
+  \therefore\enspace $(a,b,c) = \bigl(2mn, n^2-m^2, n^2+m^2\bigr)$.\hidewidth&\omit\cr
+  }} etex, point 1/2 of bbox currentpicture shifted 42 down);
 \end{mplibcode}
 $$
 \vfill
@@ -6827,18 +6834,26 @@ $$
 \begin{mplibcode}
 numeric u, n; u = 13; n = 4;
 for i=0 upto n:
-path s; s = unitsquare xscaled -1 yscaled -(2**i) scaled u shifted ((0, 2**i-1)*-u);
-fill s withcolor Oranges[7][i+1]; draw s;
-label.lft("$" & if i=n: "2^n" elseif i=n-1: "\vdots" else: decimal (2**i) fi & "$", point 3/2 of s);
-if i=0: label.top("$1$", point 1/2 of s); fi
+  path s; s = unitsquare xscaled -1 yscaled -(2**i) scaled u shifted ((0, 2**i-1)*-u);
+  fill s withcolor Oranges[7][i+1]; draw s;
+  label.lft("$" & if i=n: "2^n" 
+            elseif i=n-1: "\vdots" 
+                    else: decimal (2**i) fi & "$", point 3/2 of s);
+  if i=0: label.top("$1$", point 1/2 of s); fi
 endfor
 for i=0 upto n-1:
-path s; s = unitsquare xscaled (2**i) yscaled -(2**(n+1)-1) scaled u shifted ((2**i-1, 0)*u);
-fill s withcolor Blues [8][i+1];
-draw s;
-label.top("$" & if i=n-1: "2^{n-1}" elseif i=n-2: "\cdots" else: decimal (2**i) fi & "$", point 1/2 of s);
-label.top("$" & if i=n-1: "2^{n-1}p" elseif i=n-2: "\cdots" elseif i=0: "p" else: decimal (2**i) & "p" fi & "$", center s);
+  path s; 
+  s = unitsquare xscaled (2**i) yscaled -(2**(n+1)-1) scaled u shifted ((2**i-1, 0)*u);
+  fill s withcolor Blues [8][i+1]; draw s;
+  label.top("$" & if i=n-1: "2^{n-1}" 
+              elseif i=n-2: "\cdots" 
+                      else: decimal (2**i) fi & "$", point 1/2 of s);
+  label.top("$" & if i=n-1: "2^{n-1}p" 
+              elseif i=n-2: "\cdots" 
+                elseif i=0: "p" 
+                      else: decimal (2**i) & "p" fi & "$", center s);
 endfor
+
 path ax, ay; picture lax, lay;
 ax = ((1, 2**(n+1)-1) -- (-(2**n-1), 2**(n+1)-1)) scaled -u shifted 8 down;
 ay = ((2**n, 0) -- (2**n, -(2**(n+1)-1))) scaled u shifted 21 right;
@@ -6848,9 +6863,10 @@ drawdblarrow ax; unfill bbox lax; draw lax;
 drawdblarrow ay; unfill bbox lay; draw lay;
 
 label.top("$p=2^{n+1}-1$ prime ${}\Rightarrow{}$ $N=2^np$ perfect", 
-point 5/2 of bbox currentpicture shifted 13 up);
+  point 5/2 of bbox currentpicture shifted 13 up);
+
 label.bot("$1+2+\cdots+2^n+p+2p+\cdots+2^{n-1}p = 2^np = N$", 
-point 1/2 of bbox currentpicture shifted 13 down);
+  point 1/2 of bbox currentpicture shifted 13 down);
 \end{mplibcode}
 $$
 \vfill
@@ -6875,118 +6891,132 @@ $n\equiv1\pmod4$, then there exists a self-complementary simple graph $G_n$ with
 $$
 \begin{mplibcode}
 numeric u, v; u = 13; v = -24;
-picture G[], dot, rdot, bdot; 
-dot = image(fill fullcircle scaled 4 withcolor 3/4; draw fullcircle scaled 4);
+
+picture dot, rdot, bdot; 
+dot  = image(fill fullcircle scaled 4 withcolor 3/4; draw fullcircle scaled 4);
 rdot = image(fill fullcircle scaled 4 withcolor Reds 8 4; draw fullcircle scaled 4);
 bdot = image(fill fullcircle scaled 4 withcolor Blues 8 4; draw fullcircle scaled 4);
-G1  = image(draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); label.lft("$G_1 : {}$", point -1/2 of bbox currentpicture));
-G11 = image(draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); label.lft("$\overline{G_1} : {}$", point -1/2 of bbox currentpicture));
+
+picture G[];
+G1  = image(
+  draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); 
+  label.lft("$G_1 : {}$", point -1/2 of bbox currentpicture));
+
+G11 = image(
+  draw bdot; label.bot("$p$", point 1/2 of bbox currentpicture); 
+  label.lft("$\overline{G_1} : {}$", point -1/2 of bbox currentpicture));
 
 G4 = image(
-draw origin -- right scaled 3u; 
-numeric x; x = -1;
-forsuffixes s=a,b,c,d:
+  draw origin -- right scaled 3u; 
+  numeric x; x = -1;
+  forsuffixes s=a,b,c,d:
     draw if odd ASCII str s: rdot else: bdot fi shifted ((incr x) * u, 0); 
     label.top("$" & str s & "$", (x*u, -16)); 
-endfor
-label.lft("$G_4 : {}$", point -1/2 of bbox currentpicture)
-);
+  endfor
+  label.lft("$G_4 : {}$", point -1/2 of bbox currentpicture));
+
 G41 = image(
-draw origin -- right scaled 3u; 
-numeric x; x = -1;
-forsuffixes s=b,d,a,c:
+  draw origin -- right scaled 3u; 
+  numeric x; x = -1;
+  forsuffixes s=b,d,a,c:
     draw if odd ASCII str s: rdot else: bdot fi shifted ((incr x) * u, 0); 
     label.top("$" & str s & "$", (x*u, -16)); 
-endfor
-label.lft("$\overline{G_4} : {}$", point -1/2 of bbox currentpicture)
-);
-G5 = image(
-path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
-numeric t; t = -1;
-forsuffixes s=x, y, z, w, p: 
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
-endfor
-label.lft("$G_5 : {}$", point -1/2 of bbox currentpicture)
-);
-G51 = image(
-path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
-numeric t; t = -1;
-forsuffixes s=y, w, x, z, p: 
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
-endfor
-label.lft("$\overline{G_5} : {}$", point -1/2 of bbox currentpicture)
-);
-G8 = image(
-path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
-for t = 4 upto 7: draw point 0 of pp -- point t of pp -- point 3 of pp; endfor  
-numeric t; t = -1;
-forsuffixes s=x, y, z, w, d, c, b, a: 
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
-endfor
-label.lft("$G_8 : {}$", point -1/2 of bbox currentpicture);
-);
-G81 = image(
-path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
-for t = 4 upto 7: draw point 0 of pp -- point t of pp -- point 3 of pp; endfor  
-numeric t; t = -1;
-forsuffixes s = y, w, x, z, c, a, d, b: 
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
-endfor
-label.lft("$\overline{G_8} : {}$", point -1/2 of bbox currentpicture);
-);
-G0 = image(
-path pp, ee; 
-ee = fullcircle xscaled 6u yscaled 2u;
-draw ee;
-pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
-for i=1 upto 5: 
-    z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
-endfor
-for i=1, 2, 5:
-    draw point 0 of pp -- z[i] -- point 3 of pp;
-    draw dot shifted z[i]; 
-endfor
-for i=3, 4:
-    draw point 0 of pp -- z[i] cutafter ee scaled 2;
-    draw point 3 of pp -- z[i] cutafter ee scaled 2;
-endfor
-numeric t; t = -1;
-forsuffixes s=x, y, z, w:
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted 10 up);
-endfor
-label("$G_k$", 7/12[point 4 of ee, point 0 of ee]);
-label("$G_{k+4} : {}$", point -1/2 of bbox currentpicture);
-);
-G10 = image(
-path pp, ee; 
-ee = fullcircle xscaled 6u yscaled 2u;
-draw ee;
-pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
-for i=1 upto 5: 
-    z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
-endfor
-for i=1, 2, 5:
-    draw point 0 of pp -- z[i] -- point 3 of pp;
-    draw dot shifted z[i]; 
-endfor
-for i=3, 4:
-    draw point 0 of pp -- z[i] cutafter ee scaled 2;
-    draw point 3 of pp -- z[i] cutafter ee scaled 2;
-endfor
-numeric t; t = -1;
-forsuffixes s=y, w, x ,z:
-    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
-    label("$\strut " & str s & "$", point t of pp shifted 10 up);
-endfor
-label("$\overline{G_k}$", 7/12[point 4 of ee, point 0 of ee]);
-label("$\overline{G_{k+4}} : {}$", point -1/2 of bbox currentpicture);
+  endfor
+  label.lft("$\overline{G_4} : {}$", point -1/2 of bbox currentpicture)
 );
 
+% DUMP capture=False, comment="... and so on ..."
+
+G5 = image(
+  path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
+  numeric t; t = -1;
+  forsuffixes s=x, y, z, w, p: 
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
+  endfor
+  label.lft("$G_5 : {}$", point -1/2 of bbox currentpicture)
+);
+G51 = image(
+  path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor (3/2u, v) -- cycle; draw pp;
+  numeric t; t = -1;
+  forsuffixes s=y, w, x, z, p: 
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted if t>3: 8 down else: 10 up fi);
+  endfor
+  label.lft("$\overline{G_5} : {}$", point -1/2 of bbox currentpicture)
+);
+G8 = image(
+  path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
+  for t = 4 upto 7: 
+    draw point 0 of pp -- point t of pp -- point 3 of pp;
+  endfor  
+  numeric t; t = -1;
+  forsuffixes s=x, y, z, w, d, c, b, a: 
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
+  endfor
+  label.lft("$G_8 : {}$", point -1/2 of bbox currentpicture);
+);
+G81 = image(
+  path pp; pp = for i=0 upto 3: (i*u, 0) -- endfor for i=3 downto 0: (i*u, v) -- endfor cycle; draw pp;
+  for t = 4 upto 7: draw point 0 of pp -- point t of pp -- point 3 of pp; endfor  
+  numeric t; t = -1;
+  forsuffixes s = y, w, x, z, c, a, d, b: 
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted if t>3: 10 down else: 10 up fi);
+  endfor
+  label.lft("$\overline{G_8} : {}$", point -1/2 of bbox currentpicture);
+);
+G0 = image(
+  path pp, ee; 
+  ee = fullcircle xscaled 6u yscaled 2u;
+  draw ee;
+  pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
+  for i=1 upto 5: 
+    z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
+  endfor
+  for i=1, 2, 5:
+    draw point 0 of pp -- z[i] -- point 3 of pp;
+    draw dot shifted z[i]; 
+  endfor
+  for i=3, 4:
+    draw point 0 of pp -- z[i] cutafter ee scaled 2;
+    draw point 3 of pp -- z[i] cutafter ee scaled 2;
+  endfor
+  numeric t; t = -1;
+  forsuffixes s=x, y, z, w:
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted 10 up);
+  endfor
+  label("$G_k$", 7/12[point 4 of ee, point 0 of ee]);
+  label("$G_{k+4} : {}$", point -1/2 of bbox currentpicture);
+);
+G10 = image(
+  path pp, ee; 
+  ee = fullcircle xscaled 6u yscaled 2u;
+  draw ee;
+  pp = (origin for i=1 upto 3: -- (i*u, 0) endfor) shifted (-3/2u, -2v); draw pp;
+  for i=1 upto 5: 
+    z[i] = (i/6)[point 4 of ee, point 0 of ee]; 
+  endfor
+  for i=1, 2, 5:
+    draw point 0 of pp -- z[i] -- point 3 of pp;
+    draw dot shifted z[i]; 
+  endfor
+  for i=3, 4:
+    draw point 0 of pp -- z[i] cutafter ee scaled 2;
+    draw point 3 of pp -- z[i] cutafter ee scaled 2;
+  endfor
+  numeric t; t = -1;
+  forsuffixes s=y, w, x ,z:
+    draw if odd ASCII str s: rdot else: bdot fi shifted point incr t of pp; 
+    label("$\strut " & str s & "$", point t of pp shifted 10 up);
+  endfor
+  label("$\overline{G_k}$", 7/12[point 4 of ee, point 0 of ee]);
+  label("$\overline{G_{k+4}} : {}$", point -1/2 of bbox currentpicture);
+);
+
+% DUMP capture=True
 
 numeric dx, dy; dx = 108; dy = -3/4 dx;;
 label(G1, (0dx, 0dy)); label(G11, (1dx, 0dy)); label(G4, (2dx, 0dy)); label(G41, (3dx, 0));
@@ -6999,8 +7029,7 @@ label(G10, (9/4dx, 5/2dy));
 
 \section{Tiling with trominoes}
 
-A \textit{tronimo} is a plane figure composed of three squares: 
-\begin{mplibcode}path t; t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
+A \textit{tronimo} is a plane figure composed of three squares: \begin{mplibcode}path t; t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
 draw point 5/2 of t -- origin -- point 7/2 of t withpen pencircle scaled 1/4 withcolor 1/2; 
 draw t withpen pencircle scaled 1; \end{mplibcode}
 
@@ -7013,51 +7042,59 @@ can be tiled with trominoes}.
 
 \bigskip\noindent
 I. $$
-\begin{mplibcode}path t; t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
-fill t withcolor Blues 8 6; fill origin -- subpath (5/2, 7/2) of t -- cycle withcolor Blues 8 2;
-draw t withpen pencircle scaled 1; \end{mplibcode}
+\begin{mplibcode}
+% Part I
+path t; 
+t = origin -- subpath (-1/2, 5/2) of unitsquare shifted -(1/2, 1/2) scaled 20 -- cycle;
+fill t withcolor Blues 8 6; 
+fill origin -- subpath (5/2, 7/2) of t -- cycle withcolor Blues 8 2;
+draw t withpen pencircle scaled 1; 
+\end{mplibcode}
 $$
 
 \bigskip\noindent
 II.
 $$
 \begin{mplibcode}
+
+
+% Part II
 numeric n, u; n = 16; u = 10;
 picture P[];
 P0 = image(
-for i=0 upto n-1: for j = 0 upto n-1:
+  for i=0 upto n-1: for j = 0 upto n-1:
     fill unitsquare scaled u shifted (u*(i, j)) withcolor Blues[8][if odd (i+j): 2 else: 6 fi];
-endfor endfor
-unfill unitsquare scaled u shifted (2u,11u); 
-draw   unitsquare scaled u shifted (2u,11u) withpen pencircle scaled 1;
-draw unitsquare scaled (u*n) withpen pencircle scaled 1;
-);
-P2 = image(draw P0; 
-begingroup; interim bboxmargin := 0;
-for t=-1/2, 1/2:
-    draw point t of bbox P0 -- point 2+t of bbox P0 withpen pencircle scaled 1;
-endfor
-path hole; hole = (origin -- (0, u) -- (u, u) -- (u, -u) -- (-u, -u) -- (-u, 0) -- cycle) shifted center P0;
-unfill hole; draw hole withpen pencircle scaled 1;
-path a, b; picture p, q; 
-a = subpath (0, 1/2) of bbox P0 shifted 12 down; 
-b = subpath (1/2, 1) of bbox P0 shifted 12 down; 
-endgroup; 
-drawdblarrow a;
-drawdblarrow b;
-p = thelabel("$n$", point 1/2 of a); unfill bbox p; draw p;
-q = thelabel("$n$", point 1/2 of b); unfill bbox q; draw q;
+  endfor endfor
+  unfill unitsquare scaled u shifted (2u,11u); 
+  draw   unitsquare scaled u shifted (2u,11u) withpen pencircle scaled 1;
+  draw unitsquare scaled (u*n) withpen pencircle scaled 1;
 );
 P1 = image(draw P0; path a; picture p; 
-begingroup; interim bboxmargin := 0;
-a = subpath (0, 1) of bbox P0 shifted 12 down; 
-endgroup; drawdblarrow a;
-p = thelabel("$2n$", point 1/2 of a); unfill bbox p; draw p;
+  begingroup; interim bboxmargin := 0;
+  a = subpath (0, 1) of bbox P0 shifted 12 down; 
+  endgroup; drawdblarrow a;
+  p = thelabel("$2n$", point 1/2 of a); unfill bbox p; draw p;
+);
+P2 = image(draw P0; 
+  begingroup; interim bboxmargin := 0;
+    for t=-1/2, 1/2:
+      draw point t of bbox P0 -- point 2+t of bbox P0 withpen pencircle scaled 1;
+    endfor
+    path hole; 
+    hole = (origin -- (0, u) -- (u, u) -- (u, -u) -- (-u, -u) -- (-u, 0) -- cycle)
+      shifted center P0;
+    unfill hole; draw hole withpen pencircle scaled 1;
+    path a, b; picture p, q; 
+    a = subpath (0, 1/2) of bbox P0 shifted 12 down; 
+    b = subpath (1/2, 1) of bbox P0 shifted 12 down; 
+  endgroup; 
+  drawdblarrow a;
+  drawdblarrow b;
+  p = thelabel("$n$", point 1/2 of a); unfill bbox p; draw p;
+  q = thelabel("$n$", point 1/2 of b); unfill bbox q; draw q;
 );
 
-label(P1, 112 left);
-label(P2, 112 right);
-label("$=$", origin);
+label(P1, 112 left); label("$=$", origin); label(P2, 112 right);
 \end{mplibcode}
 $$
 

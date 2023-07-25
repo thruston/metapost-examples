@@ -61,6 +61,13 @@ def get_mplibcode(lines):
                 squash = k["squash"]
             if "replace" in k:
                 mp.append(k["replace"])
+            if "comment" in k:
+                if mp:
+                    previous_leading_space = len(mp[-1]) - len(mp[-1].lstrip())
+                else:
+                    previous_leading_space = 0
+                mp.append(' ' * previous_leading_space + 
+                          '% ' + ' '.join(k['comment'].split()))
         elif capture:
             if line or not squash:
                 mp.append(line)
