@@ -160,17 +160,18 @@ $$
 \begin{mplibcode}
     path c, t, s[];
     c = fullcircle scaled 2/5 \mpdim\textwidth;
+    
     t = point 4 of c -- point 0 of c -- point 2.5 of c -- cycle;
     fill t withcolor Oranges 7 3;
-    vardef square_on(expr a,b) = 
-     unitsquare scaled abs(a-b) rotated angle (a-b) shifted b
-    enddef;
+
     for i=1 upto 3:
-    s[i] = square_on(point i-1 of t, point i of t);
-    draw s[i];
+      s[i] = unitsquare zscaled (point i-1 of t - point i of t)
+                        shifted point i of t;
+      draw s[i];
     endfor
+    
     z1 = point 2 of t rotatedabout(center s1, 180);
-    draw point 2 of t  -- z1            dashed evenly;
+    draw point 2 of t  -- z1 dashed evenly;
     draw point 2 of s1 -- z1 -- point 3 of s1;
     draw point 2 of s2 -- point 3 of s3 dashed evenly;
     draw point 2 of s3 -- point 3 of s2;
@@ -4304,22 +4305,17 @@ d3 = d0 rotated -90 shifted (subpath (2,3) of c1 intersectionpoint subpath (1,2)
 d4 = d0 rotated -90 shifted (subpath (2,3) of c4 intersectionpoint subpath (1,2) of c2);
 a4 = a0 rotated -90 shifted (subpath (2,3) of d3 intersectionpoint subpath (1,2) of d4);
 
-forsuffixes $=a,b,c,d: forsuffixes @=1,2,3,4: 
-  fill $.@ withcolor sh.$; draw $.@; 
-endfor endfor
+def withalpha expr a =  % this a luamplib feature ... 
+  withprescript "tr_alternative=2"
+  withprescript "tr_transparency=" & decimal a
+enddef;
 
-path o[]; 
-o1 = buildcycle(b1, b2); fill o1 withcolor 15/16 sh.b;       
-o2 = buildcycle(c3, a4); fill o2 withcolor 1/2[sh.c, sh.a]; 
-o3 = buildcycle(c1, c4); fill o3 withcolor 15/16 sh.c;      
-o4 = buildcycle(c2, c4); fill o4 withcolor 15/16 sh.c;      
-o5 = buildcycle(d1, d3); fill o5 withcolor 15/16 sh.d;      
-o6 = buildcycle(d4, d3); fill o6 withcolor 15/16 sh.d;      
-o7 = buildcycle(d2, d4); fill o7 withcolor 15/16 sh.d;      
-o8 = buildcycle(b3, d3); fill o8 withcolor 3/4[sh.b, sh.d];      
-o9 = buildcycle(b4, d4); fill o9 withcolor 3/4[sh.b, sh.d];      
-
-for i=1 upto 9: draw o[i]; endfor
+forsuffixes $=a,b,c,d: 
+  forsuffixes @=1,2,3,4: 
+    fill $.@ withalpha 0.8 withcolor sh.$; 
+    draw $.@; 
+  endfor 
+endfor
 
 label.top("$|x_1|$", point -1/2 of a1);
 label.lft("$|x_1|$", point +1/2 of a1);
