@@ -12,9 +12,9 @@ beginfig(1);
     fill bat scaled 3.6 rotated t withcolor shade;
   endfor) enddef;       
   picture tile[]; tile0 = unit(navy); tile1 = unit(forest) rotated 90;
-  numeric n, u, v; n = 4; (u,v) = urcorner tile0 - llcorner tile0;
-  for i=-n upto n:
-    for j=-n upto n:
+  numeric u, v; (u,v) = urcorner tile0 - llcorner tile0;
+  for i=1 upto 8:
+    for j=1 upto 5:
       draw tile[(i+j) mod 2] shifted (i*u,j*v);
     endfor
   endfor

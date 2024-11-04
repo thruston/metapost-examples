@@ -4,30 +4,20 @@
 \mplibtextextlabel{enable}
 \begin{mplibcode}
 input jones-colors
+input jones-generic-star
 beginfig(1);
-path cross;
-vardef star(expr n, s, r) =
-    save a, b, t; path a, b; numeric t;
-    a = (up -- up rotated (360/n*s)) scaled r;
-    b = a rotated -(360/n*(s-1));
-    (t,whatever) = a intersectiontimes b;
-    for i=0 upto 2n-1: subpath (0, t) of a rotated (360/n*i) -- endfor cycle
-enddef;
-cross = star(8,2,21);
-
-pair u, v;
-v = point 0 of cross - point 8 of cross;
-u = point 4 of cross - point 12 of cross;
-n = 4;
-for i=-n upto n:
-    for j=-n upto n:
-        fill cross shifted (i*u+j*v) withcolor 
-            if odd (floor((i+abs(j))/(2abs(j)+1)) + j): forest else: navy fi;
-        draw cross shifted (i*u+j*v) withpen pencircle scaled 1 withcolor 1/2[ivory, white];
+  background := ivory;
+  path cross; cross = star(8,2,16);
+  numeric u, v; (u, v) = urcorner cross - llcorner cross;
+  for i=-6 upto 6:
+    for j=-3 upto 3:
+      pair z; z = (i*u, j*v);
+      numeric k; k = j + floor ((i + abs j) / (1 + 2 abs j));
+      fill cross shifted z withcolor if odd k: forest else: lapiz fi;
+      draw cross shifted z withpen pencircle scaled 1 withcolor white;
     endfor
-endfor
-picture P; P = currentpicture; fill bbox P withcolor ivory; draw P;
+  endfor
+  picture P; P = currentpicture; unfill bbox P; draw P;
 endfig;
 \end{mplibcode}
 \end{document}
-

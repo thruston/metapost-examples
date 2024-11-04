@@ -5,43 +5,33 @@
 \begin{mplibcode}
 input jones-colors
 beginfig(1);
-    path s, t; 
-    t = ((-3,-3) -- (-3, -3.585786) -- (-2.585786, -4) -- (2.585786, -4) -- (3, -3.585786) -- (3,-3) -- cycle)
-        scaled 10.5;
-    s = ((0, -0.585786) -- (0.41421, -1) -- (1,-1) -- (1, -3) -- (0, -4) 
-        -- (-1, -3) -- (-1, -1) -- (-0.41421, -1) -- cycle) scaled 10.5;
+  background := ivory;
+  numeric r; r = sqrt(2)-1; 
+  path s; s = (0, r-1) -- (r, -1) -- (1, -1) -- (1, -3) -- (0, -4);
+  path t; t = (0, -4) -- (1, -3) -- (3, -3) -- (3, r-4) -- (3-r, -4);
+  s := s -- subpath (3,1) of s reflectedabout(up, down) -- cycle;
+  t := t -- subpath (4,1) of t reflectedabout(up, down) -- cycle;
 
-    vardef unit(expr shade) = image(
-        for i=0 upto 3:
-            filldraw t rotated 90i withcolor navy;
-        endfor
-        for i=0 upto 3:
-            fill s rotated 90i withcolor shade;
-            draw s rotated 90i withpen pencircle scaled 1 withcolor 15/16;
-        endfor
-    ) enddef;
+  numeric u; 4u = 24;
+  s := s scaled u;
+  t := t scaled u;
 
-    pair u, v;
-    u = (84, 0); v = u rotated 90;
+  vardef unit(expr shade) = image(for i=0 upto 3:
+    filldraw t rotated 90i withcolor navy;
+    fill s rotated 90i withcolor shade;
+    draw s rotated 90i withpen pencircle scaled 1 withcolor 15/16;
+  endfor) enddef;
 
-
-    for i=0 upto 8:
-        for j= 0 upto 8:
-            color sh; sh = 
-            if odd floor(i/2):
-                if odd floor(j/2): lapiz else: forest fi
-            else:
-                if odd floor(j/2): forest else: gold fi
-            fi;
-            draw unit(sh) shifted (i*u + j*v);
-        endfor
+  for i=2 upto 9:
+    for j=2 upto 7:
+      color shade; shade = 
+      if odd floor(i/2): if odd floor(j/2): lapiz else: forest fi
+                   else: if odd floor(j/2): forest else: gold fi fi;
+      draw unit(shade) shifted ((i, j) scaled 8u);
     endfor
+  endfor
 
-
-    picture P; P = currentpicture; fill bbox P withcolor ivory; draw P;
-
-
+  picture P; P = currentpicture;clearit; unfill bbox P; draw P;
 endfig;
 \end{mplibcode}
 \end{document}
-

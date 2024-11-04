@@ -1,4 +1,4 @@
-color ivory, navy, gold, plum, forest, lapiz;
+color ivory, navy, gold, forest, lapiz, plum;
 ivory = 1/256 (218, 209, 199);
 navy = 1/256 (57, 62, 81);
 gold = 1/256 (213, 168, 101);

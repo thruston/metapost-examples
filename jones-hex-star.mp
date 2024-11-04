@@ -18,10 +18,10 @@ beginfig(1);
     point i of h' -- 1/3[point i of h', point i+2 of h'] --
   endfor cycle;
   vardef unit(expr a, b) = image(
-    fill t withcolor a; fill h withcolor ivory;
+    fill t withcolor a; fill h withcolor 15/16 ivory;
     fill t' withcolor ivory; fill s withcolor b;
     drawoptions(withpen pencircle scaled 1 withcolor 15/16);
-    draw t; draw t'; draw h; draw s;
+      draw t; draw t'; draw h; draw s;
     drawoptions();
   ) enddef;
   pair u, v; u = origin rotatedabout(point 1 of t, 120); v = u rotated -60; 
