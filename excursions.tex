@@ -531,8 +531,8 @@ enddef;
 \end{itemize}
 \newpage
 \noindent
-Intersecting orthogonal circles.
-$$
+Intersecting orthogonal circles. \count10=\inputlineno
+\\\noindent
 \begin{mplibcode}
 pair C, D; C = -D = 42 left; 
 for i=-5 upto 5:
@@ -552,7 +552,10 @@ draw C withpen pencircle scaled dotlabeldiam;
 numeric wd; wd = \mpdim\textwidth;
 clip currentpicture to unitsquare shifted -(1/2, 1/2) scaled .8 wd yscaled 3/4;
 \end{mplibcode}
-$$
+\count11=\inputlineno
+\advance\count10 3
+\advance\count11 -3\par
+\mpexternal[firstline=\the\count10,lastline=\the\count11]{\jobname.tex}
 
 \vfill
 \noindent Radical axis of non-intersecting circles
