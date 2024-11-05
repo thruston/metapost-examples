@@ -17,7 +17,7 @@ beginfig(1);
   for i=0 upto 7:
     unfilldraw leaf rotated 45i withpen pencircle scaled 1/4;
   endfor
-  path v; v = star(8,2,s); % same macro as "octa-star" uses
+  path v; v = star(8,2,s); % common star macro 
   fill v withcolor gold; undraw v;
   path w; w = (origin -- subpath(4,8) of v -- cycle)
               shifted (xpart point 0 of o, ypart point 1 of o) shifted q;

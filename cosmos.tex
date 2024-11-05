@@ -4,6 +4,7 @@
 \usepackage[hmargin=28.8mm,vmargin=30mm]{geometry}     
 \usepackage{dwmpcode}
 \setcounter{secnumdepth}{1}
+\overfullrule2pt
 \begin{document}
 
 \section{Moorish}
@@ -12,6 +13,18 @@ These designs are largely taken from the chapter on Moorish tiling patterns in O
 Jones' \textit{Grammar of Ornament}, 1856. The section names are all mine.  Each file inputs
 \mpl{jones-colors.mp}, which defines the six colours used as follows:
 $$\includegraphics{jones-color-swatches}$$
+
+\bigskip\noindent
+Many of the patterns use regular polygonal stars, which are drawn by this macro:
+\smallmpexternal[xleftmargin=0pt]{jones-generic-star.mp}
+\noindent
+The parameter $r$ is the radius of the star; $n$ and $s$ determine the shape, like
+this:
+$$\includegraphics{jones-star-sampler}$$
+
+\bigskip\noindent
+Most of the patterns in the following pages are laid out on a square grid, 
+but the last three use a triangular grid.
 
 \subsection{Bats}
 $$\includegraphics{jones-bats}$$
@@ -25,17 +38,12 @@ $$\includegraphics{jones-carre}$$
 $$\includegraphics{jones-cross}$$
 \smallmpexternal[firstline=7,lastline=28,xleftmargin=0pt]{jones-cross.mp}
 
-\subsection{Hex-star}
-$$\includegraphics{jones-hex-star}$$
-\smallmpexternal[firstline=7,lastline=37,xleftmargin=0pt]{jones-hex-star.mp}
-
 \subsection{Lifebelt}
 $$\includegraphics{jones-lifebelt}$$
 \smallmpexternal[firstline=7,lastline=34,xleftmargin=0pt]{jones-lifebelt.mp}
 
 \subsection{Octa-star}
 $$\includegraphics{jones-octa-star}$$
-\smallmpexternal[xleftmargin=0pt]{jones-generic-star.mp}
 \smallmpexternal[firstline=8,lastline=21,xleftmargin=0pt]{jones-octa-star.mp}
 
 \subsection{Quad}
@@ -50,25 +58,35 @@ $$\includegraphics{jones-rosette}$$
 $$\includegraphics{jones-scotch}$$
 \smallmpexternal[firstline=7,lastline=35,xleftmargin=0pt]{jones-scotch.mp}
 
-% \subsection{Star-flower}
-% $$\includegraphics[width=5in]{jones-star-flower}$$
-% \smallmpexternal[firstline=7,lastline=23,xleftmargin=0pt]{jones-star-flower.mp}
+\subsection{Star-flower}
+$$\includegraphics{jones-star-flower}$$
+\smallmpexternal[firstline=8,lastline=41,xleftmargin=0pt]{jones-star-flower.mp}
 
-% \subsection{Sun}
-% $$\includegraphics[width=5in]{jones-sun}$$
-% \smallmpexternal[firstline=7,lastline=23,xleftmargin=0pt]{jones-sun.mp}
+\subsection{Sun}
+$$\includegraphics{jones-sun}$$
+\smallmpexternal[firstline=8,lastline=41,xleftmargin=0pt]{jones-sun.mp}
 
-% \subsection{Tack}
-% $$\includegraphics[width=5in]{jones-tack}$$
-% \smallmpexternal[firstline=7,lastline=23,xleftmargin=0pt]{jones-tack.mp}
+\subsection{Tack}
+$$\includegraphics{jones-tack}$$
+\smallmpexternal[firstline=7,lastline=29,xleftmargin=0pt]{jones-tack.mp}
 
-% \subsection{Twelve-nines}
-% $$\includegraphics[width=5in]{jones-twelve-nines}$$
-% \smallmpexternal[firstline=7,lastline=23,xleftmargin=0pt]{jones-twelve-nines.mp}
+\subsection{Hex-star}
+$$\includegraphics{jones-hex-star}$$
+\smallmpexternal[firstline=7,lastline=37,xleftmargin=0pt]{jones-hex-star.mp}
 
-% \subsection{Twelve-pointers}
-% $$\includegraphics[width=5in]{jones-twelve-pointers}$$
-% \smallmpexternal[firstline=7,lastline=23,xleftmargin=0pt]{jones-twelve-pointers.mp}
+\subsection{Twelve-and-nines}
+$$\includegraphics{jones-twelve-nines}$$
+\smallmpexternal[firstline=8,lastline=30,xleftmargin=0pt,xrightmargin=-60pt]{jones-twelve-nines.mp}
+
+\vfill
+\rightline{continued on next page \dots} 
+\newpage
+\noindent \dots from previous page\par\vfill
+\smallmpexternal[firstline=32,lastline=69,xleftmargin=0pt,xrightmargin=-60pt]{jones-twelve-nines.mp}
+
+\subsection{Twelve-pointers}
+$$\includegraphics{jones-twelve-pointers}$$
+\smallmpexternal[firstline=8,lastline=42,xleftmargin=0pt]{jones-twelve-pointers.mp}
 
 \end{document}
 

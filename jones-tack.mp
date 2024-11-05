@@ -3,44 +3,29 @@
 \begin{document}
 \mplibtextextlabel{enable}
 \begin{mplibcode}
+input jones-colors
 beginfig(1);
-    color ivory, navy, gold, forest;
-    ivory = 1/256 (208, 199, 186);
-    navy = 1/256 (45, 48, 66);
-    gold = 1/256 (203, 135, 71);
-    forest = 1/256 (59, 89, 82);
+  path tack;
+  tack = (0,0) -- (0,2) -- (1,2) -- (1,1) -- (3,1);
+  tack := tack rotated - angle point 4 of tack;
+  tack := tack shifted -1/2 point 4 of tack;
+  tack := tack -- subpath (3,0) of tack reflectedabout(left, right) -- cycle;
+  tack := tack scaled 9;
 
-    path tack;
-    tack = (0,0) -- (0,2) -- (1,2) -- (1,3) -- (-1,3);
-    tack := tack rotated (90 - angle (-1,3));
-    tack := tack -- subpath (3,1) of tack reflectedabout(up, down) -- cycle;
-    tack := tack scaled 21;
+  pair u, v; u = point 4 of tack - point 0 of tack; v = u rotated 90;
 
-    pair u, v; v = point 4 of tack - point 0 of tack;
-    u = v rotated -90;
-
-    n = 8;
-    path box; box = makepath pensquare scaled (4n * abs(v));
-
-    fill box withcolor ivory;
-
-    for i=-n upto n:
-        for j=-n upto n:
-            for t=-90, 90:
-                path a, b;
-                a = tack rotated t shifted (j*2v) shifted (i*2u);
-                b = a shifted v shifted u;
-                fill a withcolor if odd i: forest else: gold fi;
-                fill b withcolor if t if odd i: < else: > fi 0: navy else: gold fi;
-                drawoptions(withpen pencircle scaled 1 withcolor 15/16);
-                draw a; draw b;
-                drawoptions();
-            endfor
-        endfor
+  background := ivory;
+  for i=2 upto 15:
+    for j=0 upto 6:
+      path t; t = tack rotated (180 ((i+j) mod 2));
+      pair z; z = i*u + j*v;
+      fill t shifted z withcolor 
+        if odd floor(i/2): if odd j: forest else: gold fi 
+                     else: if odd j: gold   else: navy fi fi;
+      draw t shifted z withpen pencircle scaled 1 withcolor white;
     endfor
-
-    clip currentpicture to box;
-
+  endfor
+  picture P; P = currentpicture; clearit; unfill bbox P; draw P;
 endfig;
 \end{mplibcode}
 \end{document}

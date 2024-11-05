@@ -4,51 +4,40 @@
 \mplibtextextlabel{enable}
 \begin{mplibcode}
 input jones-colors
+input jones-generic-star
 beginfig(1);
-    path S[], a, b;
-    a = makepath pensquare scaled 42 rotated 22.5;
-    b = a rotated 45;
-    numeric t, u;
-    (t, u) = a intersectiontimes b;
-    S0 = for i=0 upto 3:
-        point i of a -- point i+u of a -- point i of b -- point i+t of a -- 
-    endfor cycle;
-
-    z0 = whatever[point 2 of S0, point 6 of S0] = whatever[point 12 of S0, point 16 of S0];
-    z1 = whatever[point 2 of S0, point 14 of S0] = whatever[point 12 of S0, point 8 of S0];
-
-    S1 = S0 rotatedabout(z0, 180);
-    S2 = S0 rotatedabout(z1, 180);
-
-    z2 = whatever[point 4 of S0, point 16 of S0] = whatever[point 10 of S0, point 14 of S0];
-    z3 = whatever[point 12 of S2, point 16 of S2] = whatever[point 10 of S2, point 6 of S2];
-    z4 = whatever[point 4 of S0, point 16 of S0] = whatever[point 10 of S2, point 6 of S2];
-    path wedge; wedge = z1 -- point 12 of S2 -- z3 -- z4 -- z2 -- point 14 of S0 -- cycle;
-    
-    vardef unit(expr shade) = image(
-        fill S0 withcolor gold;
-        for i=0 upto 3:
-            fill wedge rotatedabout(1/2[center S1, center S2], 90i) withcolor shade;
-        endfor
-        draw S0 withcolor white;
-        for i=0 upto 3:
-            draw wedge rotatedabout(1/2[center S1, center S2], 90i) withcolor white;
-        endfor
-    ) enddef;
-
-    pair u, v;
-    u = center S0 - center S1;
-    v = u rotated 90;
-
-    numeric n; n = 4;
-    for i = -n upto n:
-        for j = -n upto n:
-            draw unit(if odd (i+j): navy else: forest fi) shifted (i*u + j*v);
-        endfor
+  background := ivory;
+  path S, W, M; numeric a,b,c,d,e;
+  S = star(8, 2, 12) rotated 45/2;  % the common star macro
+  z0 = a[point 2 of S, point 14 of S] = b[point 4 of S, point 8 of S];
+  z1 = c[point 6 of S, point 10 of S] = d[point 4 of S, point 0 of S];
+  z2 = e[point 6 of S, point 10 of S]; x2=x0;
+  W = z2 -- z1 -- point 4 of S -- z0 -- cycle;
+  M = W reflectedabout(origin, dir 45);
+  picture tile; tile = image(
+    fill S withcolor gold; 
+    for i=0 upto 1:
+      fill W rotated 180i withcolor forest;
+      fill M rotated 180i withcolor forest;
+      fill W rotated (90+180i) withcolor plum;
+      fill M rotated (90+180i) withcolor plum;
     endfor
-
-    picture p; p = currentpicture; fill bbox p withcolor ivory; draw p;
+    drawoptions(withpen pencircle scaled 1 withcolor white);
+      draw S;
+      for i=0 upto 3:
+        draw subpath (0, 3) of W rotated 90i;
+        draw subpath (0, 3) of M rotated 90i;
+      endfor
+    drawoptions();
+  );
+  numeric u, v, grouting; grouting = -1;
+  (u - grouting, v - grouting) = urcorner tile - llcorner tile;
+  for i = 1 upto 8:   
+    for j = 1 upto 5:
+      draw tile if odd (i+j): rotated 90 fi shifted (i*u, j*v);
+    endfor
+  endfor
+  picture p; p = currentpicture; unfill bbox p; draw p;
 endfig;
 \end{mplibcode}
 \end{document}
-
