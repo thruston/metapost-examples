@@ -28,12 +28,12 @@ You will also need the `metapost-colorbrewer` package installed (this is part of
 full TeX distribution), and the TeX Gyre Pagella and TeX Gyre Pagella Math fonts
 installed and available to `fontspec`.
 
-The documents are strictly for educational and tutorial purposes only.  All the
-original books and therefore all the pictures are copyrighted by the
+These documents are strictly for educational and tutorial purposes only.  All
+the original books and therefore all the pictures are copyrighted by the
 Mathematical Association of America.
 
-Each document contains over 100 fairly complex Metapost drawings, and on my Mac
-it takes about 3-4 seconds to compile each one, or roughly 20-30 full page drawings
+Each document contains over 100 fairly complex Metapost drawings, and on my Mac Mini (M2 2023)
+it takes about 4 seconds to compile each one, or roughly 25-30 full page drawings
 per second.  Your mileage may vary. 
 
 You can view each document in three ways:
@@ -72,18 +72,16 @@ in parallel to the output.
 
 - `excursions.tex`
 
-## Tutorial Examples
-
-For this one, I have chosen examples from various sources, that may be familiar from
-elsewhere in the world of \TeX.
-
 ## Cosmopolitan Tiling
 
-Geometric tilings -- Moorish, Islamic, Roman -- are a minor obsession of mine.
-Metapost is a great tool for exploring patterns.  This file present examples
-with minimal notes on techniques.
+Geometric tiling patterns -- Moorish, Islamic, Roman -- are a minor obsession of mine,
+and Metapost is a great tool for exploring them.  This file present many examples, 
+with minimal notes on techniques.  Like the others, this file is a self-contained 
+`lualatex` source file, showing what can be done with `luamplib` and different
+instances of MP in one file.
 
 - `cosmos.tex`
+- `cosmos.pdf`
 
 ## Contact / questions
 
